@@ -1,9 +1,22 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
+import { setActivePluginRegistry } from "../../plugins/runtime.js";
+import { createChannelTestPluginBase, createTestRegistry } from "../../test-utils/channel-plugins.js";
 import {
   buildOutboundDeliveryJson,
   formatGatewaySummary,
   formatOutboundDeliverySummary,
 } from "./format.js";
+
+beforeEach(() => {
+  setActivePluginRegistry(
+    createTestRegistry([
+      { pluginId: "slack", source: "test", plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }) },
+      { pluginId: "telegram", source: "test", plugin: createChannelTestPluginBase({ id: "telegram", label: "Telegram" }) },
+      { pluginId: "discord", source: "test", plugin: createChannelTestPluginBase({ id: "discord", label: "Discord" }) },
+      { pluginId: "imessage", source: "test", plugin: createChannelTestPluginBase({ id: "imessage", label: "iMessage" }) },
+    ]),
+  );
+});
 
 describe("formatOutboundDeliverySummary", () => {
   it("formats fallback and provider-specific detail variants", () => {

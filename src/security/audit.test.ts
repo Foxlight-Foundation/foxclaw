@@ -1,9 +1,11 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ChannelPlugin } from "../channels/plugins/types.js";
 import type { FoxClawConfig } from "../config/config.js";
+import { setActivePluginRegistry } from "../plugins/runtime.js";
+import { createChannelTestPluginBase, createTestRegistry } from "../test-utils/channel-plugins.js";
 import { withEnvAsync } from "../test-utils/env.js";
 import {
   collectInstalledSkillsCodeSafetyFindings,
@@ -233,6 +235,14 @@ description: test skill
     return { stateDir, workspaceDir };
   };
 
+  const auditTestRegistry = createTestRegistry([
+    { pluginId: "slack", source: "test", plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }) },
+    { pluginId: "discord", source: "test", plugin: createChannelTestPluginBase({ id: "discord", label: "Discord" }) },
+    { pluginId: "whatsapp", source: "test", plugin: createChannelTestPluginBase({ id: "whatsapp", label: "WhatsApp" }) },
+    { pluginId: "telegram", source: "test", plugin: createChannelTestPluginBase({ id: "telegram", label: "Telegram" }) },
+    { pluginId: "zalouser", source: "test", plugin: createChannelTestPluginBase({ id: "zalouser", label: "Zalo Personal" }) },
+  ]);
+
   beforeAll(async () => {
     fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-security-audit-"));
     channelSecurityRoot = path.join(fixtureRoot, "channel-security");
@@ -259,6 +269,10 @@ description: test skill
       return;
     }
     await fs.rm(fixtureRoot, { recursive: true, force: true }).catch(() => undefined);
+  });
+
+  beforeEach(() => {
+    setActivePluginRegistry(auditTestRegistry);
   });
 
   it("includes an attack surface summary (info)", async () => {

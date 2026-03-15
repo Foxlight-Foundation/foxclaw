@@ -1,5 +1,7 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { FoxClawConfig } from "../config/config.js";
+import { setActivePluginRegistry } from "../plugins/runtime.js";
+import { createChannelTestPluginBase, createTestRegistry } from "../test-utils/channel-plugins.js";
 
 // Mock session store so we can control what entries exist.
 const mockStore: Record<string, Record<string, unknown>> = {};
@@ -28,6 +30,15 @@ vi.mock("../channels/plugins/index.js", () => ({
 }));
 
 const { resolveDeliveryTarget } = await import("./isolated-agent/delivery-target.js");
+
+const cronTestRegistry = createTestRegistry([
+  { pluginId: "slack", source: "test", plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }) },
+  { pluginId: "telegram", source: "test", plugin: createChannelTestPluginBase({ id: "telegram", label: "Telegram" }) },
+]);
+
+beforeEach(() => {
+  setActivePluginRegistry(cronTestRegistry);
+});
 
 describe("resolveDeliveryTarget thread session lookup", () => {
   const cfg: FoxClawConfig = {};

@@ -4,7 +4,14 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vites
 import type { MsgContext } from "../auto-reply/templating.js";
 import type { FoxClawConfig } from "../config/config.js";
 import { resolvePreferredFoxClawTmpDir } from "../infra/tmp-foxclaw-dir.js";
+import { setActivePluginRegistry } from "../plugins/runtime.js";
+import { createChannelTestPluginBase, createTestRegistry } from "../test-utils/channel-plugins.js";
 import { createSafeAudioFixtureBuffer } from "./runner.test-utils.js";
+
+const echoTranscriptTestRegistry = createTestRegistry([
+  { pluginId: "slack", source: "test", plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }) },
+  { pluginId: "whatsapp", source: "test", plugin: createChannelTestPluginBase({ id: "whatsapp", label: "WhatsApp" }) },
+]);
 
 // ---------------------------------------------------------------------------
 // Module mocks
@@ -155,6 +162,7 @@ describe("applyMediaUnderstanding – echo transcript", () => {
   });
 
   beforeEach(() => {
+    setActivePluginRegistry(echoTranscriptTestRegistry);
     mockDeliverOutboundPayloads.mockClear();
     mockDeliverOutboundPayloads.mockResolvedValue([{ channel: "whatsapp", messageId: "echo-1" }]);
     clearMediaUnderstandingBinaryCacheForTests?.();

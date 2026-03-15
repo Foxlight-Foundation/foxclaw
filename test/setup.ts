@@ -130,46 +130,8 @@ const createStubPlugin = (params: {
 const createDefaultRegistry = () =>
   createTestRegistry([
     {
-      pluginId: "discord",
-      plugin: createStubPlugin({ id: "discord", label: "Discord" }),
-      source: "test",
-    },
-    {
       pluginId: "slack",
       plugin: createStubPlugin({ id: "slack", label: "Slack" }),
-      source: "test",
-    },
-    {
-      pluginId: "telegram",
-      plugin: {
-        ...createStubPlugin({ id: "telegram", label: "Telegram" }),
-        status: {
-          buildChannelSummary: async () => ({
-            configured: false,
-            tokenSource: process.env.TELEGRAM_BOT_TOKEN ? "env" : "none",
-          }),
-        },
-      },
-      source: "test",
-    },
-    {
-      pluginId: "whatsapp",
-      plugin: createStubPlugin({
-        id: "whatsapp",
-        label: "WhatsApp",
-        deliveryMode: "gateway",
-        preferSessionLookupForAnnounceTarget: true,
-      }),
-      source: "test",
-    },
-    {
-      pluginId: "signal",
-      plugin: createStubPlugin({ id: "signal", label: "Signal" }),
-      source: "test",
-    },
-    {
-      pluginId: "imessage",
-      plugin: createStubPlugin({ id: "imessage", label: "iMessage", aliases: ["imsg"] }),
       source: "test",
     },
   ]);
