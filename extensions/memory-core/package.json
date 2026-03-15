@@ -5,14 +5,14 @@
   "description": "OpenClaw core memory search plugin",
   "type": "module",
   "peerDependencies": {
-    "openclaw": ">=2026.3.11"
+    "foxclaw": ">=2026.3.11"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "foxclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "foxclaw": {
     "extensions": [
       "./index.ts"
     ]

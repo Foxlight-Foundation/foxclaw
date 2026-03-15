@@ -4,7 +4,7 @@
   "private": true,
   "description": "OpenClaw vLLM provider plugin",
   "type": "module",
-  "openclaw": {
+  "foxclaw": {
     "extensions": [
       "./index.ts"
     ]

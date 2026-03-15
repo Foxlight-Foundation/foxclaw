@@ -6,7 +6,7 @@
   "dependencies": {
     "acpx": "0.3.0"
   },
-  "openclaw": {
+  "foxclaw": {
     "extensions": [
       "./index.ts"
     ]
