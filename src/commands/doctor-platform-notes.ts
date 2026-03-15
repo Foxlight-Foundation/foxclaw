@@ -3,7 +3,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import { hasConfiguredSecretInput } from "../config/types.secrets.js";
 import { note } from "../terminal/note.js";
 import { shortenHomePath } from "../utils.js";
@@ -44,7 +44,7 @@ async function launchctlGetenv(name: string): Promise<string | undefined> {
   }
 }
 
-function hasConfigGatewayCreds(cfg: OpenClawConfig): boolean {
+function hasConfigGatewayCreds(cfg: FoxClawConfig): boolean {
   const localPassword = cfg.gateway?.auth?.password;
   const remoteToken = cfg.gateway?.remote?.token;
   const remotePassword = cfg.gateway?.remote?.password;
@@ -57,7 +57,7 @@ function hasConfigGatewayCreds(cfg: OpenClawConfig): boolean {
 }
 
 export async function noteMacLaunchctlGatewayEnvOverrides(
-  cfg: OpenClawConfig,
+  cfg: FoxClawConfig,
   deps?: {
     platform?: NodeJS.Platform;
     getenv?: (name: string) => Promise<string | undefined>;
@@ -211,8 +211,8 @@ export function noteStartupOptimizationHints(
 
   const suggestions = [
     "- Suggested env for low-power hosts:",
-    "  export NODE_COMPILE_CACHE=/var/tmp/openclaw-compile-cache",
-    "  mkdir -p /var/tmp/openclaw-compile-cache",
+    "  export NODE_COMPILE_CACHE=/var/tmp/foxclaw-compile-cache",
+    "  mkdir -p /var/tmp/foxclaw-compile-cache",
     "  export FOXCLAW_NO_RESPAWN=1",
     isTruthyEnvValue(disableCompileCache) ? "  unset NODE_DISABLE_COMPILE_CACHE" : undefined,
   ].filter((line): line is string => Boolean(line));

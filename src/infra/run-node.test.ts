@@ -5,7 +5,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 async function withTempDir<T>(run: (dir: string) => Promise<T>): Promise<T> {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-run-node-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-run-node-"));
   try {
     return await run(dir);
   } finally {
@@ -89,7 +89,7 @@ describe("run-node script", () => {
       await fs.mkdir(path.dirname(distEntryPath), { recursive: true });
       await fs.writeFile(srcPath, "export const value = 1;\n", "utf-8");
       await fs.writeFile(tsconfigPath, "{}\n", "utf-8");
-      await fs.writeFile(packageJsonPath, '{"name":"openclaw-test"}\n', "utf-8");
+      await fs.writeFile(packageJsonPath, '{"name":"foxclaw-test"}\n', "utf-8");
       await fs.writeFile(distEntryPath, "console.log('built');\n", "utf-8");
       await fs.writeFile(buildStampPath, '{"head":"abc123"}\n', "utf-8");
 

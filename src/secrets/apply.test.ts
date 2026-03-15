@@ -50,7 +50,7 @@ function createOpenAiProviderConfig(apiKey: unknown = "sk-openai-plaintext") {
 }
 
 function buildFixturePaths(rootDir: string) {
-  const stateDir = path.join(rootDir, ".openclaw");
+  const stateDir = path.join(rootDir, ".foxclaw");
   return {
     rootDir,
     stateDir,
@@ -63,7 +63,7 @@ function buildFixturePaths(rootDir: string) {
 
 async function createApplyFixture(): Promise<ApplyFixture> {
   const paths = buildFixturePaths(
-    await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-secrets-apply-")),
+    await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-secrets-apply-")),
   );
   await fs.mkdir(path.dirname(paths.configPath), { recursive: true });
   await fs.mkdir(path.dirname(paths.authStorePath), { recursive: true });

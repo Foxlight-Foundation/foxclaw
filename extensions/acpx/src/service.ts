@@ -1,7 +1,7 @@
 import type {
   AcpRuntime,
-  OpenClawPluginService,
-  OpenClawPluginServiceContext,
+  FoxClawPluginService,
+  FoxClawPluginServiceContext,
   PluginLogger,
 } from "openclaw/plugin-sdk/acpx";
 import { registerAcpRuntimeBackend, unregisterAcpRuntimeBackend } from "openclaw/plugin-sdk/acpx";
@@ -34,13 +34,13 @@ function createDefaultRuntime(params: AcpxRuntimeFactoryParams): AcpxRuntimeLike
 
 export function createAcpxRuntimeService(
   params: CreateAcpxRuntimeServiceParams = {},
-): OpenClawPluginService {
+): FoxClawPluginService {
   let runtime: AcpxRuntimeLike | null = null;
   let lifecycleRevision = 0;
 
   return {
     id: "acpx-runtime",
-    async start(ctx: OpenClawPluginServiceContext): Promise<void> {
+    async start(ctx: FoxClawPluginServiceContext): Promise<void> {
       const pluginConfig = resolveAcpxPluginConfig({
         rawConfig: params.pluginConfig,
         workspaceDir: ctx.workspaceDir,
@@ -96,7 +96,7 @@ export function createAcpxRuntimeService(
         }
       })();
     },
-    async stop(_ctx: OpenClawPluginServiceContext): Promise<void> {
+    async stop(_ctx: FoxClawPluginServiceContext): Promise<void> {
       lifecycleRevision += 1;
       unregisterAcpRuntimeBackend(ACPX_BACKEND_ID);
       runtime = null;

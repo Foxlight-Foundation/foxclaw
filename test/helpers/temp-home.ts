@@ -9,7 +9,7 @@ type EnvSnapshot = {
   userProfile: string | undefined;
   homeDrive: string | undefined;
   homePath: string | undefined;
-  openclawHome: string | undefined;
+  foxclawHome: string | undefined;
   stateDir: string | undefined;
 };
 
@@ -26,7 +26,7 @@ function snapshotEnv(): EnvSnapshot {
     userProfile: process.env.USERPROFILE,
     homeDrive: process.env.HOMEDRIVE,
     homePath: process.env.HOMEPATH,
-    openclawHome: process.env.FOXCLAW_HOME,
+    foxclawHome: process.env.FOXCLAW_HOME,
     stateDir: process.env.FOXCLAW_STATE_DIR,
   };
 }
@@ -43,7 +43,7 @@ function restoreEnv(snapshot: EnvSnapshot) {
   restoreKey("USERPROFILE", snapshot.userProfile);
   restoreKey("HOMEDRIVE", snapshot.homeDrive);
   restoreKey("HOMEPATH", snapshot.homePath);
-  restoreKey("FOXCLAW_HOME", snapshot.openclawHome);
+  restoreKey("FOXCLAW_HOME", snapshot.foxclawHome);
   restoreKey("FOXCLAW_STATE_DIR", snapshot.stateDir);
 }
 
@@ -70,7 +70,7 @@ function setTempHome(base: string) {
   process.env.USERPROFILE = base;
   // Ensure tests using HOME isolation aren't affected by leaked FOXCLAW_HOME.
   delete process.env.FOXCLAW_HOME;
-  process.env.FOXCLAW_STATE_DIR = path.join(base, ".openclaw");
+  process.env.FOXCLAW_STATE_DIR = path.join(base, ".foxclaw");
 
   if (process.platform !== "win32") {
     return;
@@ -102,7 +102,7 @@ export async function withTempHome<T>(
   fn: (home: string) => Promise<T>,
   opts: { env?: Record<string, EnvValue>; prefix?: string } = {},
 ): Promise<T> {
-  const prefix = opts.prefix ?? "openclaw-test-home-";
+  const prefix = opts.prefix ?? "foxclaw-test-home-";
   const base = await allocateTempHomeBase(prefix);
   const snapshot = snapshotEnv();
   const envKeys = Object.keys(opts.env ?? {});
@@ -114,7 +114,7 @@ export async function withTempHome<T>(
   const envSnapshot = snapshotExtraEnv(envKeys);
 
   setTempHome(base);
-  await fs.mkdir(path.join(base, ".openclaw", "agents", "main", "sessions"), { recursive: true });
+  await fs.mkdir(path.join(base, ".foxclaw", "agents", "main", "sessions"), { recursive: true });
   if (opts.env) {
     for (const [key, raw] of Object.entries(opts.env)) {
       const value = typeof raw === "function" ? raw(base) : raw;

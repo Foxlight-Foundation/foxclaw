@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import {
   loadConfig,
   resolveConfigPath,
@@ -40,7 +40,7 @@ type CallGatewayBaseOptions = {
   token?: string;
   password?: string;
   tlsFingerprint?: string;
-  config?: OpenClawConfig;
+  config?: FoxClawConfig;
   method: string;
   params?: unknown;
   expectFinal?: boolean;
@@ -152,7 +152,7 @@ export function ensureExplicitGatewayAuth(params: {
 
 export function buildGatewayConnectionDetails(
   options: {
-    config?: OpenClawConfig;
+    config?: FoxClawConfig;
     url?: string;
     configPath?: string;
     urlSource?: "cli" | "env";
@@ -216,8 +216,8 @@ export function buildGatewayConnectionDetails(
         allowPrivateWs
           ? undefined
           : "Break-glass (trusted private networks only): set FOXCLAW_ALLOW_INSECURE_PRIVATE_WS=1",
-        "Doctor: openclaw doctor --fix",
-        "Docs: https://docs.openclaw.ai/gateway/remote",
+        "Doctor: foxclaw doctor --fix",
+        "Docs: https://docs.foxclaw.ai/gateway/remote",
       ].join("\n"),
     );
   }
@@ -249,7 +249,7 @@ type GatewayRemoteSettings = {
 };
 
 type ResolvedGatewayCallContext = {
-  config: OpenClawConfig;
+  config: FoxClawConfig;
   configPath: string;
   isRemoteMode: boolean;
   remote?: GatewayRemoteSettings;
@@ -320,7 +320,7 @@ function ensureRemoteModeUrlConfigured(context: ResolvedGatewayCallContext): voi
 }
 
 async function resolveGatewaySecretInputString(params: {
-  config: OpenClawConfig;
+  config: FoxClawConfig;
   value: unknown;
   path: string;
   env: NodeJS.ProcessEnv;
@@ -389,7 +389,7 @@ function isSupportedGatewaySecretInputPath(path: string): path is SupportedGatew
 }
 
 function readGatewaySecretInputValue(
-  config: OpenClawConfig,
+  config: FoxClawConfig,
   path: SupportedGatewaySecretInputPath,
 ): unknown {
   if (path === "gateway.auth.token") {
@@ -405,7 +405,7 @@ function readGatewaySecretInputValue(
 }
 
 function hasConfiguredGatewaySecretRef(
-  config: OpenClawConfig,
+  config: FoxClawConfig,
   path: SupportedGatewaySecretInputPath,
 ): boolean {
   return Boolean(
@@ -419,7 +419,7 @@ function hasConfiguredGatewaySecretRef(
 function resolveGatewayCredentialsFromConfigOptions(params: {
   context: ResolvedGatewayCallContext;
   env: NodeJS.ProcessEnv;
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
 }) {
   const { context, env, cfg } = params;
   return {
@@ -463,7 +463,7 @@ function localAuthModeAllowsGatewaySecretInputPath(params: {
 function gatewaySecretInputPathCanWin(params: {
   context: ResolvedGatewayCallContext;
   env: NodeJS.ProcessEnv;
-  config: OpenClawConfig;
+  config: FoxClawConfig;
   path: SupportedGatewaySecretInputPath;
 }): boolean {
   if (!hasConfiguredGatewaySecretRef(params.config, params.path)) {
@@ -514,7 +514,7 @@ function gatewaySecretInputPathCanWin(params: {
 }
 
 async function resolveConfiguredGatewaySecretInput(params: {
-  config: OpenClawConfig;
+  config: FoxClawConfig;
   path: SupportedGatewaySecretInputPath;
   env: NodeJS.ProcessEnv;
 }): Promise<string | undefined> {
@@ -552,7 +552,7 @@ async function resolveConfiguredGatewaySecretInput(params: {
 }
 
 function assignResolvedGatewaySecretInput(params: {
-  config: OpenClawConfig;
+  config: FoxClawConfig;
   path: SupportedGatewaySecretInputPath;
   value: string | undefined;
 }): void {
@@ -583,8 +583,8 @@ function assignResolvedGatewaySecretInput(params: {
 async function resolvePreferredGatewaySecretInputs(params: {
   context: ResolvedGatewayCallContext;
   env: NodeJS.ProcessEnv;
-  config: OpenClawConfig;
-}): Promise<OpenClawConfig> {
+  config: FoxClawConfig;
+}): Promise<FoxClawConfig> {
   let nextConfig = params.config;
   for (const path of ALL_GATEWAY_SECRET_INPUT_PATHS) {
     if (
@@ -666,7 +666,7 @@ async function resolveGatewayCredentialsFromConfigWithSecretInputs(params: {
 }
 
 export async function resolveGatewayCredentialsWithSecretInputs(params: {
-  config: OpenClawConfig;
+  config: FoxClawConfig;
   explicitAuth?: ExplicitGatewayAuth;
   urlOverride?: string;
   urlOverrideSource?: "cli" | "env";

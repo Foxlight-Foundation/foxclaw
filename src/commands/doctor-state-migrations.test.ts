@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import {
   autoMigrateLegacyStateDir,
   autoMigrateLegacyState,
@@ -15,14 +15,14 @@ import {
 let tempRoot: string | null = null;
 
 async function makeTempRoot() {
-  const root = await fs.promises.mkdtemp(path.join(os.tmpdir(), "openclaw-doctor-"));
+  const root = await fs.promises.mkdtemp(path.join(os.tmpdir(), "foxclaw-doctor-"));
   tempRoot = root;
   return root;
 }
 
 async function makeRootWithEmptyCfg() {
   const root = await makeTempRoot();
-  const cfg: OpenClawConfig = {};
+  const cfg: FoxClawConfig = {};
   return { root, cfg };
 }
 
@@ -41,7 +41,7 @@ function writeLegacyTelegramAllowFromStore(oauthDir: string) {
   );
 }
 
-async function runTelegramAllowFromMigration(params: { root: string; cfg: OpenClawConfig }) {
+async function runTelegramAllowFromMigration(params: { root: string; cfg: FoxClawConfig }) {
   const oauthDir = ensureCredentialsDir(params.root);
   writeLegacyTelegramAllowFromStore(oauthDir);
   const detected = await detectLegacyStateMigrations({
@@ -83,7 +83,7 @@ function writeLegacySessionsFixture(params: {
 
 async function detectAndRunMigrations(params: {
   root: string;
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   now?: () => number;
 }) {
   const detected = await detectLegacyStateMigrations({
@@ -102,7 +102,7 @@ function readSessionsStore(targetDir: string) {
 
 async function runAndReadSessionsStore(params: {
   root: string;
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   targetDir: string;
   now?: () => number;
 }) {
@@ -120,7 +120,7 @@ const DIR_LINK_TYPE = process.platform === "win32" ? "junction" : "dir";
 
 function getStateDirMigrationPaths(root: string) {
   return {
-    targetDir: path.join(root, ".openclaw"),
+    targetDir: path.join(root, ".foxclaw"),
     legacyDir: path.join(root, ".clawdbot"),
   };
 }
@@ -141,7 +141,7 @@ async function runStateDirMigration(root: string, env = {} as NodeJS.ProcessEnv)
 
 async function runAutoMigrateLegacyStateWithLog(params: {
   root: string;
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   now?: () => number;
 }) {
   const log = { info: vi.fn(), warn: vi.fn() };
@@ -184,7 +184,7 @@ function ensureCredentialsDir(root: string) {
 describe("doctor legacy state migrations", () => {
   it("migrates legacy sessions into agents/<id>/sessions", async () => {
     const root = await makeTempRoot();
-    const cfg: OpenClawConfig = {};
+    const cfg: FoxClawConfig = {};
     const legacySessionsDir = writeLegacySessionsFixture({
       root,
       sessions: {
@@ -320,7 +320,7 @@ describe("doctor legacy state migrations", () => {
 
   it("fans out legacy Telegram pairing allowFrom store to configured named accounts", async () => {
     const root = await makeTempRoot();
-    const cfg: OpenClawConfig = {
+    const cfg: FoxClawConfig = {
       channels: {
         telegram: {
           accounts: {
@@ -354,7 +354,7 @@ describe("doctor legacy state migrations", () => {
 
   it("no-ops when nothing detected", async () => {
     const root = await makeTempRoot();
-    const cfg: OpenClawConfig = {};
+    const cfg: FoxClawConfig = {};
     const detected = await detectLegacyStateMigrations({
       cfg,
       env: { FOXCLAW_STATE_DIR: root } as NodeJS.ProcessEnv,
@@ -365,7 +365,7 @@ describe("doctor legacy state migrations", () => {
 
   it("routes legacy state to the default agent entry", async () => {
     const root = await makeTempRoot();
-    const cfg: OpenClawConfig = {
+    const cfg: FoxClawConfig = {
       agents: { list: [{ id: "alpha", default: true }] },
     };
     writeLegacySessionsFixture({
@@ -387,7 +387,7 @@ describe("doctor legacy state migrations", () => {
 
   it("honors session.mainKey when seeding the direct-chat bucket", async () => {
     const root = await makeTempRoot();
-    const cfg: OpenClawConfig = { session: { mainKey: "work" } };
+    const cfg: FoxClawConfig = { session: { mainKey: "work" } };
     writeLegacySessionsFixture({
       root,
       sessions: {
@@ -427,7 +427,7 @@ describe("doctor legacy state migrations", () => {
 
   it("prefers the newest entry when collapsing main aliases", async () => {
     const root = await makeTempRoot();
-    const cfg: OpenClawConfig = { session: { mainKey: "work" } };
+    const cfg: FoxClawConfig = { session: { mainKey: "work" } };
     const targetDir = path.join(root, "agents", "main", "sessions");
     writeJson5(path.join(targetDir, "sessions.json"), {
       "agent:main:main": { sessionId: "legacy", updatedAt: 50 },
@@ -446,7 +446,7 @@ describe("doctor legacy state migrations", () => {
 
   it("lowercases agent session keys during canonicalization", async () => {
     const root = await makeTempRoot();
-    const cfg: OpenClawConfig = {};
+    const cfg: FoxClawConfig = {};
     const targetDir = path.join(root, "agents", "main", "sessions");
     writeJson5(path.join(targetDir, "sessions.json"), {
       "agent:main:slack:channel:C123": { sessionId: "legacy", updatedAt: 10 },

@@ -1,7 +1,7 @@
 import { normalizeChannelId } from "../channels/plugins/index.js";
 import { resolveAccountEntry } from "../routing/account-lookup.js";
 import { normalizeAccountId } from "../routing/session-key.js";
-import type { OpenClawConfig } from "./config.js";
+import type { FoxClawConfig } from "./config.js";
 import type { SlackCapabilitiesConfig } from "./types.slack.js";
 
 type CapabilitiesConfig = SlackCapabilitiesConfig;
@@ -43,7 +43,7 @@ function resolveAccountCapabilities(params: {
 }
 
 export function resolveChannelCapabilities(params: {
-  cfg?: Partial<OpenClawConfig>;
+  cfg?: Partial<FoxClawConfig>;
   channel?: string | null;
   accountId?: string | null;
 }): string[] | undefined {

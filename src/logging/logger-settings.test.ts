@@ -16,7 +16,7 @@ vi.mock("./node-require.js", () => ({
 }));
 
 let originalTestFileLog: string | undefined;
-let originalOpenClawLogLevel: string | undefined;
+let originalFoxClawLogLevel: string | undefined;
 let logging: typeof import("../logging.js");
 
 beforeAll(async () => {
@@ -25,7 +25,7 @@ beforeAll(async () => {
 
 beforeEach(() => {
   originalTestFileLog = process.env.FOXCLAW_TEST_FILE_LOG;
-  originalOpenClawLogLevel = process.env.FOXCLAW_LOG_LEVEL;
+  originalFoxClawLogLevel = process.env.FOXCLAW_LOG_LEVEL;
   delete process.env.FOXCLAW_TEST_FILE_LOG;
   delete process.env.FOXCLAW_LOG_LEVEL;
   readLoggingConfigMock.mockClear();
@@ -40,10 +40,10 @@ afterEach(() => {
   } else {
     process.env.FOXCLAW_TEST_FILE_LOG = originalTestFileLog;
   }
-  if (originalOpenClawLogLevel === undefined) {
+  if (originalFoxClawLogLevel === undefined) {
     delete process.env.FOXCLAW_LOG_LEVEL;
   } else {
-    process.env.FOXCLAW_LOG_LEVEL = originalOpenClawLogLevel;
+    process.env.FOXCLAW_LOG_LEVEL = originalFoxClawLogLevel;
   }
   logging.resetLogger();
   logging.setLoggerOverride(null);

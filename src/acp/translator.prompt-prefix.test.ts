@@ -35,7 +35,7 @@ describe("acp prompt cwd prefix", () => {
     sessionStore.createSession({
       sessionId: TEST_SESSION_ID,
       sessionKey: TEST_SESSION_KEY,
-      cwd: options.cwd ?? path.join(os.homedir(), "openclaw-test"),
+      cwd: options.cwd ?? path.join(os.homedir(), "foxclaw-test"),
     });
 
     const requestSpy = createStopAfterSendSpy();
@@ -55,7 +55,7 @@ describe("acp prompt cwd prefix", () => {
 
   async function runPromptWithCwd(cwd: string) {
     const pinnedHome = os.homedir();
-    const previousOpenClawHome = process.env.FOXCLAW_HOME;
+    const previousFoxClawHome = process.env.FOXCLAW_HOME;
     const previousHome = process.env.HOME;
     delete process.env.FOXCLAW_HOME;
     process.env.HOME = pinnedHome;
@@ -63,10 +63,10 @@ describe("acp prompt cwd prefix", () => {
     try {
       return await runPromptAndCaptureRequest({ cwd, prefixCwd: true });
     } finally {
-      if (previousOpenClawHome === undefined) {
+      if (previousFoxClawHome === undefined) {
         delete process.env.FOXCLAW_HOME;
       } else {
-        process.env.FOXCLAW_HOME = previousOpenClawHome;
+        process.env.FOXCLAW_HOME = previousFoxClawHome;
       }
       if (previousHome === undefined) {
         delete process.env.HOME;
@@ -77,22 +77,22 @@ describe("acp prompt cwd prefix", () => {
   }
 
   it("redacts home directory in prompt prefix", async () => {
-    const requestSpy = await runPromptWithCwd(path.join(os.homedir(), "openclaw-test"));
+    const requestSpy = await runPromptWithCwd(path.join(os.homedir(), "foxclaw-test"));
     expect(requestSpy).toHaveBeenCalledWith(
       "chat.send",
       expect.objectContaining({
-        message: expect.stringMatching(/\[Working directory: ~[\\/]openclaw-test\]/),
+        message: expect.stringMatching(/\[Working directory: ~[\\/]foxclaw-test\]/),
       }),
       { expectFinal: true },
     );
   });
 
   it("keeps backslash separators when cwd uses them", async () => {
-    const requestSpy = await runPromptWithCwd(`${os.homedir()}\\openclaw-test`);
+    const requestSpy = await runPromptWithCwd(`${os.homedir()}\\foxclaw-test`);
     expect(requestSpy).toHaveBeenCalledWith(
       "chat.send",
       expect.objectContaining({
-        message: expect.stringContaining("[Working directory: ~\\openclaw-test]"),
+        message: expect.stringContaining("[Working directory: ~\\foxclaw-test]"),
       }),
       { expectFinal: true },
     );
@@ -107,7 +107,7 @@ describe("acp prompt cwd prefix", () => {
           kind: "external_user",
           originSessionId: TEST_SESSION_ID,
           sourceChannel: "acp",
-          sourceTool: "openclaw_acp",
+          sourceTool: "foxclaw_acp",
         },
         systemProvenanceReceipt: undefined,
       }),
@@ -124,7 +124,7 @@ describe("acp prompt cwd prefix", () => {
           kind: "external_user",
           originSessionId: TEST_SESSION_ID,
           sourceChannel: "acp",
-          sourceTool: "openclaw_acp",
+          sourceTool: "foxclaw_acp",
         },
         systemProvenanceReceipt: expect.stringContaining("[Source Receipt]"),
       }),
@@ -133,7 +133,7 @@ describe("acp prompt cwd prefix", () => {
     expect(requestSpy).toHaveBeenCalledWith(
       "chat.send",
       expect.objectContaining({
-        systemProvenanceReceipt: expect.stringContaining("bridge=openclaw-acp"),
+        systemProvenanceReceipt: expect.stringContaining("bridge=foxclaw-acp"),
       }),
       { expectFinal: true },
     );

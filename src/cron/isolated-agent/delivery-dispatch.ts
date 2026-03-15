@@ -2,7 +2,7 @@ import { countActiveDescendantRuns } from "../../agents/subagent-registry.js";
 import { SILENT_REPLY_TOKEN } from "../../auto-reply/tokens.js";
 import type { ReplyPayload } from "../../auto-reply/types.js";
 import { createOutboundSendDeps, type CliDeps } from "../../cli/outbound-send-deps.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { FoxClawConfig } from "../../config/config.js";
 import { callGateway } from "../../gateway/call.js";
 import { sleepWithAbort } from "../../infra/backoff.js";
 import {
@@ -73,8 +73,8 @@ export function resolveCronDeliveryBestEffort(job: CronJob): boolean {
 export type SuccessfulDeliveryTarget = Extract<DeliveryTargetResolution, { ok: true }>;
 
 type DispatchCronDeliveryParams = {
-  cfg: OpenClawConfig;
-  cfgWithAgentDefaults: OpenClawConfig;
+  cfg: FoxClawConfig;
+  cfgWithAgentDefaults: FoxClawConfig;
   deps: CliDeps;
   job: CronJob;
   agentId: string;

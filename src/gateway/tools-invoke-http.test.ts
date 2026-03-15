@@ -20,7 +20,7 @@ const hookMocks = vi.hoisted(() => ({
 }));
 
 let cfg: Record<string, unknown> = {};
-let lastCreateOpenClawToolsContext: Record<string, unknown> | undefined;
+let lastCreateFoxClawToolsContext: Record<string, unknown> | undefined;
 
 // Perf: keep this suite pure unit. Mock heavyweight config/session modules.
 vi.mock("../config/config.js", () => ({
@@ -97,8 +97,8 @@ vi.mock("../agents/foxclaw-tools.js", () => {
       execute: async () => ({
         ok: true,
         route: {
-          agentTo: lastCreateOpenClawToolsContext?.agentTo,
-          agentThreadId: lastCreateOpenClawToolsContext?.agentThreadId,
+          agentTo: lastCreateFoxClawToolsContext?.agentTo,
+          agentThreadId: lastCreateFoxClawToolsContext?.agentThreadId,
         },
       }),
     },
@@ -160,8 +160,8 @@ vi.mock("../agents/foxclaw-tools.js", () => {
   ];
 
   return {
-    createOpenClawTools: (ctx: Record<string, unknown>) => {
-      lastCreateOpenClawToolsContext = ctx;
+    createFoxClawTools: (ctx: Record<string, unknown>) => {
+      lastCreateFoxClawToolsContext = ctx;
       return tools;
     },
   };
@@ -228,7 +228,7 @@ beforeEach(() => {
   delete process.env.FOXCLAW_GATEWAY_PASSWORD;
   pluginHttpHandlers = [];
   cfg = {};
-  lastCreateOpenClawToolsContext = undefined;
+  lastCreateFoxClawToolsContext = undefined;
   hookMocks.resolveToolLoopDetectionConfig.mockClear();
   hookMocks.resolveToolLoopDetectionConfig.mockImplementation(() => ({ warnAt: 3 }));
   hookMocks.runBeforeToolCallHook.mockClear();
@@ -367,7 +367,7 @@ describe("POST /tools/invoke", () => {
     const body = await res.json();
     expect(body.ok).toBe(true);
     expect(body).toHaveProperty("result");
-    expect(lastCreateOpenClawToolsContext?.allowMediaInvokeCommands).toBe(true);
+    expect(lastCreateFoxClawToolsContext?.allowMediaInvokeCommands).toBe(true);
     expect(hookMocks.runBeforeToolCallHook).toHaveBeenCalledWith(
       expect.objectContaining({
         toolName: "agents_list",
@@ -526,8 +526,8 @@ describe("POST /tools/invoke", () => {
       port: sharedPort,
       headers: {
         ...gatewayAuthHeaders(),
-        "x-openclaw-message-to": "channel:24514",
-        "x-openclaw-thread-id": "thread-24514",
+        "x-foxclaw-message-to": "channel:24514",
+        "x-foxclaw-thread-id": "thread-24514",
       },
       tool: "sessions_spawn",
       sessionKey: "main",

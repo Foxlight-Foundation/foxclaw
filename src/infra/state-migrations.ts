@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { resolveDefaultAgentId } from "../agents/agent-scope.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import {
   resolveLegacyStateDirs,
   resolveNewStateDir,
@@ -601,7 +601,7 @@ export async function autoMigrateLegacyStateDir(params: {
 }
 
 export async function detectLegacyStateMigrations(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   env?: NodeJS.ProcessEnv;
   homedir?: () => string;
 }): Promise<LegacyStateDetection> {
@@ -949,7 +949,7 @@ export async function runLegacyStateMigrations(params: {
 }
 
 export async function autoMigrateLegacyAgentDir(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   env?: NodeJS.ProcessEnv;
   homedir?: () => string;
   log?: MigrationLogger;
@@ -964,7 +964,7 @@ export async function autoMigrateLegacyAgentDir(params: {
 }
 
 export async function autoMigrateLegacyState(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   env?: NodeJS.ProcessEnv;
   homedir?: () => string;
   log?: MigrationLogger;

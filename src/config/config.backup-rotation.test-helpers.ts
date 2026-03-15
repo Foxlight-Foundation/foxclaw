@@ -3,7 +3,7 @@ import { expect } from "vitest";
 
 export const IS_WINDOWS = process.platform === "win32";
 
-export function resolveConfigPathFromTempState(fileName = "openclaw.json"): string {
+export function resolveConfigPathFromTempState(fileName = "foxclaw.json"): string {
   const stateDir = process.env.FOXCLAW_STATE_DIR?.trim();
   if (!stateDir) {
     throw new Error("Expected FOXCLAW_STATE_DIR to be set by withTempHome");

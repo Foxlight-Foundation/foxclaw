@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { resolveHomeRelativePath, resolveRequiredHomeDir } from "../infra/home-dir.js";
-import type { OpenClawConfig } from "./types.js";
+import type { FoxClawConfig } from "./types.js";
 
 /**
  * Nix mode detection: When FOXCLAW_NIX_MODE=1, the gateway is running under Nix.
@@ -18,10 +18,10 @@ export function resolveIsNixMode(env: NodeJS.ProcessEnv = process.env): boolean 
 export const isNixMode = resolveIsNixMode();
 
 // Support historical (and occasionally misspelled) legacy state dirs.
-const LEGACY_STATE_DIRNAMES = [".openclaw", ".clawdbot", ".moldbot", ".moltbot"] as const;
+const LEGACY_STATE_DIRNAMES = [".foxclaw", ".clawdbot", ".moldbot", ".moltbot"] as const;
 const NEW_STATE_DIRNAME = ".foxclaw";
 const CONFIG_FILENAME = "foxclaw.json";
-const LEGACY_CONFIG_FILENAMES = ["openclaw.json", "clawdbot.json", "moldbot.json", "moltbot.json"] as const;
+const LEGACY_CONFIG_FILENAMES = ["foxclaw.json", "clawdbot.json", "moldbot.json", "moltbot.json"] as const;
 
 function resolveDefaultHomeDir(): string {
   return resolveRequiredHomeDir(process.env, os.homedir);
@@ -196,9 +196,9 @@ export function resolveDefaultConfigCandidates(
   }
 
   const candidates: string[] = [];
-  const openclawStateDir = env.FOXCLAW_STATE_DIR?.trim() || env.CLAWDBOT_STATE_DIR?.trim();
-  if (openclawStateDir) {
-    const resolved = resolveUserPath(openclawStateDir, env, effectiveHomedir);
+  const foxclawStateDir = env.FOXCLAW_STATE_DIR?.trim() || env.CLAWDBOT_STATE_DIR?.trim();
+  if (foxclawStateDir) {
+    const resolved = resolveUserPath(foxclawStateDir, env, effectiveHomedir);
     candidates.push(path.join(resolved, CONFIG_FILENAME));
     candidates.push(...LEGACY_CONFIG_FILENAMES.map((name) => path.join(resolved, name)));
   }
@@ -220,7 +220,7 @@ export const DEFAULT_GATEWAY_PORT = 18789;
 export function resolveGatewayLockDir(tmpdir: () => string = os.tmpdir): string {
   const base = tmpdir();
   const uid = typeof process.getuid === "function" ? process.getuid() : undefined;
-  const suffix = uid != null ? `openclaw-${uid}` : "openclaw";
+  const suffix = uid != null ? `foxclaw-${uid}` : "foxclaw";
   return path.join(base, suffix);
 }
 
@@ -252,7 +252,7 @@ export function resolveOAuthPath(
 }
 
 export function resolveGatewayPort(
-  cfg?: OpenClawConfig,
+  cfg?: FoxClawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): number {
   const envRaw = env.FOXCLAW_GATEWAY_PORT?.trim() || env.CLAWDBOT_GATEWAY_PORT?.trim();

@@ -4,7 +4,7 @@ import {
 } from "../channels/plugins/config-helpers.js";
 import { buildAccountScopedDmSecurityPolicy } from "../channels/plugins/helpers.js";
 import type { ChannelConfigAdapter } from "../channels/plugins/types.adapters.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import { normalizeStringEntries } from "../shared/string-normalization.js";
 
 export function mapAllowFromEntries(
@@ -28,7 +28,7 @@ export function resolveOptionalConfigString(
 }
 
 export function createScopedAccountConfigAccessors<ResolvedAccount>(params: {
-  resolveAccount: (params: { cfg: OpenClawConfig; accountId?: string | null }) => ResolvedAccount;
+  resolveAccount: (params: { cfg: FoxClawConfig; accountId?: string | null }) => ResolvedAccount;
   resolveAllowFrom: (account: ResolvedAccount) => Array<string | number> | null | undefined;
   formatAllowFrom: (allowFrom: Array<string | number>) => string[];
   resolveDefaultTo?: (account: ResolvedAccount) => string | number | null | undefined;
@@ -37,7 +37,7 @@ export function createScopedAccountConfigAccessors<ResolvedAccount>(params: {
   "resolveAllowFrom" | "formatAllowFrom" | "resolveDefaultTo"
 > {
   const base = {
-    resolveAllowFrom: ({ cfg, accountId }: { cfg: OpenClawConfig; accountId?: string | null }) =>
+    resolveAllowFrom: ({ cfg, accountId }: { cfg: FoxClawConfig; accountId?: string | null }) =>
       mapAllowFromEntries(params.resolveAllowFrom(params.resolveAccount({ cfg, accountId }))),
     formatAllowFrom: ({ allowFrom }: { allowFrom: Array<string | number> }) =>
       params.formatAllowFrom(allowFrom),
@@ -58,7 +58,7 @@ export function createScopedAccountConfigAccessors<ResolvedAccount>(params: {
 
 export function createScopedChannelConfigBase<
   ResolvedAccount,
-  Config extends OpenClawConfig = OpenClawConfig,
+  Config extends FoxClawConfig = FoxClawConfig,
 >(params: {
   sectionKey: string;
   listAccountIds: (cfg: Config) => string[];
@@ -120,7 +120,7 @@ export function createScopedDmSecurityResolver<
     accountId,
     account,
   }: {
-    cfg: OpenClawConfig;
+    cfg: FoxClawConfig;
     accountId?: string | null;
     account: ResolvedAccount;
   }) =>

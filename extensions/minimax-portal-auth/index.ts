@@ -1,7 +1,7 @@
 import {
   buildOauthProviderAuthResult,
   emptyPluginConfigSchema,
-  type OpenClawPluginApi,
+  type FoxClawPluginApi,
   type ProviderAuthContext,
   type ProviderAuthResult,
 } from "openclaw/plugin-sdk/minimax-portal-auth";
@@ -135,7 +135,7 @@ const minimaxPortalPlugin = {
   name: "MiniMax OAuth",
   description: "OAuth flow for MiniMax models",
   configSchema: emptyPluginConfigSchema(),
-  register(api: OpenClawPluginApi) {
+  register(api: FoxClawPluginApi) {
     api.registerProvider({
       id: PROVIDER_ID,
       label: PROVIDER_LABEL,

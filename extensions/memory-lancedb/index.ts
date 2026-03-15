@@ -10,7 +10,7 @@ import { randomUUID } from "node:crypto";
 import type * as LanceDB from "@lancedb/lancedb";
 import { Type } from "@sinclair/typebox";
 import OpenAI from "openai";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/memory-lancedb";
+import type { FoxClawPluginApi } from "openclaw/plugin-sdk/memory-lancedb";
 import {
   DEFAULT_CAPTURE_MAX_CHARS,
   MEMORY_CATEGORIES,
@@ -296,7 +296,7 @@ const memoryPlugin = {
   kind: "memory" as const,
   configSchema: memoryConfigSchema,
 
-  register(api: OpenClawPluginApi) {
+  register(api: FoxClawPluginApi) {
     const cfg = memoryConfigSchema.parse(api.pluginConfig);
     const resolvedDbPath = api.resolvePath(cfg.dbPath!);
     const { model, dimensions, apiKey, baseUrl } = cfg.embedding;

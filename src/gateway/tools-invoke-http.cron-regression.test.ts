@@ -48,7 +48,7 @@ vi.mock("../agents/foxclaw-tools.js", () => {
     },
   ];
   return {
-    createOpenClawTools: () => tools,
+    createFoxClawTools: () => tools,
   };
 });
 

@@ -13,7 +13,7 @@ import {
 
 const ROOT_DIR = path.parse(process.cwd()).root;
 const CONFIG_DIR = path.join(ROOT_DIR, "config");
-const ETC_FOXCLAW_DIR = path.join(ROOT_DIR, "etc", "openclaw");
+const ETC_FOXCLAW_DIR = path.join(ROOT_DIR, "etc", "foxclaw");
 const SHARED_DIR = path.join(ROOT_DIR, "shared");
 
 const DEFAULT_BASE_PATH = path.join(CONFIG_DIR, "foxclaw.json");
@@ -22,7 +22,7 @@ function configPath(...parts: string[]) {
   return path.join(CONFIG_DIR, ...parts);
 }
 
-function etcOpenClawPath(...parts: string[]) {
+function etcFoxClawPath(...parts: string[]) {
   return path.join(ETC_FOXCLAW_DIR, ...parts);
 }
 
@@ -83,7 +83,7 @@ describe("resolveConfigIncludes", () => {
   });
 
   it("rejects absolute path outside config directory (CWE-22)", () => {
-    const absolute = etcOpenClawPath("agents.json");
+    const absolute = etcFoxClawPath("agents.json");
     const files = { [absolute]: { list: [{ id: "main" }] } };
     const obj = { agents: { $include: absolute } };
     expectResolveIncludeError(() => resolve(obj, files), /escapes config directory/);
@@ -620,7 +620,7 @@ describe("security: path traversal protection (CWE-22)", () => {
     });
 
     it("allows include files when the config root path is a symlink", async () => {
-      const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-includes-symlink-"));
+      const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-includes-symlink-"));
       try {
         const realRoot = path.join(tempRoot, "real");
         const linkRoot = path.join(tempRoot, "link");
@@ -646,7 +646,7 @@ describe("security: path traversal protection (CWE-22)", () => {
       if (process.platform === "win32") {
         return;
       }
-      const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-includes-hardlink-"));
+      const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-includes-hardlink-"));
       try {
         const configDir = path.join(tempRoot, "config");
         const outsideDir = path.join(tempRoot, "outside");
@@ -676,7 +676,7 @@ describe("security: path traversal protection (CWE-22)", () => {
     });
 
     it("rejects oversized include files", async () => {
-      const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-includes-big-"));
+      const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-includes-big-"));
       try {
         const configDir = path.join(tempRoot, "config");
         await fs.mkdir(configDir, { recursive: true });

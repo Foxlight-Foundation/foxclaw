@@ -40,7 +40,7 @@ function installTmpDirHarness(params: { prefix: string }) {
 }
 
 describe("memory plugin e2e", () => {
-  const { getDbPath } = installTmpDirHarness({ prefix: "openclaw-memory-test-" });
+  const { getDbPath } = installTmpDirHarness({ prefix: "foxclaw-memory-test-" });
 
   async function parseConfig(overrides: Record<string, unknown> = {}) {
     const { default: memoryPlugin } = await import("./index.js");
@@ -278,7 +278,7 @@ describe("memory plugin e2e", () => {
 
 // Live tests that require OpenAI API key and actually use LanceDB
 describeLive("memory plugin live tests", () => {
-  const { getDbPath } = installTmpDirHarness({ prefix: "openclaw-memory-live-" });
+  const { getDbPath } = installTmpDirHarness({ prefix: "foxclaw-memory-live-" });
 
   test("memory tools work end-to-end", async () => {
     const { default: memoryPlugin } = await import("./index.js");

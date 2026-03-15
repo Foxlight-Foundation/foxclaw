@@ -24,7 +24,7 @@ describe("readServiceStatusSummary", () => {
     const summary = await readServiceStatusSummary(
       createService({
         isLoaded: vi.fn(async () => true),
-        readCommand: vi.fn(async () => ({ programArguments: ["openclaw", "gateway", "run"] })),
+        readCommand: vi.fn(async () => ({ programArguments: ["foxclaw", "gateway", "run"] })),
         readRuntime: vi.fn(async () => ({ status: "running" })),
       }),
       "Daemon",
@@ -71,7 +71,7 @@ describe("readServiceStatusSummary", () => {
       createService({
         isLoaded,
         readCommand: vi.fn(async () => ({
-          programArguments: ["openclaw", "gateway", "run", "--port", "18789"],
+          programArguments: ["foxclaw", "gateway", "run", "--port", "18789"],
           environment: { FOXCLAW_GATEWAY_PORT: "18789" },
         })),
         readRuntime,

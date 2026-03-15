@@ -8,7 +8,7 @@ import {
 import { resolveSessionAgentId } from "../../agents/agent-scope.js";
 import { clearBootstrapSnapshotOnSessionRollover } from "../../agents/bootstrap-cache.js";
 import { normalizeChatType } from "../../channels/chat-type.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { FoxClawConfig } from "../../config/config.js";
 import {
   DEFAULT_RESET_TRIGGERS,
   deriveSessionMetaPatch,
@@ -148,7 +148,7 @@ function resolveAcpResetBindingContext(ctx: MsgContext): {
 }
 
 function resolveBoundAcpSessionForReset(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   ctx: MsgContext;
 }): string | undefined {
   const activeSessionKey = normalizeConversationText(params.ctx.SessionKey);
@@ -168,7 +168,7 @@ function resolveBoundAcpSessionForReset(params: {
 
 export async function initSessionState(params: {
   ctx: MsgContext;
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   commandAuthorized: boolean;
 }): Promise<SessionInitResult> {
   const { ctx, cfg, commandAuthorized } = params;

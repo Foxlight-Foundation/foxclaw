@@ -128,8 +128,8 @@ describe("daemon-cli coverage", () => {
       "FOXCLAW_GATEWAY_PORT",
       "FOXCLAW_PROFILE",
     ]);
-    process.env.FOXCLAW_STATE_DIR = "/tmp/openclaw-cli-state";
-    process.env.FOXCLAW_CONFIG_PATH = "/tmp/openclaw-cli-state/openclaw.json";
+    process.env.FOXCLAW_STATE_DIR = "/tmp/foxclaw-cli-state";
+    process.env.FOXCLAW_CONFIG_PATH = "/tmp/foxclaw-cli-state/foxclaw.json";
     delete process.env.FOXCLAW_GATEWAY_PORT;
     delete process.env.FOXCLAW_PROFILE;
     serviceReadCommand.mockResolvedValue(null);
@@ -162,11 +162,11 @@ describe("daemon-cli coverage", () => {
       programArguments: ["/bin/node", "cli", "gateway", "--port", "19001"],
       environment: {
         FOXCLAW_PROFILE: "dev",
-        FOXCLAW_STATE_DIR: "/tmp/openclaw-daemon-state",
-        FOXCLAW_CONFIG_PATH: "/tmp/openclaw-daemon-state/openclaw.json",
+        FOXCLAW_STATE_DIR: "/tmp/foxclaw-daemon-state",
+        FOXCLAW_CONFIG_PATH: "/tmp/foxclaw-daemon-state/foxclaw.json",
         FOXCLAW_GATEWAY_PORT: "19001",
       },
-      sourcePath: "/tmp/ai.openclaw.gateway.plist",
+      sourcePath: "/tmp/ai.foxclaw.gateway.plist",
     });
 
     await runDaemonCommand(["daemon", "status", "--json"]);

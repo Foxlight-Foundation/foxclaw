@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../../config/config.js";
+import type { FoxClawConfig } from "../../../config/config.js";
 
 const handleSlackAction = vi.fn(async (..._args: unknown[]) => ({ details: { ok: true } }));
 
@@ -10,7 +10,7 @@ vi.mock("../../../agents/tools/slack-actions.js", () => ({
 const { createSlackActions } = await import("../slack.actions.js");
 
 function slackHarness() {
-  const cfg = { channels: { slack: { botToken: "tok" } } } as OpenClawConfig;
+  const cfg = { channels: { slack: { botToken: "tok" } } } as FoxClawConfig;
   const actions = createSlackActions("slack");
   return { cfg, actions };
 }

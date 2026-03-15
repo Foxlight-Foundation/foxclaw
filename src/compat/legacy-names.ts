@@ -1,4 +1,4 @@
-export const PROJECT_NAME = "openclaw" as const;
+export const PROJECT_NAME = "foxclaw" as const;
 
 export const LEGACY_PROJECT_NAMES = [] as const;
 
@@ -6,7 +6,7 @@ export const MANIFEST_KEY = PROJECT_NAME;
 
 export const LEGACY_MANIFEST_KEYS = LEGACY_PROJECT_NAMES;
 
-export const LEGACY_PLUGIN_MANIFEST_FILENAMES = ["openclaw.plugin.json"] as const;
+export const LEGACY_PLUGIN_MANIFEST_FILENAMES = ["foxclaw.plugin.json"] as const;
 
 export const LEGACY_CANVAS_HANDLER_NAMES = [] as const;
 

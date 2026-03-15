@@ -72,7 +72,7 @@ describe("restart-helper", () => {
       });
       expect(scriptPath.endsWith(".sh")).toBe(true);
       expect(content).toContain("#!/bin/sh");
-      expect(content).toContain("systemctl --user restart 'openclaw-gateway.service'");
+      expect(content).toContain("systemctl --user restart 'foxclaw-gateway.service'");
       // Script should self-cleanup
       expect(content).toContain('rm -f "$0"');
       await cleanupScript(scriptPath);
@@ -97,9 +97,9 @@ describe("restart-helper", () => {
       });
       expect(scriptPath.endsWith(".sh")).toBe(true);
       expect(content).toContain("#!/bin/sh");
-      expect(content).toContain("launchctl kickstart -k 'gui/501/ai.openclaw.gateway'");
+      expect(content).toContain("launchctl kickstart -k 'gui/501/ai.foxclaw.gateway'");
       // Should clear disabled state and fall back to bootstrap when kickstart fails.
-      expect(content).toContain("launchctl enable 'gui/501/ai.openclaw.gateway'");
+      expect(content).toContain("launchctl enable 'gui/501/ai.foxclaw.gateway'");
       expect(content).toContain("launchctl bootstrap 'gui/501'");
       expect(content).toContain('rm -f "$0"');
       await cleanupScript(scriptPath);
@@ -111,9 +111,9 @@ describe("restart-helper", () => {
 
       const { scriptPath, content } = await prepareAndReadScript({
         FOXCLAW_PROFILE: "default",
-        FOXCLAW_LAUNCHD_LABEL: "com.custom.openclaw",
+        FOXCLAW_LAUNCHD_LABEL: "com.custom.foxclaw",
       });
-      expect(content).toContain("launchctl kickstart -k 'gui/501/com.custom.openclaw'");
+      expect(content).toContain("launchctl kickstart -k 'gui/501/com.custom.foxclaw'");
       await cleanupScript(scriptPath);
     });
 
@@ -125,8 +125,8 @@ describe("restart-helper", () => {
       });
       expect(scriptPath.endsWith(".bat")).toBe(true);
       expect(content).toContain("@echo off");
-      expect(content).toContain('schtasks /End /TN "OpenClaw Gateway"');
-      expect(content).toContain('schtasks /Run /TN "OpenClaw Gateway"');
+      expect(content).toContain('schtasks /End /TN "FoxClaw Gateway"');
+      expect(content).toContain('schtasks /Run /TN "FoxClaw Gateway"');
       expectWindowsRestartWaitOrdering(content);
       // Batch self-cleanup
       expect(content).toContain('del "%~f0"');
@@ -138,10 +138,10 @@ describe("restart-helper", () => {
 
       const { scriptPath, content } = await prepareAndReadScript({
         FOXCLAW_PROFILE: "default",
-        FOXCLAW_WINDOWS_TASK_NAME: "OpenClaw Gateway (custom)",
+        FOXCLAW_WINDOWS_TASK_NAME: "FoxClaw Gateway (custom)",
       });
-      expect(content).toContain('schtasks /End /TN "OpenClaw Gateway (custom)"');
-      expect(content).toContain('schtasks /Run /TN "OpenClaw Gateway (custom)"');
+      expect(content).toContain('schtasks /End /TN "FoxClaw Gateway (custom)"');
+      expect(content).toContain('schtasks /Run /TN "FoxClaw Gateway (custom)"');
       expectWindowsRestartWaitOrdering(content);
       await cleanupScript(scriptPath);
     });
@@ -169,7 +169,7 @@ describe("restart-helper", () => {
       const { scriptPath, content } = await prepareAndReadScript({
         FOXCLAW_PROFILE: "production",
       });
-      expect(content).toContain("openclaw-gateway-production.service");
+      expect(content).toContain("foxclaw-gateway-production.service");
       await cleanupScript(scriptPath);
     });
 
@@ -180,7 +180,7 @@ describe("restart-helper", () => {
       const { scriptPath, content } = await prepareAndReadScript({
         FOXCLAW_PROFILE: "staging",
       });
-      expect(content).toContain("gui/502/ai.openclaw.staging");
+      expect(content).toContain("gui/502/ai.foxclaw.staging");
       await cleanupScript(scriptPath);
     });
 
@@ -190,7 +190,7 @@ describe("restart-helper", () => {
       const { scriptPath, content } = await prepareAndReadScript({
         FOXCLAW_PROFILE: "production",
       });
-      expect(content).toContain('schtasks /End /TN "OpenClaw Gateway (production)"');
+      expect(content).toContain('schtasks /End /TN "FoxClaw Gateway (production)"');
       expectWindowsRestartWaitOrdering(content);
       await cleanupScript(scriptPath);
     });
@@ -258,10 +258,10 @@ describe("restart-helper", () => {
 
       const { scriptPath, content } = await prepareAndReadScript({
         HOME: "/Users/testuser",
-        FOXCLAW_LAUNCHD_LABEL: "ai.openclaw.it's-a-test",
+        FOXCLAW_LAUNCHD_LABEL: "ai.foxclaw.it's-a-test",
       });
       // The plist path must also shell-escape the label to prevent injection
-      expect(content).toContain("ai.openclaw.it'\\''s-a-test.plist");
+      expect(content).toContain("ai.foxclaw.it'\\''s-a-test.plist");
       await cleanupScript(scriptPath);
     });
 

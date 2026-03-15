@@ -17,7 +17,7 @@ function buildConfig() {
       enabled: true,
       color: "#FF4500",
       headless: true,
-      defaultProfile: "openclaw",
+      defaultProfile: "foxclaw",
       profiles: { ...cfgProfiles },
     },
   };
@@ -51,7 +51,7 @@ describe("server-context hot-reload profiles", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cfgProfiles = {
-      openclaw: { cdpPort: 18800, color: "#FF4500" },
+      foxclaw: { cdpPort: 18800, color: "#FF4500" },
     };
     cachedConfig = null; // Clear simulated cache
   });
@@ -136,16 +136,16 @@ describe("server-context hot-reload profiles", () => {
       profiles: new Map(),
     };
 
-    cfgProfiles.openclaw = { cdpPort: 19999, color: "#FF4500" };
+    cfgProfiles.foxclaw = { cdpPort: 19999, color: "#FF4500" };
     cachedConfig = null;
 
     const after = resolveBrowserProfileWithHotReload({
       current: state,
       refreshConfigFromDisk: true,
-      name: "openclaw",
+      name: "foxclaw",
     });
     expect(after?.cdpPort).toBe(19999);
-    expect(state.resolved.profiles.openclaw?.cdpPort).toBe(19999);
+    expect(state.resolved.profiles.foxclaw?.cdpPort).toBe(19999);
   });
 
   it("listProfiles refreshes config before enumerating profiles", async () => {
@@ -172,17 +172,17 @@ describe("server-context hot-reload profiles", () => {
   it("marks existing runtime state for reconcile when profile invariants change", async () => {
     const cfg = loadConfig();
     const resolved = resolveBrowserConfig(cfg.browser, cfg);
-    const openclawProfile = resolveProfile(resolved, "openclaw");
-    expect(openclawProfile).toBeTruthy();
+    const foxclawProfile = resolveProfile(resolved, "foxclaw");
+    expect(foxclawProfile).toBeTruthy();
     const state: BrowserServerState = {
       server: null,
       port: 18791,
       resolved,
       profiles: new Map([
         [
-          "openclaw",
+          "foxclaw",
           {
-            profile: openclawProfile!,
+            profile: foxclawProfile!,
             running: { pid: 123 } as never,
             lastTargetId: "tab-1",
             reconcile: null,
@@ -191,7 +191,7 @@ describe("server-context hot-reload profiles", () => {
       ]),
     };
 
-    cfgProfiles.openclaw = { cdpPort: 19999, color: "#FF4500" };
+    cfgProfiles.foxclaw = { cdpPort: 19999, color: "#FF4500" };
     cachedConfig = null;
 
     refreshResolvedBrowserConfigFromDisk({
@@ -200,7 +200,7 @@ describe("server-context hot-reload profiles", () => {
       mode: "cached",
     });
 
-    const runtime = state.profiles.get("openclaw");
+    const runtime = state.profiles.get("foxclaw");
     expect(runtime).toBeTruthy();
     expect(runtime?.profile.cdpPort).toBe(19999);
     expect(runtime?.lastTargetId).toBeNull();

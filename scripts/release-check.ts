@@ -65,7 +65,7 @@ const requiredPathGroups = [
   "dist/plugin-sdk/keyed-async-queue.d.ts",
   "dist/build-info.json",
 ];
-const forbiddenPrefixes = ["dist/OpenClaw.app/"];
+const forbiddenPrefixes = ["dist/FoxClaw.app/"];
 
 function normalizePluginSyncVersion(version: string): string {
   const normalized = version.trim().replace(/^v/, "");
@@ -92,7 +92,7 @@ export function collectBundledExtensionRootDependencyGapErrors(params: {
     }
 
     const missing = Object.keys(extension.packageJson.dependencies ?? {})
-      .filter((dep) => dep !== "openclaw" && !rootDeps[dep])
+      .filter((dep) => dep !== "foxclaw" && !rootDeps[dep])
       .toSorted();
     const allowlisted = extension.rootDependencyMirrorAllowlist.toSorted();
     if (missing.join("\n") !== allowlisted.join("\n")) {

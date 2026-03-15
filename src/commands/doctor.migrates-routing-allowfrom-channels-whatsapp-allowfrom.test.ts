@@ -6,7 +6,7 @@ import {
   mockDoctorConfigSnapshot,
   note,
   readConfigFileSnapshot,
-  resolveOpenClawPackageRoot,
+  resolveFoxClawPackageRoot,
   runCommandWithTimeout,
   runGatewayUpdate,
   serviceInstall,
@@ -73,7 +73,7 @@ describe("doctor command", () => {
       findLegacyGatewayServices.mockResolvedValueOnce([
         {
           platform: "darwin",
-          label: "com.steipete.openclaw.gateway",
+          label: "com.steipete.foxclaw.gateway",
           detail: "loaded",
         },
       ]);
@@ -90,8 +90,8 @@ describe("doctor command", () => {
   it("offers to update first for git checkouts", async () => {
     delete process.env.FOXCLAW_UPDATE_IN_PROGRESS;
 
-    const root = "/tmp/openclaw";
-    resolveOpenClawPackageRoot.mockResolvedValueOnce(root);
+    const root = "/tmp/foxclaw";
+    resolveFoxClawPackageRoot.mockResolvedValueOnce(root);
     runCommandWithTimeout.mockResolvedValueOnce({
       stdout: `${root}\n`,
       stderr: "",

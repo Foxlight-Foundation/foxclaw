@@ -2,10 +2,10 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-export const POSIX_FOXCLAW_TMP_DIR = "/tmp/openclaw";
+export const POSIX_FOXCLAW_TMP_DIR = "/tmp/foxclaw";
 const TMP_DIR_ACCESS_MODE = fs.constants.W_OK | fs.constants.X_OK;
 
-type ResolvePreferredOpenClawTmpDirOptions = {
+type ResolvePreferredFoxClawTmpDirOptions = {
   accessSync?: (path: string, mode?: number) => void;
   chmodSync?: (path: string, mode: number) => void;
   lstatSync?: (path: string) => {
@@ -31,8 +31,8 @@ function isNodeErrorWithCode(err: unknown, code: string): err is MaybeNodeError 
   );
 }
 
-export function resolvePreferredOpenClawTmpDir(
-  options: ResolvePreferredOpenClawTmpDirOptions = {},
+export function resolvePreferredFoxClawTmpDir(
+  options: ResolvePreferredFoxClawTmpDirOptions = {},
 ): string {
   const accessSync = options.accessSync ?? fs.accessSync;
   const chmodSync = options.chmodSync ?? fs.chmodSync;
@@ -67,7 +67,7 @@ export function resolvePreferredOpenClawTmpDir(
 
   const fallback = (): string => {
     const base = tmpdir();
-    const suffix = uid === undefined ? "openclaw" : `openclaw-${uid}`;
+    const suffix = uid === undefined ? "foxclaw" : `foxclaw-${uid}`;
     return path.join(base, suffix);
   };
 
@@ -109,7 +109,7 @@ export function resolvePreferredOpenClawTmpDir(
         return false;
       }
       chmodSync(candidatePath, 0o700);
-      warn(`[openclaw] tightened permissions on temp dir: ${candidatePath}`);
+      warn(`[foxclaw] tightened permissions on temp dir: ${candidatePath}`);
       return resolveDirState(candidatePath) === "available";
     } catch {
       return false;
@@ -126,16 +126,16 @@ export function resolvePreferredOpenClawTmpDir(
       if (tryRepairWritableBits(fallbackPath)) {
         return fallbackPath;
       }
-      throw new Error(`Unsafe fallback OpenClaw temp dir: ${fallbackPath}`);
+      throw new Error(`Unsafe fallback FoxClaw temp dir: ${fallbackPath}`);
     }
     try {
       mkdirSync(fallbackPath, { recursive: true, mode: 0o700 });
       chmodSync(fallbackPath, 0o700);
     } catch {
-      throw new Error(`Unable to create fallback OpenClaw temp dir: ${fallbackPath}`);
+      throw new Error(`Unable to create fallback FoxClaw temp dir: ${fallbackPath}`);
     }
     if (resolveDirState(fallbackPath) !== "available" && !tryRepairWritableBits(fallbackPath)) {
-      throw new Error(`Unsafe fallback OpenClaw temp dir: ${fallbackPath}`);
+      throw new Error(`Unsafe fallback FoxClaw temp dir: ${fallbackPath}`);
     }
     return fallbackPath;
   };

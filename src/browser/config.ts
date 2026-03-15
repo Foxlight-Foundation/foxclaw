@@ -1,4 +1,4 @@
-import type { BrowserConfig, BrowserProfileConfig, OpenClawConfig } from "../config/config.js";
+import type { BrowserConfig, BrowserProfileConfig, FoxClawConfig } from "../config/config.js";
 import { resolveGatewayPort } from "../config/paths.js";
 import {
   deriveDefaultBrowserCdpPortRange,
@@ -46,7 +46,7 @@ export type ResolvedBrowserProfile = {
   cdpHost: string;
   cdpIsLoopback: boolean;
   color: string;
-  driver: "openclaw" | "extension" | "existing-session";
+  driver: "foxclaw" | "extension" | "existing-session";
   attachOnly: boolean;
 };
 
@@ -199,7 +199,7 @@ function ensureDefaultUserBrowserProfile(
 
 export function resolveBrowserConfig(
   cfg: BrowserConfig | undefined,
-  rootConfig?: OpenClawConfig,
+  rootConfig?: FoxClawConfig,
 ): ResolvedBrowserConfig {
   const enabled = cfg?.enabled ?? DEFAULT_FOXCLAW_BROWSER_ENABLED;
   const evaluateEnabled = cfg?.evaluateEnabled ?? DEFAULT_BROWSER_EVALUATE_ENABLED;
@@ -327,7 +327,7 @@ export function resolveProfile(
       ? "extension"
       : profile.driver === "existing-session"
         ? "existing-session"
-        : "openclaw";
+        : "foxclaw";
 
   if (driver === "existing-session") {
     // existing-session uses Chrome MCP auto-connect; no CDP port/URL needed

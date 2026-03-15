@@ -26,8 +26,8 @@ type ExecFileError = Error & {
 };
 
 const TEST_SERVICE_HOME = "/home/test";
-const TEST_MANAGED_HOME = "/tmp/openclaw-test-home";
-const GATEWAY_SERVICE = "openclaw-gateway.service";
+const TEST_MANAGED_HOME = "/tmp/foxclaw-test-home";
+const GATEWAY_SERVICE = "foxclaw-gateway.service";
 
 const createExecFileError = (
   message: string,
@@ -97,10 +97,10 @@ function mockReadGatewayServiceFile(
 }
 
 async function expectExecStartWithoutEnvironment(envFileLine: string) {
-  mockReadGatewayServiceFile(["[Service]", "ExecStart=/usr/bin/openclaw gateway run", envFileLine]);
+  mockReadGatewayServiceFile(["[Service]", "ExecStart=/usr/bin/foxclaw gateway run", envFileLine]);
 
   const command = await readSystemdServiceExecStart({ HOME: TEST_SERVICE_HOME });
-  expect(command?.programArguments).toEqual(["/usr/bin/openclaw", "gateway", "run"]);
+  expect(command?.programArguments).toEqual(["/usr/bin/foxclaw", "gateway", "run"]);
   expect(command?.environment).toBeUndefined();
 }
 
@@ -185,7 +185,7 @@ describe("isSystemdServiceEnabled", () => {
     err.code = "ENOENT";
     vi.spyOn(fs, "access").mockRejectedValueOnce(err);
 
-    const result = await isSystemdServiceEnabled({ env: { HOME: "/tmp/openclaw-test-home" } });
+    const result = await isSystemdServiceEnabled({ env: { HOME: "/tmp/foxclaw-test-home" } });
 
     expect(result).toBe(false);
     expect(execFileMock).not.toHaveBeenCalled();
@@ -290,7 +290,7 @@ describe("isSystemdServiceEnabled", () => {
     vi.spyOn(fs, "access").mockResolvedValue(undefined);
     execFileMock
       .mockImplementationOnce((_cmd, args, _opts, cb) => {
-        expect(args).toEqual(["--user", "is-enabled", "openclaw-gateway.service"]);
+        expect(args).toEqual(["--user", "is-enabled", "foxclaw-gateway.service"]);
         const err = new Error("Failed to connect to bus") as Error & { code?: number };
         err.code = 1;
         cb(err, "", "Failed to connect to bus");
@@ -298,13 +298,13 @@ describe("isSystemdServiceEnabled", () => {
       .mockImplementationOnce((_cmd, args, _opts, cb) => {
         expect(args[0]).toBe("--machine");
         expect(String(args[1])).toMatch(/^[^@]+@$/);
-        expect(args.slice(2)).toEqual(["--user", "is-enabled", "openclaw-gateway.service"]);
+        expect(args.slice(2)).toEqual(["--user", "is-enabled", "foxclaw-gateway.service"]);
         const err = new Error("permission denied") as Error & { code?: number };
         err.code = 1;
         cb(err, "", "permission denied");
       });
     await expect(
-      isSystemdServiceEnabled({ env: { HOME: "/tmp/openclaw-test-home" } }),
+      isSystemdServiceEnabled({ env: { HOME: "/tmp/foxclaw-test-home" } }),
     ).rejects.toThrow("systemctl is-enabled unavailable: permission denied");
   });
 
@@ -315,12 +315,12 @@ describe("isSystemdServiceEnabled", () => {
       // On Ubuntu 24.04, `systemctl --user is-enabled <unit>` exits with
       // code 4 and prints "not-found" to stdout when the unit doesn't exist.
       const err = new Error(
-        "Command failed: systemctl --user is-enabled openclaw-gateway.service",
+        "Command failed: systemctl --user is-enabled foxclaw-gateway.service",
       ) as Error & { code?: number };
       err.code = 4;
       cb(err, "not-found\n", "");
     });
-    const result = await isSystemdServiceEnabled({ env: { HOME: "/tmp/openclaw-test-home" } });
+    const result = await isSystemdServiceEnabled({ env: { HOME: "/tmp/foxclaw-test-home" } });
     expect(result).toBe(false);
   });
 });
@@ -329,7 +329,7 @@ describe("isNonFatalSystemdInstallProbeError", () => {
   it("matches wrapper-only WSL install probe failures", () => {
     expect(
       isNonFatalSystemdInstallProbeError(
-        new Error("Command failed: systemctl --user is-enabled openclaw-gateway.service"),
+        new Error("Command failed: systemctl --user is-enabled foxclaw-gateway.service"),
       ),
     ).toBe(true);
   });
@@ -389,12 +389,12 @@ describe("resolveSystemdUserUnitPath", () => {
     {
       name: "uses default service name when FOXCLAW_PROFILE is unset",
       env: { HOME: "/home/test" },
-      expected: "/home/test/.config/systemd/user/openclaw-gateway.service",
+      expected: "/home/test/.config/systemd/user/foxclaw-gateway.service",
     },
     {
       name: "uses profile-specific service name when FOXCLAW_PROFILE is set to a custom value",
       env: { HOME: "/home/test", FOXCLAW_PROFILE: "jbphoenix" },
-      expected: "/home/test/.config/systemd/user/openclaw-gateway-jbphoenix.service",
+      expected: "/home/test/.config/systemd/user/foxclaw-gateway-jbphoenix.service",
     },
     {
       name: "prefers FOXCLAW_SYSTEMD_UNIT over FOXCLAW_PROFILE",
@@ -428,8 +428,8 @@ describe("resolveSystemdUserUnitPath", () => {
 
 describe("splitArgsPreservingQuotes", () => {
   it("splits on whitespace outside quotes", () => {
-    expect(splitArgsPreservingQuotes('/usr/bin/openclaw gateway start --name "My Bot"')).toEqual([
-      "/usr/bin/openclaw",
+    expect(splitArgsPreservingQuotes('/usr/bin/foxclaw gateway start --name "My Bot"')).toEqual([
+      "/usr/bin/foxclaw",
       "gateway",
       "start",
       "--name",
@@ -439,32 +439,32 @@ describe("splitArgsPreservingQuotes", () => {
 
   it("supports systemd-style backslash escaping", () => {
     expect(
-      splitArgsPreservingQuotes('openclaw --name "My \\"Bot\\"" --foo bar', {
+      splitArgsPreservingQuotes('foxclaw --name "My \\"Bot\\"" --foo bar', {
         escapeMode: "backslash",
       }),
-    ).toEqual(["openclaw", "--name", 'My "Bot"', "--foo", "bar"]);
+    ).toEqual(["foxclaw", "--name", 'My "Bot"', "--foo", "bar"]);
   });
 
   it("supports schtasks-style escaped quotes while preserving other backslashes", () => {
     expect(
-      splitArgsPreservingQuotes('openclaw --path "C:\\\\Program Files\\\\OpenClaw"', {
+      splitArgsPreservingQuotes('foxclaw --path "C:\\\\Program Files\\\\OpenClaw"', {
         escapeMode: "backslash-quote-only",
       }),
-    ).toEqual(["openclaw", "--path", "C:\\\\Program Files\\\\OpenClaw"]);
+    ).toEqual(["foxclaw", "--path", "C:\\\\Program Files\\\\OpenClaw"]);
 
     expect(
-      splitArgsPreservingQuotes('openclaw --label "My \\"Quoted\\" Name"', {
+      splitArgsPreservingQuotes('foxclaw --label "My \\"Quoted\\" Name"', {
         escapeMode: "backslash-quote-only",
       }),
-    ).toEqual(["openclaw", "--label", 'My "Quoted" Name']);
+    ).toEqual(["foxclaw", "--label", 'My "Quoted" Name']);
   });
 });
 
 describe("parseSystemdExecStart", () => {
   it("preserves quoted arguments", () => {
-    const execStart = '/usr/bin/openclaw gateway start --name "My Bot"';
+    const execStart = '/usr/bin/foxclaw gateway start --name "My Bot"';
     expect(parseSystemdExecStart(execStart)).toEqual([
-      "/usr/bin/openclaw",
+      "/usr/bin/foxclaw",
       "gateway",
       "start",
       "--name",
@@ -480,8 +480,8 @@ describe("readSystemdServiceExecStart", () => {
 
   it("loads FOXCLAW_GATEWAY_TOKEN from EnvironmentFile", async () => {
     const readFileSpy = mockReadGatewayServiceFile(
-      ["[Service]", "ExecStart=/usr/bin/openclaw gateway run", "EnvironmentFile=%h/.openclaw/.env"],
-      { [`${TEST_SERVICE_HOME}/.openclaw/.env`]: "FOXCLAW_GATEWAY_TOKEN=env-file-token\n" },
+      ["[Service]", "ExecStart=/usr/bin/foxclaw gateway run", "EnvironmentFile=%h/.foxclaw/.env"],
+      { [`${TEST_SERVICE_HOME}/.foxclaw/.env`]: "FOXCLAW_GATEWAY_TOKEN=env-file-token\n" },
     );
 
     const command = await readSystemdServiceExecStart({ HOME: TEST_SERVICE_HOME });
@@ -493,11 +493,11 @@ describe("readSystemdServiceExecStart", () => {
     mockReadGatewayServiceFile(
       [
         "[Service]",
-        "ExecStart=/usr/bin/openclaw gateway run",
-        "EnvironmentFile=%h/.openclaw/.env",
+        "ExecStart=/usr/bin/foxclaw gateway run",
+        "EnvironmentFile=%h/.foxclaw/.env",
         'Environment="FOXCLAW_GATEWAY_TOKEN=inline-token"',
       ],
-      { [`${TEST_SERVICE_HOME}/.openclaw/.env`]: "FOXCLAW_GATEWAY_TOKEN=env-file-token\n" },
+      { [`${TEST_SERVICE_HOME}/.foxclaw/.env`]: "FOXCLAW_GATEWAY_TOKEN=env-file-token\n" },
     );
 
     const command = await readSystemdServiceExecStart({ HOME: TEST_SERVICE_HOME });
@@ -506,27 +506,27 @@ describe("readSystemdServiceExecStart", () => {
   });
 
   it("ignores missing optional EnvironmentFile entries", async () => {
-    await expectExecStartWithoutEnvironment("EnvironmentFile=-%h/.openclaw/missing.env");
+    await expectExecStartWithoutEnvironment("EnvironmentFile=-%h/.foxclaw/missing.env");
   });
 
   it("keeps parsing when non-optional EnvironmentFile entries are missing", async () => {
-    await expectExecStartWithoutEnvironment("EnvironmentFile=%h/.openclaw/missing.env");
+    await expectExecStartWithoutEnvironment("EnvironmentFile=%h/.foxclaw/missing.env");
   });
 
   it("supports multiple EnvironmentFile entries and quoted paths", async () => {
     vi.spyOn(fs, "readFile").mockImplementation(async (pathname) => {
       const pathValue = pathLikeToString(pathname);
-      if (pathValue.endsWith("/openclaw-gateway.service")) {
+      if (pathValue.endsWith("/foxclaw-gateway.service")) {
         return [
           "[Service]",
-          "ExecStart=/usr/bin/openclaw gateway run",
-          'EnvironmentFile=%h/.openclaw/first.env "%h/.openclaw/second env.env"',
+          "ExecStart=/usr/bin/foxclaw gateway run",
+          'EnvironmentFile=%h/.foxclaw/first.env "%h/.foxclaw/second env.env"',
         ].join("\n");
       }
-      if (pathValue === "/home/test/.openclaw/first.env") {
+      if (pathValue === "/home/test/.foxclaw/first.env") {
         return "FOXCLAW_GATEWAY_TOKEN=first-token\n"; // pragma: allowlist secret
       }
-      if (pathValue === "/home/test/.openclaw/second env.env") {
+      if (pathValue === "/home/test/.foxclaw/second env.env") {
         return 'FOXCLAW_GATEWAY_PASSWORD="second password"\n'; // pragma: allowlist secret
       }
       throw new Error(`unexpected readFile path: ${pathValue}`);
@@ -542,10 +542,10 @@ describe("readSystemdServiceExecStart", () => {
   it("resolves relative EnvironmentFile paths from the unit directory", async () => {
     vi.spyOn(fs, "readFile").mockImplementation(async (pathname) => {
       const pathValue = pathLikeToString(pathname);
-      if (pathValue.endsWith("/openclaw-gateway.service")) {
+      if (pathValue.endsWith("/foxclaw-gateway.service")) {
         return [
           "[Service]",
-          "ExecStart=/usr/bin/openclaw gateway run",
+          "ExecStart=/usr/bin/foxclaw gateway run",
           "EnvironmentFile=./gateway.env ./override.env",
         ].join("\n");
       }
@@ -571,14 +571,14 @@ describe("readSystemdServiceExecStart", () => {
   it("parses EnvironmentFile content with comments and quoted values", async () => {
     vi.spyOn(fs, "readFile").mockImplementation(async (pathname) => {
       const pathValue = pathLikeToString(pathname);
-      if (pathValue.endsWith("/openclaw-gateway.service")) {
+      if (pathValue.endsWith("/foxclaw-gateway.service")) {
         return [
           "[Service]",
-          "ExecStart=/usr/bin/openclaw gateway run",
-          "EnvironmentFile=%h/.openclaw/gateway.env",
+          "ExecStart=/usr/bin/foxclaw gateway run",
+          "EnvironmentFile=%h/.foxclaw/gateway.env",
         ].join("\n");
       }
-      if (pathValue === "/home/test/.openclaw/gateway.env") {
+      if (pathValue === "/home/test/.foxclaw/gateway.env") {
         return [
           "# comment",
           "; another comment",
@@ -650,7 +650,7 @@ describe("systemd service control", () => {
     execFileMock
       .mockImplementationOnce((_cmd, _args, _opts, cb) => cb(null, "", ""))
       .mockImplementationOnce((_cmd, args, _opts, cb) => {
-        assertUserSystemctlArgs(args, "restart", "openclaw-gateway-work.service");
+        assertUserSystemctlArgs(args, "restart", "foxclaw-gateway-work.service");
         cb(null, "", "");
       });
     await assertRestartSuccess({ FOXCLAW_PROFILE: "work" });

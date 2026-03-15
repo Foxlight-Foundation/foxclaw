@@ -1,6 +1,6 @@
 import { vi } from "vitest";
 import type { ChannelOutboundAdapter } from "../../channels/plugins/types.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { FoxClawConfig } from "../../config/config.js";
 import { setActivePluginRegistry } from "../../plugins/runtime.js";
 import { createOutboundTestPlugin, createTestRegistry } from "../../test-utils/channel-plugins.js";
 import { createInternalHookEventPayload } from "../../test-utils/internal-hook-event-payload.js";
@@ -138,7 +138,7 @@ vi.mock("../../logging/subsystem.js", () => ({
   },
 }));
 
-export const whatsappChunkConfig: OpenClawConfig = {
+export const whatsappChunkConfig: FoxClawConfig = {
   channels: { whatsapp: { textChunkLimit: 4000 } },
 };
 
@@ -231,7 +231,7 @@ export async function runChunkedWhatsAppDelivery(params: {
     >()
     .mockResolvedValueOnce({ messageId: "w1", toJid: "jid" })
     .mockResolvedValueOnce({ messageId: "w2", toJid: "jid" });
-  const cfg: OpenClawConfig = {
+  const cfg: FoxClawConfig = {
     channels: { whatsapp: { textChunkLimit: 2 } },
   };
   const results = await params.deliverOutboundPayloads({

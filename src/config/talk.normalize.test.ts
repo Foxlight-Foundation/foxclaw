@@ -13,7 +13,7 @@ async function withTempConfig(
   config: unknown,
   run: (configPath: string) => Promise<void>,
 ): Promise<void> {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-talk-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-talk-"));
   const configPath = path.join(dir, "foxclaw.json");
   await fs.writeFile(configPath, JSON.stringify(config, null, 2));
   try {

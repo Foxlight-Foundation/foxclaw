@@ -12,7 +12,7 @@ import {
 } from "./interactions.modal.js";
 
 // Prefix for FoxClaw-generated action IDs to scope our handler
-const FOXCLAW_ACTION_PREFIX = "openclaw:";
+const FOXCLAW_ACTION_PREFIX = "foxclaw:";
 const SLACK_INTERACTION_EVENT_PREFIX = "Slack interaction: ";
 const REDACTED_INTERACTION_VALUE = "[redacted]";
 const SLACK_INTERACTION_EVENT_MAX_CHARS = 2400;

@@ -10,11 +10,11 @@ function createPluginSourceRoots() {
     "homebrew",
     "lib",
     "node_modules",
-    "openclaw",
+    "foxclaw",
     "extensions",
   );
-  const globalRoot = path.resolve(path.sep, "Users", "x", ".openclaw", "extensions");
-  const workspaceRoot = path.resolve(path.sep, "Users", "x", "ws", ".openclaw", "extensions");
+  const globalRoot = path.resolve(path.sep, "Users", "x", ".foxclaw", "extensions");
+  const workspaceRoot = path.resolve(path.sep, "Users", "x", "ws", ".foxclaw", "extensions");
   return {
     stock: stockRoot,
     global: globalRoot,
@@ -64,7 +64,7 @@ describe("formatPluginSourceForTable", () => {
 
   it("resolves source roots from an explicit env override", () => {
     const ignoredHome = path.resolve(path.sep, "tmp", "ignored-home");
-    const homeDir = path.resolve(path.sep, "tmp", "openclaw-home");
+    const homeDir = path.resolve(path.sep, "tmp", "foxclaw-home");
     const roots = withEnv(
       {
         FOXCLAW_BUNDLED_PLUGINS_DIR: path.join(ignoredHome, "ignored-bundled"),
@@ -86,7 +86,7 @@ describe("formatPluginSourceForTable", () => {
     expect(roots).toEqual({
       stock: path.join(homeDir, "bundled"),
       global: path.join(homeDir, "state", "extensions"),
-      workspace: path.join(homeDir, "ws", ".openclaw", "extensions"),
+      workspace: path.join(homeDir, "ws", ".foxclaw", "extensions"),
     });
   });
 });

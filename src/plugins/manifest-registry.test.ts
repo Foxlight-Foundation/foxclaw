@@ -23,7 +23,7 @@ function mkdirSafe(dir: string) {
 }
 
 function makeTempDir() {
-  return makeTrackedTempDir("openclaw-manifest-registry", tempDirs);
+  return makeTrackedTempDir("foxclaw-manifest-registry", tempDirs);
 }
 
 function writeManifest(dir: string, manifest: Record<string, unknown>) {

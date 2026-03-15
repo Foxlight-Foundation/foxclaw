@@ -1,7 +1,7 @@
 import fs from "node:fs";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import { normalizePluginsConfig, type NormalizedPluginsConfig } from "./config-state.js";
-import { discoverOpenClawPlugins, type PluginCandidate } from "./discovery.js";
+import { discoverFoxClawPlugins, type PluginCandidate } from "./discovery.js";
 import { loadPluginManifest, type PluginManifest } from "./manifest.js";
 import { safeRealpathSync } from "./path-safety.js";
 import { resolvePluginCacheInputs } from "./roots.js";
@@ -136,7 +136,7 @@ function buildRecord(params: {
 }
 
 export function loadPluginManifestRegistry(params: {
-  config?: OpenClawConfig;
+  config?: FoxClawConfig;
   workspaceDir?: string;
   cache?: boolean;
   env?: NodeJS.ProcessEnv;
@@ -160,7 +160,7 @@ export function loadPluginManifestRegistry(params: {
         candidates: params.candidates,
         diagnostics: params.diagnostics ?? [],
       }
-    : discoverOpenClawPlugins({
+    : discoverFoxClawPlugins({
         workspaceDir: params.workspaceDir,
         extraPaths: normalized.loadPaths,
         env,

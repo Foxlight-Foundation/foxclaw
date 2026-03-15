@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { FoxClawConfig } from "../../config/config.js";
 import type { PluginManifestRegistry } from "../../plugins/manifest-registry.js";
 import { createTrackedTempDirs } from "../../test-utils/tracked-temp-dirs.js";
 
@@ -70,9 +70,9 @@ function createSinglePluginRegistry(params: {
 }
 
 async function setupAcpxAndHelperRegistry() {
-  const workspaceDir = await tempDirs.make("openclaw-");
-  const acpxRoot = await tempDirs.make("openclaw-acpx-plugin-");
-  const helperRoot = await tempDirs.make("openclaw-helper-plugin-");
+  const workspaceDir = await tempDirs.make("foxclaw-");
+  const acpxRoot = await tempDirs.make("foxclaw-acpx-plugin-");
+  const helperRoot = await tempDirs.make("foxclaw-helper-plugin-");
   await fs.mkdir(path.join(acpxRoot, "skills"), { recursive: true });
   await fs.mkdir(path.join(helperRoot, "skills"), { recursive: true });
   hoisted.loadPluginManifestRegistry.mockReturnValue(buildRegistry({ acpxRoot, helperRoot }));
@@ -80,9 +80,9 @@ async function setupAcpxAndHelperRegistry() {
 }
 
 async function setupPluginOutsideSkills() {
-  const workspaceDir = await tempDirs.make("openclaw-");
-  const pluginRoot = await tempDirs.make("openclaw-plugin-");
-  const outsideDir = await tempDirs.make("openclaw-outside-");
+  const workspaceDir = await tempDirs.make("foxclaw-");
+  const pluginRoot = await tempDirs.make("foxclaw-plugin-");
+  const outsideDir = await tempDirs.make("foxclaw-outside-");
   const outsideSkills = path.join(outsideDir, "skills");
   return { workspaceDir, pluginRoot, outsideSkills };
 }
@@ -116,7 +116,7 @@ describe("resolvePluginSkillDirs", () => {
       workspaceDir,
       config: {
         acp: { enabled: acpEnabled },
-      } as OpenClawConfig,
+      } as FoxClawConfig,
     });
 
     expect(dirs).toEqual(expectedDirs({ acpxRoot, helperRoot }));
@@ -137,7 +137,7 @@ describe("resolvePluginSkillDirs", () => {
 
     const dirs = resolvePluginSkillDirs({
       workspaceDir,
-      config: {} as OpenClawConfig,
+      config: {} as FoxClawConfig,
     });
 
     expect(dirs).toEqual([path.resolve(pluginRoot, "skills")]);
@@ -162,7 +162,7 @@ describe("resolvePluginSkillDirs", () => {
 
     const dirs = resolvePluginSkillDirs({
       workspaceDir,
-      config: {} as OpenClawConfig,
+      config: {} as FoxClawConfig,
     });
 
     expect(dirs).toEqual([]);

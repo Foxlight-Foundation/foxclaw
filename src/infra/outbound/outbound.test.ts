@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ReplyPayload } from "../../auto-reply/types.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { FoxClawConfig } from "../../config/config.js";
 import { typedCases } from "../../test-utils/typed-cases.js";
 import {
   ackDelivery,
@@ -44,7 +44,7 @@ describe("delivery-queue", () => {
   let fixtureCount = 0;
 
   beforeAll(() => {
-    fixtureRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-dq-suite-"));
+    fixtureRoot = fs.mkdtempSync(path.join(os.tmpdir(), "foxclaw-dq-suite-"));
   });
 
   beforeEach(() => {
@@ -618,7 +618,7 @@ describe("delivery-queue", () => {
 });
 
 describe("DirectoryCache", () => {
-  const cfg = {} as OpenClawConfig;
+  const cfg = {} as FoxClawConfig;
 
   afterEach(() => {
     vi.useRealTimers();
@@ -869,13 +869,13 @@ const slackConfig = {
       appToken: "xapp-test",
     },
   },
-} as OpenClawConfig;
+} as FoxClawConfig;
 
 const discordConfig = {
   channels: {
     discord: {},
   },
-} as OpenClawConfig;
+} as FoxClawConfig;
 
 describe("outbound policy", () => {
   it("allows cross-provider sends when enabled", () => {
@@ -884,7 +884,7 @@ describe("outbound policy", () => {
       tools: {
         message: { crossContext: { allowAcrossProviders: true } },
       },
-    } as OpenClawConfig;
+    } as FoxClawConfig;
 
     expect(() =>
       enforceCrossContextPolicy({
@@ -920,10 +920,10 @@ describe("outbound policy", () => {
 });
 
 describe("resolveOutboundSessionRoute", () => {
-  const baseConfig = {} as OpenClawConfig;
+  const baseConfig = {} as FoxClawConfig;
 
   it("resolves provider-specific session routes", async () => {
-    const perChannelPeerCfg = { session: { dmScope: "per-channel-peer" } } as OpenClawConfig;
+    const perChannelPeerCfg = { session: { dmScope: "per-channel-peer" } } as FoxClawConfig;
     const identityLinksCfg = {
       session: {
         dmScope: "per-peer",
@@ -931,7 +931,7 @@ describe("resolveOutboundSessionRoute", () => {
           alice: ["discord:123"],
         },
       },
-    } as OpenClawConfig;
+    } as FoxClawConfig;
     const slackMpimCfg = {
       channels: {
         slack: {
@@ -940,10 +940,10 @@ describe("resolveOutboundSessionRoute", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as FoxClawConfig;
     const cases: Array<{
       name: string;
-      cfg: OpenClawConfig;
+      cfg: FoxClawConfig;
       channel: string;
       target: string;
       replyToId?: string;
@@ -1122,7 +1122,7 @@ describe("resolveOutboundSessionRoute", () => {
 
   it("uses resolved Discord user targets to route bare numeric ids as DMs", async () => {
     const route = await resolveOutboundSessionRoute({
-      cfg: { session: { dmScope: "per-channel-peer" } } as OpenClawConfig,
+      cfg: { session: { dmScope: "per-channel-peer" } } as FoxClawConfig,
       channel: "discord",
       agentId: "main",
       target: "123",
@@ -1144,7 +1144,7 @@ describe("resolveOutboundSessionRoute", () => {
   it("uses resolved Mattermost user targets to route bare ids as DMs", async () => {
     const userId = "dthcxgoxhifn3pwh65cut3ud3w";
     const route = await resolveOutboundSessionRoute({
-      cfg: { session: { dmScope: "per-channel-peer" } } as OpenClawConfig,
+      cfg: { session: { dmScope: "per-channel-peer" } } as FoxClawConfig,
       channel: "mattermost",
       agentId: "main",
       target: userId,
@@ -1166,7 +1166,7 @@ describe("resolveOutboundSessionRoute", () => {
   it("rejects bare numeric Discord targets when the caller has no kind hint", async () => {
     await expect(
       resolveOutboundSessionRoute({
-        cfg: { session: { dmScope: "per-channel-peer" } } as OpenClawConfig,
+        cfg: { session: { dmScope: "per-channel-peer" } } as FoxClawConfig,
         channel: "discord",
         agentId: "main",
         target: "123",

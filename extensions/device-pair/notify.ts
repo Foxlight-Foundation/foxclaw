@@ -1,6 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/device-pair";
+import type { FoxClawPluginApi } from "openclaw/plugin-sdk/device-pair";
 import { listDevicePairing } from "openclaw/plugin-sdk/device-pair";
 
 const NOTIFY_STATE_FILE = "device-pair-notify.json";
@@ -222,7 +222,7 @@ function shouldNotifySubscriberForRequest(
 // That channel has been removed; this is now a best-effort no-op until a
 // generic outbound delivery path is wired up.
 const notifySubscriber = async (_params: {
-  api: OpenClawPluginApi;
+  api: FoxClawPluginApi;
   subscriber: NotifySubscription;
   text: string;
 }): Promise<boolean> => {
@@ -231,7 +231,7 @@ const notifySubscriber = async (_params: {
 };
 
 async function notifyPendingPairingRequests(params: {
-  api: OpenClawPluginApi;
+  api: FoxClawPluginApi;
   statePath: string;
 }): Promise<void> {
   const state = await readNotifyState(params.statePath);
@@ -294,7 +294,7 @@ async function notifyPendingPairingRequests(params: {
 }
 
 export async function armPairNotifyOnce(params: {
-  api: OpenClawPluginApi;
+  api: FoxClawPluginApi;
   ctx: {
     channel: string;
     senderId?: string;
@@ -328,7 +328,7 @@ export async function armPairNotifyOnce(params: {
 }
 
 export async function handleNotifyCommand(params: {
-  api: OpenClawPluginApi;
+  api: FoxClawPluginApi;
   ctx: {
     channel: string;
     senderId?: string;
@@ -407,7 +407,7 @@ export async function handleNotifyCommand(params: {
   return { text: "Usage: /pair notify on|off|once|status" };
 }
 
-export function registerPairingNotifierService(api: OpenClawPluginApi): void {
+export function registerPairingNotifierService(api: FoxClawPluginApi): void {
   let notifyInterval: ReturnType<typeof setInterval> | null = null;
 
   api.registerService({

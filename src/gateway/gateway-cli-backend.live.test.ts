@@ -232,7 +232,7 @@ describeLive("gateway live (cli backend)", () => {
       );
     }
 
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-live-cli-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-live-cli-"));
     const disableMcpConfig = process.env.FOXCLAW_LIVE_CLI_BACKEND_DISABLE_MCP_CONFIG !== "0";
     let cliArgs = baseCliArgs;
     if (providerId === "claude-cli" && disableMcpConfig) {

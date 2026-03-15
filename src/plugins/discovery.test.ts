@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { clearPluginDiscoveryCache, discoverOpenClawPlugins } from "./discovery.js";
+import { clearPluginDiscoveryCache, discoverFoxClawPlugins } from "./discovery.js";
 import {
   cleanupTrackedTempDirs,
   makeTrackedTempDir,
@@ -11,7 +11,7 @@ import {
 const tempDirs: string[] = [];
 
 function makeTempDir() {
-  return makeTrackedTempDir("openclaw-plugins", tempDirs);
+  return makeTrackedTempDir("foxclaw-plugins", tempDirs);
 }
 
 const mkdirSafe = mkdirSafeDir;
@@ -27,9 +27,9 @@ function buildDiscoveryEnv(stateDir: string): NodeJS.ProcessEnv {
 
 async function discoverWithStateDir(
   stateDir: string,
-  params: Parameters<typeof discoverOpenClawPlugins>[0],
+  params: Parameters<typeof discoverFoxClawPlugins>[0],
 ) {
-  return discoverOpenClawPlugins({ ...params, env: buildDiscoveryEnv(stateDir) });
+  return discoverFoxClawPlugins({ ...params, env: buildDiscoveryEnv(stateDir) });
 }
 
 function writePluginPackageManifest(params: {
@@ -41,7 +41,7 @@ function writePluginPackageManifest(params: {
     path.join(params.packageDir, "package.json"),
     JSON.stringify({
       name: params.packageName,
-      openclaw: { extensions: params.extensions },
+      foxclaw: { extensions: params.extensions },
     }),
     "utf-8",
   );
@@ -58,7 +58,7 @@ afterEach(() => {
   cleanupTrackedTempDirs(tempDirs);
 });
 
-describe("discoverOpenClawPlugins", () => {
+describe("discoverFoxClawPlugins", () => {
   it("discovers global and workspace extensions", async () => {
     const stateDir = makeTempDir();
     const workspaceDir = path.join(stateDir, "workspace");
@@ -67,7 +67,7 @@ describe("discoverOpenClawPlugins", () => {
     mkdirSafe(globalExt);
     fs.writeFileSync(path.join(globalExt, "alpha.ts"), "export default function () {}", "utf-8");
 
-    const workspaceExt = path.join(workspaceDir, ".openclaw", "extensions");
+    const workspaceExt = path.join(workspaceDir, ".foxclaw", "extensions");
     mkdirSafe(workspaceExt);
     fs.writeFileSync(path.join(workspaceExt, "beta.ts"), "export default function () {}", "utf-8");
 
@@ -82,11 +82,11 @@ describe("discoverOpenClawPlugins", () => {
     const stateDir = makeTempDir();
     const homeDir = makeTempDir();
     const workspaceRoot = path.join(homeDir, "workspace");
-    const workspaceExt = path.join(workspaceRoot, ".openclaw", "extensions");
+    const workspaceExt = path.join(workspaceRoot, ".foxclaw", "extensions");
     mkdirSafe(workspaceExt);
     fs.writeFileSync(path.join(workspaceExt, "tilde-workspace.ts"), "export default {}", "utf-8");
 
-    const result = discoverOpenClawPlugins({
+    const result = discoverFoxClawPlugins({
       workspaceDir: "~/workspace",
       env: {
         ...buildDiscoveryEnv(stateDir),
@@ -313,7 +313,7 @@ describe("discoverOpenClawPlugins", () => {
       outsideManifest,
       JSON.stringify({
         name: "@openclaw/pack",
-        openclaw: { extensions: ["./entry.ts"] },
+        foxclaw: { extensions: ["./entry.ts"] },
       }),
       "utf-8",
     );
@@ -357,7 +357,7 @@ describe("discoverOpenClawPlugins", () => {
       fs.writeFileSync(path.join(packDir, "index.ts"), "export default function () {}", "utf-8");
       fs.chmodSync(packDir, 0o777);
 
-      const result = discoverOpenClawPlugins({
+      const result = discoverFoxClawPlugins({
         env: {
           ...process.env,
           FOXCLAW_STATE_DIR: stateDir,
@@ -405,7 +405,7 @@ describe("discoverOpenClawPlugins", () => {
     const pluginPath = path.join(globalExt, "cached.ts");
     fs.writeFileSync(pluginPath, "export default function () {}", "utf-8");
 
-    const first = discoverOpenClawPlugins({
+    const first = discoverFoxClawPlugins({
       env: {
         ...buildDiscoveryEnv(stateDir),
         FOXCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
@@ -415,7 +415,7 @@ describe("discoverOpenClawPlugins", () => {
 
     fs.rmSync(pluginPath, { force: true });
 
-    const second = discoverOpenClawPlugins({
+    const second = discoverFoxClawPlugins({
       env: {
         ...buildDiscoveryEnv(stateDir),
         FOXCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
@@ -425,7 +425,7 @@ describe("discoverOpenClawPlugins", () => {
 
     clearPluginDiscoveryCache();
 
-    const third = discoverOpenClawPlugins({
+    const third = discoverFoxClawPlugins({
       env: {
         ...buildDiscoveryEnv(stateDir),
         FOXCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
@@ -444,13 +444,13 @@ describe("discoverOpenClawPlugins", () => {
     fs.writeFileSync(path.join(globalExtA, "alpha.ts"), "export default function () {}", "utf-8");
     fs.writeFileSync(path.join(globalExtB, "beta.ts"), "export default function () {}", "utf-8");
 
-    const first = discoverOpenClawPlugins({
+    const first = discoverFoxClawPlugins({
       env: {
         ...buildDiscoveryEnv(stateDirA),
         FOXCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
       },
     });
-    const second = discoverOpenClawPlugins({
+    const second = discoverFoxClawPlugins({
       env: {
         ...buildDiscoveryEnv(stateDirB),
         FOXCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
@@ -474,7 +474,7 @@ describe("discoverOpenClawPlugins", () => {
     fs.writeFileSync(pluginA, "export default {}", "utf-8");
     fs.writeFileSync(pluginB, "export default {}", "utf-8");
 
-    const first = discoverOpenClawPlugins({
+    const first = discoverFoxClawPlugins({
       extraPaths: ["~/plugins/demo.ts"],
       env: {
         ...buildDiscoveryEnv(stateDir),
@@ -482,7 +482,7 @@ describe("discoverOpenClawPlugins", () => {
         FOXCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
       },
     });
-    const second = discoverOpenClawPlugins({
+    const second = discoverFoxClawPlugins({
       extraPaths: ["~/plugins/demo.ts"],
       env: {
         ...buildDiscoveryEnv(stateDir),
@@ -510,11 +510,11 @@ describe("discoverOpenClawPlugins", () => {
       FOXCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
     };
 
-    const first = discoverOpenClawPlugins({
+    const first = discoverFoxClawPlugins({
       extraPaths: [pluginA, pluginB],
       env,
     });
-    const second = discoverOpenClawPlugins({
+    const second = discoverFoxClawPlugins({
       extraPaths: [pluginB, pluginA],
       env,
     });

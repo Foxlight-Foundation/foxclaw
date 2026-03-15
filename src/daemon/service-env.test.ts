@@ -273,13 +273,13 @@ describe("buildServiceEnvironment", () => {
     }
     expect(env.FOXCLAW_GATEWAY_PORT).toBe("18789");
     expect(env.FOXCLAW_GATEWAY_TOKEN).toBeUndefined();
-    expect(env.FOXCLAW_SERVICE_MARKER).toBe("openclaw");
+    expect(env.FOXCLAW_SERVICE_MARKER).toBe("foxclaw");
     expect(env.FOXCLAW_SERVICE_KIND).toBe("gateway");
     expect(typeof env.FOXCLAW_SERVICE_VERSION).toBe("string");
-    expect(env.FOXCLAW_SYSTEMD_UNIT).toBe("openclaw-gateway.service");
-    expect(env.FOXCLAW_WINDOWS_TASK_NAME).toBe("OpenClaw Gateway");
+    expect(env.FOXCLAW_SYSTEMD_UNIT).toBe("foxclaw-gateway.service");
+    expect(env.FOXCLAW_WINDOWS_TASK_NAME).toBe("FoxClaw Gateway");
     if (process.platform === "darwin") {
-      expect(env.FOXCLAW_LAUNCHD_LABEL).toBe("ai.openclaw.gateway");
+      expect(env.FOXCLAW_LAUNCHD_LABEL).toBe("ai.foxclaw.gateway");
     }
   });
 
@@ -304,10 +304,10 @@ describe("buildServiceEnvironment", () => {
       env: { HOME: "/home/user", FOXCLAW_PROFILE: "work" },
       port: 18789,
     });
-    expect(env.FOXCLAW_SYSTEMD_UNIT).toBe("openclaw-gateway-work.service");
-    expect(env.FOXCLAW_WINDOWS_TASK_NAME).toBe("OpenClaw Gateway (work)");
+    expect(env.FOXCLAW_SYSTEMD_UNIT).toBe("foxclaw-gateway-work.service");
+    expect(env.FOXCLAW_WINDOWS_TASK_NAME).toBe("FoxClaw Gateway (work)");
     if (process.platform === "darwin") {
-      expect(env.FOXCLAW_LAUNCHD_LABEL).toBe("ai.openclaw.work");
+      expect(env.FOXCLAW_LAUNCHD_LABEL).toBe("ai.foxclaw.work");
     }
   });
 
@@ -342,7 +342,7 @@ describe("buildServiceEnvironment", () => {
     });
 
     expect(env).not.toHaveProperty("PATH");
-    expect(env.FOXCLAW_WINDOWS_TASK_NAME).toBe("OpenClaw Gateway");
+    expect(env.FOXCLAW_WINDOWS_TASK_NAME).toBe("FoxClaw Gateway");
   });
 });
 
@@ -372,11 +372,11 @@ describe("buildNodeServiceEnvironment", () => {
     const env = buildNodeServiceEnvironment({
       env: {
         HOME: "/home/user",
-        FOXCLAW_GATEWAY_TOKEN: "openclaw-token",
+        FOXCLAW_GATEWAY_TOKEN: "foxclaw-token",
         CLAWDBOT_GATEWAY_TOKEN: "legacy-token",
       },
     });
-    expect(env.FOXCLAW_GATEWAY_TOKEN).toBe("openclaw-token");
+    expect(env.FOXCLAW_GATEWAY_TOKEN).toBe("foxclaw-token");
   });
 
   it("omits FOXCLAW_GATEWAY_TOKEN when both token env vars are empty", () => {
@@ -466,31 +466,31 @@ describe("shared Node TLS env defaults", () => {
 describe("resolveGatewayStateDir", () => {
   it("uses the default state dir when no overrides are set", () => {
     const env = { HOME: "/Users/test" };
-    expect(resolveGatewayStateDir(env)).toBe(path.join("/Users/test", ".openclaw"));
+    expect(resolveGatewayStateDir(env)).toBe(path.join("/Users/test", ".foxclaw"));
   });
 
   it("appends the profile suffix when set", () => {
     const env = { HOME: "/Users/test", FOXCLAW_PROFILE: "rescue" };
-    expect(resolveGatewayStateDir(env)).toBe(path.join("/Users/test", ".openclaw-rescue"));
+    expect(resolveGatewayStateDir(env)).toBe(path.join("/Users/test", ".foxclaw-rescue"));
   });
 
   it("treats default profiles as the base state dir", () => {
     const env = { HOME: "/Users/test", FOXCLAW_PROFILE: "Default" };
-    expect(resolveGatewayStateDir(env)).toBe(path.join("/Users/test", ".openclaw"));
+    expect(resolveGatewayStateDir(env)).toBe(path.join("/Users/test", ".foxclaw"));
   });
 
   it("uses FOXCLAW_STATE_DIR when provided", () => {
-    const env = { HOME: "/Users/test", FOXCLAW_STATE_DIR: "/var/lib/openclaw" };
-    expect(resolveGatewayStateDir(env)).toBe(path.resolve("/var/lib/openclaw"));
+    const env = { HOME: "/Users/test", FOXCLAW_STATE_DIR: "/var/lib/foxclaw" };
+    expect(resolveGatewayStateDir(env)).toBe(path.resolve("/var/lib/foxclaw"));
   });
 
   it("expands ~ in FOXCLAW_STATE_DIR", () => {
-    const env = { HOME: "/Users/test", FOXCLAW_STATE_DIR: "~/openclaw-state" };
-    expect(resolveGatewayStateDir(env)).toBe(path.resolve("/Users/test/openclaw-state"));
+    const env = { HOME: "/Users/test", FOXCLAW_STATE_DIR: "~/foxclaw-state" };
+    expect(resolveGatewayStateDir(env)).toBe(path.resolve("/Users/test/foxclaw-state"));
   });
 
   it("preserves Windows absolute paths without HOME", () => {
-    const env = { FOXCLAW_STATE_DIR: "C:\\State\\openclaw" };
-    expect(resolveGatewayStateDir(env)).toBe("C:\\State\\openclaw");
+    const env = { FOXCLAW_STATE_DIR: "C:\\State\\foxclaw" };
+    expect(resolveGatewayStateDir(env)).toBe("C:\\State\\foxclaw");
   });
 });

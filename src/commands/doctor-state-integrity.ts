@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import { resolveOAuthDir, resolveStateDir } from "../config/paths.js";
 import {
   formatSessionArchiveTimestamp,
@@ -443,7 +443,7 @@ function isSlashRoutingSessionKey(sessionKey: string): boolean {
   return /^[^:]+:slash:[^:]+(?:$|:)/.test(scoped);
 }
 
-function shouldRequireOAuthDir(cfg: OpenClawConfig, env: NodeJS.ProcessEnv): boolean {
+function shouldRequireOAuthDir(cfg: FoxClawConfig, env: NodeJS.ProcessEnv): boolean {
   if (env.FOXCLAW_OAUTH_DIR?.trim()) {
     return true;
   }
@@ -468,7 +468,7 @@ function shouldRequireOAuthDir(cfg: OpenClawConfig, env: NodeJS.ProcessEnv): boo
 }
 
 export async function noteStateIntegrity(
-  cfg: OpenClawConfig,
+  cfg: FoxClawConfig,
   prompter: DoctorPrompterLike,
   configPath?: string,
 ) {
@@ -498,8 +498,8 @@ export async function noteStateIntegrity(
       [
         `- State directory is under macOS cloud-synced storage (${displayStateDir}; ${cloudSyncedStateDir.storage}).`,
         "- This can cause slow I/O and sync/lock races for sessions and credentials.",
-        "- Prefer a local non-synced state dir (for example: ~/.openclaw).",
-        `  Set locally: FOXCLAW_STATE_DIR=~/.openclaw ${formatCliCommand("openclaw doctor")}`,
+        "- Prefer a local non-synced state dir (for example: ~/.foxclaw).",
+        `  Set locally: FOXCLAW_STATE_DIR=~/.foxclaw ${formatCliCommand("foxclaw doctor")}`,
       ].join("\n"),
     );
   }
@@ -720,9 +720,9 @@ export async function noteStateIntegrity(
       warnings.push(
         [
           `- ${missing.length}/${recentTranscriptCandidates.length} recent sessions are missing transcripts.`,
-          `  Verify sessions in store: ${formatCliCommand(`openclaw sessions --store "${absoluteStorePath}"`)}`,
-          `  Preview cleanup impact: ${formatCliCommand(`openclaw sessions cleanup --store "${absoluteStorePath}" --dry-run`)}`,
-          `  Prune missing entries: ${formatCliCommand(`openclaw sessions cleanup --store "${absoluteStorePath}" --enforce --fix-missing`)}`,
+          `  Verify sessions in store: ${formatCliCommand(`foxclaw sessions --store "${absoluteStorePath}"`)}`,
+          `  Preview cleanup impact: ${formatCliCommand(`foxclaw sessions cleanup --store "${absoluteStorePath}" --dry-run`)}`,
+          `  Prune missing entries: ${formatCliCommand(`foxclaw sessions cleanup --store "${absoluteStorePath}" --enforce --fix-missing`)}`,
         ].join("\n"),
       );
     }
@@ -817,7 +817,7 @@ export function noteWorkspaceBackupTip(workspaceDir: string) {
   note(
     [
       "- Tip: back up the workspace in a private git repo (GitHub or GitLab).",
-      "- Keep ~/.openclaw out of git; it contains credentials and session history.",
+      "- Keep ~/.foxclaw out of git; it contains credentials and session history.",
       "- Details: /concepts/agent-workspace#git-backup-recommended",
     ].join("\n"),
     "Workspace",

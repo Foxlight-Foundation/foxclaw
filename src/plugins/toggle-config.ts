@@ -1,15 +1,15 @@
 import { normalizeChatChannelId } from "../channels/registry.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 
 export function setPluginEnabledInConfig(
-  config: OpenClawConfig,
+  config: FoxClawConfig,
   pluginId: string,
   enabled: boolean,
-): OpenClawConfig {
+): FoxClawConfig {
   const builtInChannelId = normalizeChatChannelId(pluginId);
   const resolvedId = builtInChannelId ?? pluginId;
 
-  const next: OpenClawConfig = {
+  const next: FoxClawConfig = {
     ...config,
     plugins: {
       ...config.plugins,

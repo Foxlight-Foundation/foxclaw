@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import { getPath } from "./path-utils.js";
 import { SECRET_TARGET_REGISTRY } from "./target-registry-data.js";
 import {
@@ -240,13 +240,13 @@ export function resolvePlanTargetAgainstRegistry(candidate: {
 }
 
 export function discoverConfigSecretTargets(
-  config: OpenClawConfig,
+  config: FoxClawConfig,
 ): DiscoveredConfigSecretTarget[] {
   return discoverConfigSecretTargetsByIds(config);
 }
 
 export function discoverConfigSecretTargetsByIds(
-  config: OpenClawConfig,
+  config: FoxClawConfig,
   targetIds?: Iterable<string>,
 ): DiscoveredConfigSecretTarget[] {
   const allowedTargetIds = normalizeAllowedTargetIds(targetIds);

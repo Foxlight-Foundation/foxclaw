@@ -43,7 +43,7 @@ type TalkConfigPayload = {
 type TalkConfig = NonNullable<NonNullable<TalkConfigPayload["config"]>["talk"]>;
 const TALK_CONFIG_DEVICE_PATH = path.join(
   os.tmpdir(),
-  `openclaw-talk-config-device-${process.pid}.json`,
+  `foxclaw-talk-config-device-${process.pid}.json`,
 );
 const TALK_CONFIG_DEVICE = loadOrCreateDeviceIdentity(TALK_CONFIG_DEVICE_PATH);
 

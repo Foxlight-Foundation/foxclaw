@@ -1,11 +1,11 @@
 import { inspectSlackAccount } from "../../../extensions/slack/src/account-inspect.js";
-import type { OpenClawConfig } from "../../config/types.js";
+import type { FoxClawConfig } from "../../config/types.js";
 import { applyDirectoryQueryAndLimit, toDirectoryEntries } from "./directory-config-helpers.js";
 import { normalizeSlackMessagingTarget } from "./normalize/slack.js";
 import type { ChannelDirectoryEntry } from "./types.js";
 
 export type DirectoryConfigParams = {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   accountId?: string | null;
   query?: string | null;
   limit?: number | null;

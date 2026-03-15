@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { FoxClawConfig } from "../../config/config.js";
 import { clearPluginManifestRegistryCache } from "../../plugins/manifest-registry.js";
 import { writePluginWithSkill } from "../test-helpers/skill-plugin-fixtures.js";
 import { resolveEmbeddedRunSkillEntries } from "./skills-runtime.js";
@@ -17,8 +17,8 @@ async function createTempDir(prefix: string) {
 }
 
 async function setupBundledDiffsPlugin() {
-  const bundledPluginsDir = await createTempDir("openclaw-bundled-");
-  const workspaceDir = await createTempDir("openclaw-workspace-");
+  const bundledPluginsDir = await createTempDir("foxclaw-bundled-");
+  const workspaceDir = await createTempDir("foxclaw-workspace-");
   const pluginRoot = path.join(bundledPluginsDir, "diffs");
 
   await writePluginWithSkill({
@@ -45,7 +45,7 @@ describe("resolveEmbeddedRunSkillEntries (integration)", () => {
     process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = bundledPluginsDir;
     clearPluginManifestRegistryCache();
 
-    const config: OpenClawConfig = {
+    const config: FoxClawConfig = {
       plugins: {
         entries: {
           diffs: { enabled: true },

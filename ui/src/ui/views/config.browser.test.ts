@@ -43,7 +43,7 @@ describe("config view", () => {
     setTheme: vi.fn(),
     setThemeMode: vi.fn(),
     gatewayUrl: "",
-    assistantName: "OpenClaw",
+    assistantName: "FoxClaw",
   });
 
   function findActionButtons(container: HTMLElement): {

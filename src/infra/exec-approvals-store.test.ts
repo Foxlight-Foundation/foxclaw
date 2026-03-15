@@ -23,7 +23,7 @@ import {
 } from "./exec-approvals.js";
 
 const tempDirs: string[] = [];
-const originalOpenClawHome = process.env.FOXCLAW_HOME;
+const originalFoxClawHome = process.env.FOXCLAW_HOME;
 
 beforeEach(() => {
   requestJsonlSocketMock.mockReset();
@@ -31,10 +31,10 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.restoreAllMocks();
-  if (originalOpenClawHome === undefined) {
+  if (originalFoxClawHome === undefined) {
     delete process.env.FOXCLAW_HOME;
   } else {
-    process.env.FOXCLAW_HOME = originalOpenClawHome;
+    process.env.FOXCLAW_HOME = originalFoxClawHome;
   }
   for (const dir of tempDirs.splice(0)) {
     fs.rmSync(dir, { recursive: true, force: true });
@@ -49,7 +49,7 @@ function createHomeDir(): string {
 }
 
 function approvalsFilePath(homeDir: string): string {
-  return path.join(homeDir, ".openclaw", "exec-approvals.json");
+  return path.join(homeDir, ".foxclaw", "exec-approvals.json");
 }
 
 function readApprovalsFile(homeDir: string): ExecApprovalsFile {
@@ -61,10 +61,10 @@ describe("exec approvals store helpers", () => {
     const dir = createHomeDir();
 
     expect(path.normalize(resolveExecApprovalsPath())).toBe(
-      path.normalize(path.join(dir, ".openclaw", "exec-approvals.json")),
+      path.normalize(path.join(dir, ".foxclaw", "exec-approvals.json")),
     );
     expect(path.normalize(resolveExecApprovalsSocketPath())).toBe(
-      path.normalize(path.join(dir, ".openclaw", "exec-approvals.sock")),
+      path.normalize(path.join(dir, ".foxclaw", "exec-approvals.sock")),
     );
   });
 

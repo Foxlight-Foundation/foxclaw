@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import { withEnvAsync } from "../test-utils/env.js";
 
 const fsMocks = vi.hoisted(() => ({
@@ -113,13 +113,13 @@ function makeDoctorPrompts() {
   };
 }
 
-async function runRepair(cfg: OpenClawConfig) {
+async function runRepair(cfg: FoxClawConfig) {
   await maybeRepairGatewayServiceConfig(cfg, "local", makeDoctorIo(), makeDoctorPrompts());
 }
 
 const gatewayProgramArguments = [
   "/usr/bin/node",
-  "/usr/local/bin/openclaw",
+  "/usr/local/bin/foxclaw",
   "gateway",
   "--port",
   "18789",
@@ -154,7 +154,7 @@ describe("maybeRepairGatewayServiceConfig", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     fsMocks.realpath.mockImplementation(async (value: string) => value);
-    mocks.resolveGatewayAuthTokenForService.mockImplementation(async (cfg: OpenClawConfig, env) => {
+    mocks.resolveGatewayAuthTokenForService.mockImplementation(async (cfg: FoxClawConfig, env) => {
       const configToken =
         typeof cfg.gateway?.auth?.token === "string" ? cfg.gateway.auth.token.trim() : undefined;
       const envToken = env.FOXCLAW_GATEWAY_TOKEN?.trim() || undefined;
@@ -165,7 +165,7 @@ describe("maybeRepairGatewayServiceConfig", () => {
   it("treats gateway.auth.token as source of truth for service token repairs", async () => {
     setupGatewayTokenRepairScenario();
 
-    const cfg: OpenClawConfig = {
+    const cfg: FoxClawConfig = {
       gateway: {
         auth: {
           mode: "token",
@@ -200,7 +200,7 @@ describe("maybeRepairGatewayServiceConfig", () => {
     await withEnvAsync({ FOXCLAW_GATEWAY_TOKEN: "env-token" }, async () => {
       setupGatewayTokenRepairScenario();
 
-      const cfg: OpenClawConfig = {
+      const cfg: FoxClawConfig = {
         gateway: {},
       };
 
@@ -239,7 +239,7 @@ describe("maybeRepairGatewayServiceConfig", () => {
     mocks.readCommand.mockResolvedValue({
       programArguments: [
         "/usr/bin/node",
-        "/Users/test/Library/pnpm/global/5/node_modules/openclaw/dist/index.js",
+        "/Users/test/Library/pnpm/global/5/node_modules/foxclaw/dist/index.js",
         "gateway",
         "--port",
         "18789",
@@ -253,7 +253,7 @@ describe("maybeRepairGatewayServiceConfig", () => {
     mocks.buildGatewayInstallPlan.mockResolvedValue({
       programArguments: [
         "/usr/bin/node",
-        "/Users/test/Library/pnpm/global/5/node_modules/.pnpm/openclaw@2026.3.12/node_modules/openclaw/dist/index.js",
+        "/Users/test/Library/pnpm/global/5/node_modules/.pnpm/foxclaw@2026.3.12/node_modules/foxclaw/dist/index.js",
         "gateway",
         "--port",
         "18789",
@@ -261,10 +261,10 @@ describe("maybeRepairGatewayServiceConfig", () => {
       environment: {},
     });
     fsMocks.realpath.mockImplementation(async (value: string) => {
-      if (value.includes("/global/5/node_modules/openclaw/")) {
+      if (value.includes("/global/5/node_modules/foxclaw/")) {
         return value.replace(
-          "/global/5/node_modules/openclaw/",
-          "/global/5/node_modules/.pnpm/openclaw@2026.3.12/node_modules/openclaw/",
+          "/global/5/node_modules/foxclaw/",
+          "/global/5/node_modules/.pnpm/foxclaw@2026.3.12/node_modules/foxclaw/",
         );
       }
       return value;
@@ -283,7 +283,7 @@ describe("maybeRepairGatewayServiceConfig", () => {
     mocks.readCommand.mockResolvedValue({
       programArguments: [
         "/usr/bin/node",
-        "/opt/openclaw/../openclaw/dist/index.js",
+        "/opt/foxclaw/../foxclaw/dist/index.js",
         "gateway",
         "--port",
         "18789",
@@ -297,7 +297,7 @@ describe("maybeRepairGatewayServiceConfig", () => {
     mocks.buildGatewayInstallPlan.mockResolvedValue({
       programArguments: [
         "/usr/bin/node",
-        "/opt/openclaw/dist/index.js",
+        "/opt/foxclaw/dist/index.js",
         "gateway",
         "--port",
         "18789",
@@ -319,7 +319,7 @@ describe("maybeRepairGatewayServiceConfig", () => {
     mocks.readCommand.mockResolvedValue({
       programArguments: [
         "/usr/bin/node",
-        "/Users/test/.nvm/versions/node/v22.0.0/lib/node_modules/openclaw/dist/index.js",
+        "/Users/test/.nvm/versions/node/v22.0.0/lib/node_modules/foxclaw/dist/index.js",
         "gateway",
         "--port",
         "18789",
@@ -333,7 +333,7 @@ describe("maybeRepairGatewayServiceConfig", () => {
     mocks.buildGatewayInstallPlan.mockResolvedValue({
       programArguments: [
         "/usr/bin/node",
-        "/Users/test/Library/pnpm/global/5/node_modules/openclaw/dist/index.js",
+        "/Users/test/Library/pnpm/global/5/node_modules/foxclaw/dist/index.js",
         "gateway",
         "--port",
         "18789",
@@ -368,7 +368,7 @@ describe("maybeRepairGatewayServiceConfig", () => {
     });
     mocks.install.mockResolvedValue(undefined);
 
-    const cfg: OpenClawConfig = {
+    const cfg: FoxClawConfig = {
       gateway: {
         auth: {
           mode: "token",
@@ -405,7 +405,7 @@ describe("maybeRepairGatewayServiceConfig", () => {
       async () => {
         setupGatewayTokenRepairScenario();
 
-        const cfg: OpenClawConfig = {
+        const cfg: FoxClawConfig = {
           gateway: {},
         };
 
@@ -468,7 +468,7 @@ describe("maybeRepairGatewayServiceConfig", () => {
         });
         mocks.install.mockResolvedValue(undefined);
 
-        const cfg: OpenClawConfig = {
+        const cfg: FoxClawConfig = {
           gateway: {},
         };
 
@@ -535,7 +535,7 @@ describe("maybeScanExtraGatewayServices", () => {
       "Legacy gateway removed",
     );
     expect(runtime.log).toHaveBeenCalledWith(
-      "Legacy gateway services removed. Installing OpenClaw gateway next.",
+      "Legacy gateway services removed. Installing FoxClaw gateway next.",
     );
   });
 });

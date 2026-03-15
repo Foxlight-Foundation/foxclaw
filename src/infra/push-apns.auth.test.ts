@@ -12,7 +12,7 @@ import {
 const tempDirs: string[] = [];
 
 async function makeTempDir(): Promise<string> {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-push-apns-auth-test-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-push-apns-auth-test-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -139,7 +139,7 @@ describe("push APNs auth and helper coverage", () => {
           nodeId: "ios-node-direct",
           transport: "direct",
           token: "ABCD1234ABCD1234ABCD1234ABCD1234",
-          topic: "ai.openclaw.ios",
+          topic: "ai.foxclaw.ios",
           environment: "sandbox",
           updatedAtMs: 1,
         },
@@ -155,7 +155,7 @@ describe("push APNs auth and helper coverage", () => {
           relayHandle: "relay-handle-123",
           sendGrant: "send-grant-123",
           installationId: "install-123",
-          topic: "ai.openclaw.ios",
+          topic: "ai.foxclaw.ios",
           environment: "production",
           distribution: "official",
           updatedAtMs: 1,
@@ -170,7 +170,7 @@ describe("push APNs auth and helper coverage", () => {
           nodeId: "ios-node-direct",
           transport: "direct",
           token: "ABCD1234ABCD1234ABCD1234ABCD1234",
-          topic: "ai.openclaw.ios",
+          topic: "ai.foxclaw.ios",
           environment: "sandbox",
           updatedAtMs: 1,
         },

@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import { INTERNAL_MESSAGE_CHANNEL, normalizeMessageChannel } from "../utils/message-channel.js";
 
 export type ExecApprovalInitiatingSurfaceState =
@@ -24,7 +24,7 @@ function labelForChannel(channel?: string): string {
 export function resolveExecApprovalInitiatingSurfaceState(params: {
   channel?: string | null;
   accountId?: string | null;
-  cfg?: OpenClawConfig;
+  cfg?: FoxClawConfig;
 }): ExecApprovalInitiatingSurfaceState {
   const channel = normalizeMessageChannel(params.channel);
   const channelLabel = labelForChannel(channel);
@@ -35,6 +35,6 @@ export function resolveExecApprovalInitiatingSurfaceState(params: {
   return { kind: "unsupported", channel, channelLabel };
 }
 
-export function hasConfiguredExecApprovalDmRoute(_cfg: OpenClawConfig): boolean {
+export function hasConfiguredExecApprovalDmRoute(_cfg: FoxClawConfig): boolean {
   return false;
 }

@@ -2,7 +2,7 @@ import { parseSlackTarget } from "../../../extensions/slack/src/targets.js";
 import { normalizeChatType, type ChatType } from "../../channels/chat-type.js";
 import type { ChannelOutboundTargetMode } from "../../channels/plugins/types.js";
 import { formatCliCommand } from "../../cli/command-format.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { FoxClawConfig } from "../../config/config.js";
 import type { SessionEntry } from "../../config/sessions.js";
 import type { AgentDefaultsConfig } from "../../config/types.agent-defaults.js";
 import { mapAllowFromEntries } from "../../plugin-sdk/channel-config-helpers.js";
@@ -158,7 +158,7 @@ export function resolveOutboundTarget(params: {
   channel: GatewayMessageChannel;
   to?: string;
   allowFrom?: string[];
-  cfg?: OpenClawConfig;
+  cfg?: FoxClawConfig;
   accountId?: string | null;
   mode?: ChannelOutboundTargetMode;
 }): OutboundTargetResolution {
@@ -166,7 +166,7 @@ export function resolveOutboundTarget(params: {
     return {
       ok: false,
       error: new Error(
-        `Delivering to WebChat is not supported via \`${formatCliCommand("openclaw agent")}\`; use WhatsApp/Telegram or run with --deliver=false.`,
+        `Delivering to WebChat is not supported via \`${formatCliCommand("foxclaw agent")}\`; use WhatsApp/Telegram or run with --deliver=false.`,
       ),
     };
   }
@@ -224,7 +224,7 @@ export function resolveOutboundTarget(params: {
 }
 
 export function resolveHeartbeatDeliveryTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   entry?: SessionEntry;
   heartbeat?: AgentDefaultsConfig["heartbeat"];
 }): OutboundTarget {
@@ -475,7 +475,7 @@ function resolveHeartbeatSenderId(params: {
 }
 
 export function resolveHeartbeatSenderContext(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   entry?: SessionEntry;
   delivery: OutboundTarget;
 }): HeartbeatSenderContext {

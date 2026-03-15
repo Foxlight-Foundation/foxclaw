@@ -31,7 +31,7 @@ function mkdirSafe(dir: string) {
 }
 
 function makeTempDir() {
-  const dir = mkdtempSafe(path.join(os.tmpdir(), "openclaw-plugin-auto-enable-"));
+  const dir = mkdtempSafe(path.join(os.tmpdir(), "foxclaw-plugin-auto-enable-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -209,7 +209,7 @@ describe("applyPluginAutoEnable", () => {
       config: {},
       env: {
         IRC_HOST: "irc.libera.chat",
-        IRC_NICK: "openclaw-bot",
+        IRC_NICK: "foxclaw-bot",
       },
     });
 
@@ -253,7 +253,7 @@ describe("applyPluginAutoEnable", () => {
         entries: [
           {
             name: "@openclaw/env-secondary",
-            openclaw: {
+            foxclaw: {
               channel: {
                 id: "env-secondary",
                 label: "Env Secondary",

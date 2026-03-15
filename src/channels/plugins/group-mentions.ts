@@ -1,5 +1,5 @@
 import { inspectSlackAccount } from "../../../extensions/slack/src/account-inspect.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { FoxClawConfig } from "../../config/config.js";
 import {
   resolveChannelGroupRequireMention,
   resolveChannelGroupToolsPolicy,

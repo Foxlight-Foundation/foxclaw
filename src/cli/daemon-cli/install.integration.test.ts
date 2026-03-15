@@ -56,7 +56,7 @@ describe("runDaemonInstall integration", () => {
       "FOXCLAW_GATEWAY_PASSWORD",
       "CLAWDBOT_GATEWAY_PASSWORD",
     ]);
-    tempHome = await makeTempWorkspace("openclaw-daemon-install-int-");
+    tempHome = await makeTempWorkspace("foxclaw-daemon-install-int-");
     configPath = path.join(tempHome, "foxclaw.json");
     process.env.HOME = tempHome;
     process.env.FOXCLAW_STATE_DIR = tempHome;

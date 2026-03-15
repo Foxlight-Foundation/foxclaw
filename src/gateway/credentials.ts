@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import {
   createGatewayCredentialPlan,
   type GatewayCredentialPlan,
@@ -251,7 +251,7 @@ function resolveRemoteGatewayCredentials(params: {
 }
 
 export function resolveGatewayCredentialsFromConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   env?: NodeJS.ProcessEnv;
   explicitAuth?: ExplicitGatewayAuth;
   urlOverride?: string;
@@ -323,7 +323,7 @@ export function resolveGatewayCredentialsFromConfig(params: {
 }
 
 export function resolveGatewayProbeCredentialsFromConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   mode: GatewayCredentialMode;
   env?: NodeJS.ProcessEnv;
   explicitAuth?: ExplicitGatewayAuth;
@@ -339,7 +339,7 @@ export function resolveGatewayProbeCredentialsFromConfig(params: {
 }
 
 export function resolveGatewayDriftCheckCredentialsFromConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
 }): ResolvedGatewayCredentials {
   return resolveGatewayCredentialsFromConfig({
     cfg: params.cfg,

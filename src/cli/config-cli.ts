@@ -100,7 +100,7 @@ function hasOwnPathKey(value: Record<string, unknown>, key: string): boolean {
 }
 
 function formatDoctorHint(message: string): string {
-  return `Run \`${formatCliCommand("openclaw doctor")}\` ${message}`;
+  return `Run \`${formatCliCommand("foxclaw doctor")}\` ${message}`;
 }
 
 function validatePathSegments(path: PathSegment[]): void {
@@ -401,7 +401,7 @@ export function registerConfigCli(program: Command) {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/config", "docs.openclaw.ai/cli/config")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/config", "docs.foxclaw.ai/cli/config")}\n`,
     )
     .option(
       "--section <section>",

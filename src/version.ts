@@ -1,7 +1,7 @@
 import { createRequire } from "node:module";
 
 declare const __FOXCLAW_VERSION__: string | undefined;
-const CORE_PACKAGE_NAME = "openclaw";
+const CORE_PACKAGE_NAME = "foxclaw";
 
 const PACKAGE_JSON_CANDIDATES = [
   "../package.json",

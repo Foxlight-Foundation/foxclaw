@@ -248,7 +248,7 @@ describe("syncPluginsForUpdateChannel", () => {
 
   it("forwards an explicit env to bundled plugin source resolution", async () => {
     resolveBundledPluginSourcesMock.mockReturnValue(new Map());
-    const env = { FOXCLAW_HOME: "/srv/openclaw-home" } as NodeJS.ProcessEnv;
+    const env = { FOXCLAW_HOME: "/srv/foxclaw-home" } as NodeJS.ProcessEnv;
 
     const { syncPluginsForUpdateChannel } = await import("./update.js");
     await syncPluginsForUpdateChannel({
@@ -265,7 +265,7 @@ describe("syncPluginsForUpdateChannel", () => {
   });
 
   it("uses the provided env when matching bundled load and install paths", async () => {
-    const bundledHome = "/tmp/openclaw-home";
+    const bundledHome = "/tmp/foxclaw-home";
     resolveBundledPluginSourcesMock.mockReturnValue(
       new Map([
         [

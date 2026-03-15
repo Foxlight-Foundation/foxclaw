@@ -45,7 +45,7 @@ describe("gateway e2e", () => {
 
       const { baseUrl: openaiBaseUrl, restore } = installOpenAiResponsesMock();
 
-      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-mock-home-"));
+      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-gw-mock-home-"));
       process.env.HOME = tempHome;
       process.env.FOXCLAW_SKIP_CHANNELS = "1";
       process.env.FOXCLAW_SKIP_GMAIL_WATCHER = "1";
@@ -56,15 +56,15 @@ describe("gateway e2e", () => {
       const token = nextGatewayId("test-token");
       process.env.FOXCLAW_GATEWAY_TOKEN = token;
 
-      const workspaceDir = path.join(tempHome, "openclaw");
+      const workspaceDir = path.join(tempHome, "foxclaw");
       await fs.mkdir(workspaceDir, { recursive: true });
 
       const nonceA = nextGatewayId("nonce-a");
       const nonceB = nextGatewayId("nonce-b");
-      const toolProbePath = path.join(workspaceDir, `.openclaw-tool-probe.${nonceA}.txt`);
+      const toolProbePath = path.join(workspaceDir, `.foxclaw-tool-probe.${nonceA}.txt`);
       await fs.writeFile(toolProbePath, `nonceA=${nonceA}\nnonceB=${nonceB}\n`);
 
-      const configDir = path.join(tempHome, ".openclaw");
+      const configDir = path.join(tempHome, ".foxclaw");
       await fs.mkdir(configDir, { recursive: true });
       const configPath = path.join(configDir, "foxclaw.json");
 
@@ -148,7 +148,7 @@ describe("gateway e2e", () => {
       process.env.FOXCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
       delete process.env.FOXCLAW_GATEWAY_TOKEN;
 
-      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-wizard-home-"));
+      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-wizard-home-"));
       process.env.HOME = tempHome;
       delete process.env.FOXCLAW_STATE_DIR;
       delete process.env.FOXCLAW_CONFIG_PATH;

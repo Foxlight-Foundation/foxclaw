@@ -1,7 +1,7 @@
 import {
   buildOauthProviderAuthResult,
   emptyPluginConfigSchema,
-  type OpenClawPluginApi,
+  type FoxClawPluginApi,
   type ProviderAuthContext,
 } from "openclaw/plugin-sdk/google-gemini-cli-auth";
 import { loginGeminiCliOAuth } from "./oauth.js";
@@ -21,7 +21,7 @@ const geminiCliPlugin = {
   name: "Google Gemini CLI Auth",
   description: "OAuth flow for Gemini CLI (Google Code Assist)",
   configSchema: emptyPluginConfigSchema(),
-  register(api: OpenClawPluginApi) {
+  register(api: FoxClawPluginApi) {
     api.registerProvider({
       id: PROVIDER_ID,
       label: PROVIDER_LABEL,

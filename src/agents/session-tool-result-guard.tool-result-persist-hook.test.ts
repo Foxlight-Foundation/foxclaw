@@ -8,7 +8,7 @@ import {
   initializeGlobalHookRunner,
   resetGlobalHookRunner,
 } from "../plugins/hook-runner-global.js";
-import { loadOpenClawPlugins } from "../plugins/loader.js";
+import { loadFoxClawPlugins } from "../plugins/loader.js";
 import { guardSessionManager } from "./session-tool-result-guard-wrapper.js";
 
 const EMPTY_PLUGIN_SCHEMA = { type: "object", additionalProperties: false, properties: {} };
@@ -77,7 +77,7 @@ describe("tool_result_persist hook", () => {
   });
 
   it("loads tool_result_persist hooks without breaking persistence", () => {
-    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-toolpersist-"));
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "foxclaw-toolpersist-"));
     process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
 
     const pluginA = writeTempPlugin({
@@ -104,7 +104,7 @@ describe("tool_result_persist hook", () => {
 } };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       workspaceDir: tmp,
       config: {
@@ -134,7 +134,7 @@ describe("tool_result_persist hook", () => {
 
 describe("before_message_write hook", () => {
   it("continues persistence when a before_message_write hook throws", () => {
-    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-before-write-"));
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "foxclaw-before-write-"));
     process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
 
     const plugin = writeTempPlugin({
@@ -147,7 +147,7 @@ describe("before_message_write hook", () => {
 } };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       workspaceDir: tmp,
       config: {

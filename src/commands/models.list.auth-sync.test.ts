@@ -25,7 +25,7 @@ type AuthSyncFixture = {
 };
 
 async function withAuthSyncFixture(run: (fixture: AuthSyncFixture) => Promise<void>) {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-models-list-auth-sync-"));
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-models-list-auth-sync-"));
   try {
     const stateDir = path.join(root, "state");
     const agentDir = path.join(stateDir, "agents", "main", "agent");

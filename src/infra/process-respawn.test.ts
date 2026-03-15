@@ -3,14 +3,14 @@ import { captureFullEnv } from "../test-utils/env.js";
 import { SUPERVISOR_HINT_ENV_VARS } from "./supervisor-markers.js";
 
 const spawnMock = vi.hoisted(() => vi.fn());
-const triggerOpenClawRestartMock = vi.hoisted(() => vi.fn());
+const triggerFoxClawRestartMock = vi.hoisted(() => vi.fn());
 const scheduleDetachedLaunchdRestartHandoffMock = vi.hoisted(() => vi.fn());
 
 vi.mock("node:child_process", () => ({
   spawn: (...args: unknown[]) => spawnMock(...args),
 }));
 vi.mock("./restart.js", () => ({
-  triggerOpenClawRestart: (...args: unknown[]) => triggerOpenClawRestartMock(...args),
+  triggerFoxClawRestart: (...args: unknown[]) => triggerFoxClawRestartMock(...args),
 }));
 vi.mock("../daemon/launchd-restart-handoff.js", () => ({
   scheduleDetachedLaunchdRestartHandoff: (...args: unknown[]) =>
@@ -39,7 +39,7 @@ afterEach(() => {
   process.argv = [...originalArgv];
   process.execArgv = [...originalExecArgv];
   spawnMock.mockClear();
-  triggerOpenClawRestartMock.mockClear();
+  triggerFoxClawRestartMock.mockClear();
   scheduleDetachedLaunchdRestartHandoffMock.mockReset();
   scheduleDetachedLaunchdRestartHandoffMock.mockReturnValue({ ok: true, pid: 8123 });
   if (originalPlatformDescriptor) {
@@ -61,7 +61,7 @@ function expectLaunchdSupervisedWithoutKickstart(params?: {
   if (params?.launchJobLabel) {
     process.env.LAUNCH_JOB_LABEL = params.launchJobLabel;
   }
-  process.env.FOXCLAW_LAUNCHD_LABEL = "ai.openclaw.gateway";
+  process.env.FOXCLAW_LAUNCHD_LABEL = "ai.foxclaw.gateway";
   const result = restartGatewayProcessWithFreshPid();
   expect(result.mode).toBe("supervised");
   if (params?.detailContains) {
@@ -72,7 +72,7 @@ function expectLaunchdSupervisedWithoutKickstart(params?: {
     mode: "start-after-exit",
     waitForPid: process.pid,
   });
-  expect(triggerOpenClawRestartMock).not.toHaveBeenCalled();
+  expect(triggerFoxClawRestartMock).not.toHaveBeenCalled();
   expect(spawnMock).not.toHaveBeenCalled();
 }
 
@@ -87,21 +87,21 @@ describe("restartGatewayProcessWithFreshPid", () => {
   it("returns supervised when launchd hints are present on macOS (no kickstart)", () => {
     clearSupervisorHints();
     expectLaunchdSupervisedWithoutKickstart({
-      launchJobLabel: "ai.openclaw.gateway",
+      launchJobLabel: "ai.foxclaw.gateway",
       detailContains: "launchd restart handoff",
     });
   });
 
   it("returns supervised on macOS when launchd label is set (no kickstart)", () => {
-    expectLaunchdSupervisedWithoutKickstart({ launchJobLabel: "ai.openclaw.gateway" });
+    expectLaunchdSupervisedWithoutKickstart({ launchJobLabel: "ai.foxclaw.gateway" });
   });
 
-  it("launchd supervisor never returns failed regardless of triggerOpenClawRestart outcome", () => {
+  it("launchd supervisor never returns failed regardless of triggerFoxClawRestart outcome", () => {
     clearSupervisorHints();
     setPlatform("darwin");
-    process.env.FOXCLAW_LAUNCHD_LABEL = "ai.openclaw.gateway";
+    process.env.FOXCLAW_LAUNCHD_LABEL = "ai.foxclaw.gateway";
     // Even if triggerFoxClawRestart *would* fail, launchd path must not call it.
-    triggerOpenClawRestartMock.mockReturnValue({
+    triggerFoxClawRestartMock.mockReturnValue({
       ok: false,
       method: "launchctl",
       detail: "Bootstrap failed: 5: Input/output error",
@@ -109,13 +109,13 @@ describe("restartGatewayProcessWithFreshPid", () => {
     const result = restartGatewayProcessWithFreshPid();
     expect(result.mode).toBe("supervised");
     expect(result.mode).not.toBe("failed");
-    expect(triggerOpenClawRestartMock).not.toHaveBeenCalled();
+    expect(triggerFoxClawRestartMock).not.toHaveBeenCalled();
   });
 
   it("falls back to plain supervised exit when launchd handoff scheduling fails", () => {
     clearSupervisorHints();
     setPlatform("darwin");
-    process.env.XPC_SERVICE_NAME = "ai.openclaw.gateway";
+    process.env.XPC_SERVICE_NAME = "ai.foxclaw.gateway";
     scheduleDetachedLaunchdRestartHandoffMock.mockReturnValue({
       ok: false,
       detail: "spawn failed",
@@ -127,29 +127,29 @@ describe("restartGatewayProcessWithFreshPid", () => {
       mode: "supervised",
       detail: "launchd exit fallback (spawn failed)",
     });
-    expect(triggerOpenClawRestartMock).not.toHaveBeenCalled();
+    expect(triggerFoxClawRestartMock).not.toHaveBeenCalled();
     expect(spawnMock).not.toHaveBeenCalled();
   });
 
   it("does not schedule kickstart on non-darwin platforms", () => {
     setPlatform("linux");
     process.env.INVOCATION_ID = "abc123";
-    process.env.FOXCLAW_LAUNCHD_LABEL = "ai.openclaw.gateway";
+    process.env.FOXCLAW_LAUNCHD_LABEL = "ai.foxclaw.gateway";
 
     const result = restartGatewayProcessWithFreshPid();
 
     expect(result.mode).toBe("supervised");
-    expect(triggerOpenClawRestartMock).not.toHaveBeenCalled();
+    expect(triggerFoxClawRestartMock).not.toHaveBeenCalled();
     expect(spawnMock).not.toHaveBeenCalled();
   });
 
   it("returns supervised when XPC_SERVICE_NAME is set by launchd", () => {
     clearSupervisorHints();
     setPlatform("darwin");
-    process.env.XPC_SERVICE_NAME = "ai.openclaw.gateway";
+    process.env.XPC_SERVICE_NAME = "ai.foxclaw.gateway";
     const result = restartGatewayProcessWithFreshPid();
     expect(result.mode).toBe("supervised");
-    expect(triggerOpenClawRestartMock).not.toHaveBeenCalled();
+    expect(triggerFoxClawRestartMock).not.toHaveBeenCalled();
     expect(spawnMock).not.toHaveBeenCalled();
   });
 
@@ -182,35 +182,35 @@ describe("restartGatewayProcessWithFreshPid", () => {
   it("returns supervised when FOXCLAW_SYSTEMD_UNIT is set", () => {
     clearSupervisorHints();
     setPlatform("linux");
-    process.env.FOXCLAW_SYSTEMD_UNIT = "openclaw-gateway.service";
+    process.env.FOXCLAW_SYSTEMD_UNIT = "foxclaw-gateway.service";
     const result = restartGatewayProcessWithFreshPid();
     expect(result.mode).toBe("supervised");
     expect(spawnMock).not.toHaveBeenCalled();
   });
 
-  it("returns supervised when OpenClaw gateway task markers are set on Windows", () => {
+  it("returns supervised when FoxClaw gateway task markers are set on Windows", () => {
     clearSupervisorHints();
     setPlatform("win32");
-    process.env.FOXCLAW_SERVICE_MARKER = "openclaw";
+    process.env.FOXCLAW_SERVICE_MARKER = "foxclaw";
     process.env.FOXCLAW_SERVICE_KIND = "gateway";
-    triggerOpenClawRestartMock.mockReturnValue({ ok: true, method: "schtasks" });
+    triggerFoxClawRestartMock.mockReturnValue({ ok: true, method: "schtasks" });
     const result = restartGatewayProcessWithFreshPid();
     expect(result.mode).toBe("supervised");
-    expect(triggerOpenClawRestartMock).toHaveBeenCalledOnce();
+    expect(triggerFoxClawRestartMock).toHaveBeenCalledOnce();
     expect(spawnMock).not.toHaveBeenCalled();
   });
 
   it("keeps generic service markers out of non-Windows supervisor detection", () => {
     clearSupervisorHints();
     setPlatform("linux");
-    process.env.FOXCLAW_SERVICE_MARKER = "openclaw";
+    process.env.FOXCLAW_SERVICE_MARKER = "foxclaw";
     process.env.FOXCLAW_SERVICE_KIND = "gateway";
     spawnMock.mockReturnValue({ pid: 4242, unref: vi.fn() });
 
     const result = restartGatewayProcessWithFreshPid();
 
     expect(result).toEqual({ mode: "spawned", pid: 4242 });
-    expect(triggerOpenClawRestartMock).not.toHaveBeenCalled();
+    expect(triggerFoxClawRestartMock).not.toHaveBeenCalled();
   });
 
   it("returns disabled on Windows without Scheduled Task markers", () => {
@@ -227,15 +227,15 @@ describe("restartGatewayProcessWithFreshPid", () => {
   it("ignores node task script hints for gateway restart detection on Windows", () => {
     clearSupervisorHints();
     setPlatform("win32");
-    process.env.FOXCLAW_TASK_SCRIPT = "C:\\openclaw\\node.cmd";
+    process.env.FOXCLAW_TASK_SCRIPT = "C:\\foxclaw\\node.cmd";
     process.env.FOXCLAW_TASK_SCRIPT_NAME = "node.cmd";
-    process.env.FOXCLAW_SERVICE_MARKER = "openclaw";
+    process.env.FOXCLAW_SERVICE_MARKER = "foxclaw";
     process.env.FOXCLAW_SERVICE_KIND = "node";
 
     const result = restartGatewayProcessWithFreshPid();
 
     expect(result.mode).toBe("disabled");
-    expect(triggerOpenClawRestartMock).not.toHaveBeenCalled();
+    expect(triggerFoxClawRestartMock).not.toHaveBeenCalled();
     expect(spawnMock).not.toHaveBeenCalled();
   });
 

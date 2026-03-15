@@ -6,7 +6,7 @@ import { captureEnv } from "../test-utils/env.js";
 import type { UpdateCheckResult } from "./update-check.js";
 
 vi.mock("./foxclaw-root.js", () => ({
-  resolveOpenClawPackageRoot: vi.fn(),
+  resolveFoxClawPackageRoot: vi.fn(),
 }));
 
 vi.mock("./update-check.js", async () => {
@@ -45,7 +45,7 @@ describe("update-startup", () => {
   let tempDir: string;
   let envSnapshot: ReturnType<typeof captureEnv>;
 
-  let resolveOpenClawPackageRoot: (typeof import("./foxclaw-root.js"))["resolveOpenClawPackageRoot"];
+  let resolveFoxClawPackageRoot: (typeof import("./foxclaw-root.js"))["resolveFoxClawPackageRoot"];
   let checkUpdateStatus: (typeof import("./update-check.js"))["checkUpdateStatus"];
   let resolveNpmChannelTag: (typeof import("./update-check.js"))["resolveNpmChannelTag"];
   let runCommandWithTimeout: (typeof import("../process/exec.js"))["runCommandWithTimeout"];
@@ -56,7 +56,7 @@ describe("update-startup", () => {
   let loaded = false;
 
   beforeAll(async () => {
-    suiteRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-update-check-suite-"));
+    suiteRoot = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-update-check-suite-"));
   });
 
   beforeEach(async () => {
@@ -74,7 +74,7 @@ describe("update-startup", () => {
 
     // Perf: load mocked modules once (after timers/env are set up).
     if (!loaded) {
-      ({ resolveOpenClawPackageRoot } = await import("./foxclaw-root.js"));
+      ({ resolveFoxClawPackageRoot } = await import("./foxclaw-root.js"));
       ({ checkUpdateStatus, resolveNpmChannelTag } = await import("./update-check.js"));
       ({ runCommandWithTimeout } = await import("../process/exec.js"));
       ({
@@ -85,7 +85,7 @@ describe("update-startup", () => {
       } = await import("./update-startup.js"));
       loaded = true;
     }
-    vi.mocked(resolveOpenClawPackageRoot).mockClear();
+    vi.mocked(resolveFoxClawPackageRoot).mockClear();
     vi.mocked(checkUpdateStatus).mockClear();
     vi.mocked(resolveNpmChannelTag).mockClear();
     vi.mocked(runCommandWithTimeout).mockClear();
@@ -112,9 +112,9 @@ describe("update-startup", () => {
   }
 
   function mockPackageInstallStatus() {
-    vi.mocked(resolveOpenClawPackageRoot).mockResolvedValue("/opt/openclaw");
+    vi.mocked(resolveFoxClawPackageRoot).mockResolvedValue("/opt/foxclaw");
     vi.mocked(checkUpdateStatus).mockResolvedValue({
-      root: "/opt/openclaw",
+      root: "/opt/foxclaw",
       installKind: "package",
       packageManager: "npm",
     } satisfies UpdateCheckResult);
@@ -335,7 +335,7 @@ describe("update-startup", () => {
     expect(runAutoUpdate).toHaveBeenCalledWith({
       channel: "stable",
       timeoutMs: 45 * 60 * 1000,
-      root: "/opt/openclaw",
+      root: "/opt/foxclaw",
     });
   });
 
@@ -352,7 +352,7 @@ describe("update-startup", () => {
     expect(runAutoUpdate).toHaveBeenCalledWith({
       channel: "beta",
       timeoutMs: 45 * 60 * 1000,
-      root: "/opt/openclaw",
+      root: "/opt/foxclaw",
     });
   });
 
@@ -381,7 +381,7 @@ describe("update-startup", () => {
     });
 
     const originalArgv = process.argv.slice();
-    process.argv = [process.execPath, "/opt/openclaw/dist/entry.js"];
+    process.argv = [process.execPath, "/opt/foxclaw/dist/entry.js"];
     try {
       await runAutoUpdateCheckWithDefaults({
         cfg: createBetaAutoUpdateConfig(),
@@ -393,7 +393,7 @@ describe("update-startup", () => {
     expect(runCommandWithTimeout).toHaveBeenCalledWith(
       [
         process.execPath,
-        "/opt/openclaw/dist/entry.js",
+        "/opt/foxclaw/dist/entry.js",
         "update",
         "--yes",
         "--channel",

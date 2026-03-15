@@ -12,7 +12,7 @@ import {
 describe("schtasks runtime parsing", () => {
   it.each(["Ready", "Running"])("parses %s status", (status) => {
     const output = [
-      "TaskName: \\OpenClaw Gateway",
+      "TaskName: \\FoxClaw Gateway",
       `Status: ${status}`,
       "Last Run Time: 1/8/2026 1:23:45 AM",
       "Last Run Result: 0x0",
@@ -114,26 +114,26 @@ describe("resolveTaskScriptPath", () => {
     {
       name: "uses default path when FOXCLAW_PROFILE is unset",
       env: { USERPROFILE: "C:\\Users\\test" },
-      expected: path.join("C:\\Users\\test", ".openclaw", "gateway.cmd"),
+      expected: path.join("C:\\Users\\test", ".foxclaw", "gateway.cmd"),
     },
     {
       name: "uses profile-specific path when FOXCLAW_PROFILE is set to a custom value",
       env: { USERPROFILE: "C:\\Users\\test", FOXCLAW_PROFILE: "jbphoenix" },
-      expected: path.join("C:\\Users\\test", ".openclaw-jbphoenix", "gateway.cmd"),
+      expected: path.join("C:\\Users\\test", ".foxclaw-jbphoenix", "gateway.cmd"),
     },
     {
       name: "prefers FOXCLAW_STATE_DIR over profile-derived defaults",
       env: {
         USERPROFILE: "C:\\Users\\test",
         FOXCLAW_PROFILE: "rescue",
-        FOXCLAW_STATE_DIR: "C:\\State\\openclaw",
+        FOXCLAW_STATE_DIR: "C:\\State\\foxclaw",
       },
-      expected: path.join("C:\\State\\openclaw", "gateway.cmd"),
+      expected: path.join("C:\\State\\foxclaw", "gateway.cmd"),
     },
     {
       name: "falls back to HOME when USERPROFILE is not set",
       env: { HOME: "/home/test", FOXCLAW_PROFILE: "default" },
-      expected: path.join("/home/test", ".openclaw", "gateway.cmd"),
+      expected: path.join("/home/test", ".foxclaw", "gateway.cmd"),
     },
   ])("$name", ({ env, expected }) => {
     expect(resolveTaskScriptPath(env)).toBe(expected);
@@ -150,7 +150,7 @@ describe("readScheduledTaskCommand", () => {
     },
     run: (env: Record<string, string | undefined>) => Promise<void>,
   ) {
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-schtasks-test-"));
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-schtasks-test-"));
     try {
       const extraEnv = typeof options.env === "function" ? options.env(tmpDir) : options.env;
       const env = {
@@ -207,8 +207,8 @@ describe("readScheduledTaskCommand", () => {
       {
         scriptLines: [
           "@echo off",
-          "rem OpenClaw Gateway",
-          "cd /d C:\\Projects\\openclaw",
+          "rem FoxClaw Gateway",
+          "cd /d C:\\Projects\\foxclaw",
           "set NODE_ENV=production",
           "set FOXCLAW_PORT=18789",
           "node gateway.js --verbose",
@@ -218,7 +218,7 @@ describe("readScheduledTaskCommand", () => {
         const result = await readScheduledTaskCommand(env);
         expect(result).toEqual({
           programArguments: ["node", "gateway.js", "--verbose"],
-          workingDirectory: "C:\\Projects\\openclaw",
+          workingDirectory: "C:\\Projects\\foxclaw",
           environment: {
             NODE_ENV: "production",
             FOXCLAW_PORT: "18789",
@@ -234,7 +234,7 @@ describe("readScheduledTaskCommand", () => {
       {
         scriptLines: [
           "@echo off",
-          '"C:\\Program Files\\nodejs\\node.exe" C:\\Users\\test\\AppData\\Roaming\\npm\\node_modules\\openclaw\\dist\\index.js gateway --port 18789',
+          '"C:\\Program Files\\nodejs\\node.exe" C:\\Users\\test\\AppData\\Roaming\\npm\\node_modules\\foxclaw\\dist\\index.js gateway --port 18789',
         ],
       },
       async (env) => {
@@ -242,7 +242,7 @@ describe("readScheduledTaskCommand", () => {
         expect(result).toEqual({
           programArguments: [
             "C:\\Program Files\\nodejs\\node.exe",
-            "C:\\Users\\test\\AppData\\Roaming\\npm\\node_modules\\openclaw\\dist\\index.js",
+            "C:\\Users\\test\\AppData\\Roaming\\npm\\node_modules\\foxclaw\\dist\\index.js",
             "gateway",
             "--port",
             "18789",
@@ -258,15 +258,15 @@ describe("readScheduledTaskCommand", () => {
       {
         scriptLines: [
           "@echo off",
-          '"\\\\fileserver\\OpenClaw Share\\node.exe" "\\\\fileserver\\OpenClaw Share\\dist\\index.js" gateway --port 18789',
+          '"\\\\fileserver\\FoxClaw Share\\node.exe" "\\\\fileserver\\FoxClaw Share\\dist\\index.js" gateway --port 18789',
         ],
       },
       async (env) => {
         const result = await readScheduledTaskCommand(env);
         expect(result).toEqual({
           programArguments: [
-            "\\\\fileserver\\OpenClaw Share\\node.exe",
-            "\\\\fileserver\\OpenClaw Share\\dist\\index.js",
+            "\\\\fileserver\\FoxClaw Share\\node.exe",
+            "\\\\fileserver\\FoxClaw Share\\dist\\index.js",
             "gateway",
             "--port",
             "18789",

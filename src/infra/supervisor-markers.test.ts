@@ -17,7 +17,7 @@ describe("SUPERVISOR_HINT_ENV_VARS", () => {
 
 describe("detectRespawnSupervisor", () => {
   it("detects launchd and systemd only from non-blank platform-specific hints", () => {
-    expect(detectRespawnSupervisor({ LAUNCH_JOB_LABEL: " ai.openclaw.gateway " }, "darwin")).toBe(
+    expect(detectRespawnSupervisor({ LAUNCH_JOB_LABEL: " ai.foxclaw.gateway " }, "darwin")).toBe(
       "launchd",
     );
     expect(detectRespawnSupervisor({ LAUNCH_JOB_LABEL: "   " }, "darwin")).toBeNull();
@@ -28,12 +28,12 @@ describe("detectRespawnSupervisor", () => {
 
   it("detects scheduled-task supervision on Windows from either hint family", () => {
     expect(
-      detectRespawnSupervisor({ FOXCLAW_WINDOWS_TASK_NAME: "OpenClaw Gateway" }, "win32"),
+      detectRespawnSupervisor({ FOXCLAW_WINDOWS_TASK_NAME: "FoxClaw Gateway" }, "win32"),
     ).toBe("schtasks");
     expect(
       detectRespawnSupervisor(
         {
-          FOXCLAW_SERVICE_MARKER: "openclaw",
+          FOXCLAW_SERVICE_MARKER: "foxclaw",
           FOXCLAW_SERVICE_KIND: "gateway",
         },
         "win32",
@@ -42,7 +42,7 @@ describe("detectRespawnSupervisor", () => {
     expect(
       detectRespawnSupervisor(
         {
-          FOXCLAW_SERVICE_MARKER: "openclaw",
+          FOXCLAW_SERVICE_MARKER: "foxclaw",
           FOXCLAW_SERVICE_KIND: "worker",
         },
         "win32",
@@ -54,14 +54,14 @@ describe("detectRespawnSupervisor", () => {
     expect(
       detectRespawnSupervisor(
         {
-          FOXCLAW_SERVICE_MARKER: "openclaw",
+          FOXCLAW_SERVICE_MARKER: "foxclaw",
           FOXCLAW_SERVICE_KIND: "gateway",
         },
         "linux",
       ),
     ).toBeNull();
     expect(
-      detectRespawnSupervisor({ LAUNCH_JOB_LABEL: "ai.openclaw.gateway" }, "freebsd"),
+      detectRespawnSupervisor({ LAUNCH_JOB_LABEL: "ai.foxclaw.gateway" }, "freebsd"),
     ).toBeNull();
   });
 });

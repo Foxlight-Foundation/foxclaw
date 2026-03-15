@@ -134,7 +134,7 @@ function buildMessagingSection(params: {
     "- Cross-session messaging → use sessions_send(sessionKey, message)",
     "- Sub-agent orchestration → use subagents(action=list|steer|kill)",
     `- Runtime-generated completion events may ask for a user update. Rewrite those in your normal assistant voice and send the update (do not forward raw internal metadata or default to ${SILENT_REPLY_TOKEN}).`,
-    "- Never use exec/curl for provider messaging; OpenClaw handles all routing internally.",
+    "- Never use exec/curl for provider messaging; FoxClaw handles all routing internally.",
     params.availableTools.has("message")
       ? [
           "",
@@ -176,12 +176,12 @@ function buildDocsSection(params: { docsPath?: string; isMinimal: boolean; readT
   return [
     "## Documentation",
     `OpenClaw docs: ${docsPath}`,
-    "Mirror: https://docs.openclaw.ai",
-    "Source: https://github.com/openclaw/openclaw",
+    "Mirror: https://docs.foxclaw.ai",
+    "Source: https://github.com/foxclaw/foxclaw",
     "Community: https://discord.com/invite/clawd",
     "Find new skills: https://clawhub.com",
-    "For OpenClaw behavior, commands, config, or architecture: consult local docs first.",
-    "When diagnosing issues, run `openclaw status` yourself when possible; only ask the user if you lack access (e.g., sandboxed).",
+    "For FoxClaw behavior, commands, config, or architecture: consult local docs first.",
+    "When diagnosing issues, run `foxclaw status` yourself when possible; only ask the user if you lack access (e.g., sandboxed).",
     "",
   ];
 }
@@ -255,10 +255,10 @@ export function buildAgentSystemPrompt(params: {
     nodes: "List/describe/notify/camera/screen on paired nodes",
     cron: "Manage cron jobs and wake events (use for reminders; when scheduling a reminder, write the systemEvent text as something that will read like a reminder when it fires, and mention that it is a reminder depending on the time gap between setting and firing; include recent context in reminder text if appropriate)",
     message: "Send messages and channel actions",
-    gateway: "Restart, apply config, or run updates on the running OpenClaw process",
+    gateway: "Restart, apply config, or run updates on the running FoxClaw process",
     agents_list: acpSpawnRuntimeEnabled
-      ? 'List OpenClaw agent ids allowed for sessions_spawn when runtime="subagent" (not ACP harness ids)'
-      : "List OpenClaw agent ids allowed for sessions_spawn",
+      ? 'List FoxClaw agent ids allowed for sessions_spawn when runtime="subagent" (not ACP harness ids)'
+      : "List FoxClaw agent ids allowed for sessions_spawn",
     sessions_list: "List other sessions (incl. sub-agents) with filters/last",
     sessions_history: "Fetch history for another session/sub-agent",
     sessions_send: "Send a message to another session/sub-agent",
@@ -416,11 +416,11 @@ export function buildAgentSystemPrompt(params: {
 
   // For "none" mode, return just the basic identity line
   if (promptMode === "none") {
-    return "You are a personal assistant running inside OpenClaw.";
+    return "You are a personal assistant running inside FoxClaw.";
   }
 
   const lines = [
-    "You are a personal assistant running inside OpenClaw.",
+    "You are a personal assistant running inside FoxClaw.",
     "",
     "## Tooling",
     "Tool availability (filtered by policy):",
@@ -435,7 +435,7 @@ export function buildAgentSystemPrompt(params: {
           "- apply_patch: apply multi-file patches",
           `- ${execToolName}: run shell commands (supports background via yieldMs/background)`,
           `- ${processToolName}: manage background exec sessions`,
-          "- browser: control OpenClaw's dedicated browser",
+          "- browser: control FoxClaw's dedicated browser",
           "- canvas: present/eval/snapshot the Canvas",
           "- nodes: list/describe/notify/camera/screen on paired nodes",
           "- cron: manage cron jobs and wake events (use for reminders; when scheduling a reminder, write the systemEvent text as something that will read like a reminder when it fires, and mention that it is a reminder depending on the time gap between setting and firing; include recent context in reminder text if appropriate)",
@@ -469,26 +469,26 @@ export function buildAgentSystemPrompt(params: {
     "When approvals are required, preserve and show the full command/script exactly as provided (including chained operators like &&, ||, |, ;, or multiline shells) so the user can approve what will actually run.",
     "",
     ...safetySection,
-    "## OpenClaw CLI Quick Reference",
-    "OpenClaw is controlled via subcommands. Do not invent commands.",
+    "## FoxClaw CLI Quick Reference",
+    "FoxClaw is controlled via subcommands. Do not invent commands.",
     "To manage the Gateway daemon service (start/stop/restart):",
-    "- openclaw gateway status",
-    "- openclaw gateway start",
-    "- openclaw gateway stop",
-    "- openclaw gateway restart",
-    "If unsure, ask the user to run `openclaw help` (or `openclaw gateway --help`) and paste the output.",
+    "- foxclaw gateway status",
+    "- foxclaw gateway start",
+    "- foxclaw gateway stop",
+    "- foxclaw gateway restart",
+    "If unsure, ask the user to run `foxclaw help` (or `foxclaw gateway --help`) and paste the output.",
     "",
     ...skillsSection,
     ...memorySection,
     // Skip self-update for subagent/none modes
-    hasGateway && !isMinimal ? "## OpenClaw Self-Update" : "",
+    hasGateway && !isMinimal ? "## FoxClaw Self-Update" : "",
     hasGateway && !isMinimal
       ? [
           "Get Updates (self-update) is ONLY allowed when the user explicitly asks for it.",
           "Do not run config.apply or update.run unless the user explicitly requests an update or config change; if it's not explicit, ask first.",
           "Use config.schema.lookup with a specific dot path to inspect only the relevant config subtree before making config changes or answering config-field questions; avoid guessing field names/types.",
           "Actions: config.schema.lookup, config.get, config.apply (validate + write full config, then restart), config.patch (partial update, merges with existing), update.run (update deps or git, then restart).",
-          "After restart, OpenClaw pings the last active session automatically.",
+          "After restart, FoxClaw pings the last active session automatically.",
         ].join("\n")
       : "",
     hasGateway && !isMinimal ? "" : "",
@@ -566,7 +566,7 @@ export function buildAgentSystemPrompt(params: {
       userTimezone,
     }),
     "## Workspace Files (injected)",
-    "These user-editable files are loaded by OpenClaw and included below in Project Context.",
+    "These user-editable files are loaded by FoxClaw and included below in Project Context.",
     "",
     ...buildReplyTagsSection(isMinimal),
     ...buildMessagingSection({

@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import { setLoggerOverride } from "../logging/logger.js";
 import { loggingState } from "../logging/state.js";
 import { stripAnsi } from "../terminal/ansi.js";
@@ -22,7 +22,7 @@ describe("loader", () => {
   let envSnapshot: ReturnType<typeof captureEnv>;
 
   beforeAll(async () => {
-    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-hooks-loader-"));
+    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-hooks-loader-"));
   });
 
   beforeEach(async () => {
@@ -54,7 +54,7 @@ describe("loader", () => {
 
   function createEnabledHooksConfig(
     handlers?: Array<{ event: string; module: string; export?: string }>,
-  ): OpenClawConfig {
+  ): FoxClawConfig {
     return {
       hooks: {
         internal: handlers ? { enabled: true, handlers } : { enabled: true },
@@ -85,14 +85,14 @@ describe("loader", () => {
         },
       ]);
 
-    const expectNoCommandHookRegistration = async (cfg: OpenClawConfig) => {
+    const expectNoCommandHookRegistration = async (cfg: FoxClawConfig) => {
       const count = await loadInternalHooks(cfg, tmpDir);
       expect(count).toBe(0);
       expect(getRegisteredEventKeys()).not.toContain("command:new");
     };
 
     it("should return 0 when hooks are not enabled", async () => {
-      const cfg: OpenClawConfig = {
+      const cfg: FoxClawConfig = {
         hooks: {
           internal: {
             enabled: false,
@@ -105,7 +105,7 @@ describe("loader", () => {
     });
 
     it("should return 0 when hooks config is missing", async () => {
-      const cfg: OpenClawConfig = {};
+      const cfg: FoxClawConfig = {};
       const count = await loadInternalHooks(cfg, tmpDir);
       expect(count).toBe(0);
     });
@@ -265,7 +265,7 @@ describe("loader", () => {
           "---",
           "name: symlink-hook",
           "description: symlink test",
-          'metadata: {"openclaw":{"events":["command:new"]}}',
+          'metadata: {"foxclaw":{"events":["command:new"]}}',
           "---",
           "",
           "# Symlink Hook",
@@ -310,7 +310,7 @@ describe("loader", () => {
           "---",
           "name: hardlink-hook",
           "description: hardlink test",
-          'metadata: {"openclaw":{"events":["command:new"]}}',
+          'metadata: {"foxclaw":{"events":["command:new"]}}',
           "---",
           "",
           "# Hardlink Hook",

@@ -1,5 +1,5 @@
 import type { ReplyPayload } from "../auto-reply/types.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import { loadConfig } from "../config/config.js";
 import type {
   ExecApprovalForwardingConfig,
@@ -40,11 +40,11 @@ export type ExecApprovalForwarder = {
 };
 
 export type ExecApprovalForwarderDeps = {
-  getConfig?: () => OpenClawConfig;
+  getConfig?: () => FoxClawConfig;
   deliver?: typeof deliverOutboundPayloads;
   nowMs?: () => number;
   resolveSessionTarget?: (params: {
-    cfg: OpenClawConfig;
+    cfg: FoxClawConfig;
     request: ExecApprovalRequest;
   }) => ExecApprovalForwardTarget | null;
 };
@@ -187,7 +187,7 @@ function normalizeTurnSourceChannel(value?: string | null): DeliverableMessageCh
 }
 
 function defaultResolveSessionTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   request: ExecApprovalRequest;
 }): ExecApprovalForwardTarget | null {
   const resolvedTarget = resolveExecApprovalSessionTarget({
@@ -214,7 +214,7 @@ function defaultResolveSessionTarget(params: {
 }
 
 async function deliverToTargets(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   targets: ForwardTarget[];
   buildPayload: (target: ForwardTarget) => ReplyPayload;
   deliver: typeof deliverOutboundPayloads;
@@ -246,7 +246,7 @@ async function deliverToTargets(params: {
 }
 
 function buildRequestPayloadForTarget(
-  _cfg: OpenClawConfig,
+  _cfg: FoxClawConfig,
   request: ExecApprovalRequest,
   nowMsValue: number,
   target: ForwardTarget,
@@ -255,11 +255,11 @@ function buildRequestPayloadForTarget(
 }
 
 function resolveForwardTargets(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   config?: ExecApprovalForwardingConfig;
   request: ExecApprovalRequest;
   resolveSessionTarget: (params: {
-    cfg: OpenClawConfig;
+    cfg: FoxClawConfig;
     request: ExecApprovalRequest;
   }) => ExecApprovalForwardTarget | null;
 }): ForwardTarget[] {

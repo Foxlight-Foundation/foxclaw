@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import { withEnvAsync } from "../test-utils/env.js";
 import {
   resolveGatewayAuthTokenForService,
@@ -17,7 +17,7 @@ describe("resolveGatewayAuthTokenForService", () => {
             token: "config-token",
           },
         },
-      } as OpenClawConfig,
+      } as FoxClawConfig,
       {} as NodeJS.ProcessEnv,
     );
 
@@ -41,7 +41,7 @@ describe("resolveGatewayAuthTokenForService", () => {
             default: { source: "env" },
           },
         },
-      } as OpenClawConfig,
+      } as FoxClawConfig,
       {
         CUSTOM_GATEWAY_TOKEN: "resolved-token",
       } as NodeJS.ProcessEnv,
@@ -63,7 +63,7 @@ describe("resolveGatewayAuthTokenForService", () => {
             default: { source: "env" },
           },
         },
-      } as OpenClawConfig,
+      } as FoxClawConfig,
       {
         CUSTOM_GATEWAY_TOKEN: "resolved-token",
       } as NodeJS.ProcessEnv,
@@ -89,7 +89,7 @@ describe("resolveGatewayAuthTokenForService", () => {
             default: { source: "env" },
           },
         },
-      } as OpenClawConfig,
+      } as FoxClawConfig,
       {
         FOXCLAW_GATEWAY_TOKEN: "env-fallback-token",
       } as NodeJS.ProcessEnv,
@@ -115,7 +115,7 @@ describe("resolveGatewayAuthTokenForService", () => {
             default: { source: "env" },
           },
         },
-      } as OpenClawConfig,
+      } as FoxClawConfig,
       {
         CUSTOM_GATEWAY_TOKEN: "   ",
         FOXCLAW_GATEWAY_TOKEN: "env-fallback-token",
@@ -142,7 +142,7 @@ describe("resolveGatewayAuthTokenForService", () => {
             default: { source: "env" },
           },
         },
-      } as OpenClawConfig,
+      } as FoxClawConfig,
       {} as NodeJS.ProcessEnv,
     );
 
@@ -160,7 +160,7 @@ describe("shouldRequireGatewayTokenForInstall", () => {
             mode: "token",
           },
         },
-      } as OpenClawConfig,
+      } as FoxClawConfig,
       {} as NodeJS.ProcessEnv,
     );
     expect(required).toBe(true);
@@ -174,7 +174,7 @@ describe("shouldRequireGatewayTokenForInstall", () => {
             mode: "password",
           },
         },
-      } as OpenClawConfig,
+      } as FoxClawConfig,
       {} as NodeJS.ProcessEnv,
     );
     expect(required).toBe(false);
@@ -190,7 +190,7 @@ describe("shouldRequireGatewayTokenForInstall", () => {
             gateway: {
               auth: {},
             },
-          } as OpenClawConfig,
+          } as FoxClawConfig,
           process.env,
         );
         expect(required).toBe(true);
@@ -215,7 +215,7 @@ describe("shouldRequireGatewayTokenForInstall", () => {
             default: { source: "env" },
           },
         },
-      } as OpenClawConfig,
+      } as FoxClawConfig,
       {} as NodeJS.ProcessEnv,
     );
     expect(required).toBe(false);
@@ -232,7 +232,7 @@ describe("shouldRequireGatewayTokenForInstall", () => {
             FOXCLAW_GATEWAY_PASSWORD: "configured-password", // pragma: allowlist secret
           },
         },
-      } as OpenClawConfig,
+      } as FoxClawConfig,
       {} as NodeJS.ProcessEnv,
     );
     expect(required).toBe(false);
@@ -244,7 +244,7 @@ describe("shouldRequireGatewayTokenForInstall", () => {
         gateway: {
           auth: {},
         },
-      } as OpenClawConfig,
+      } as FoxClawConfig,
       {} as NodeJS.ProcessEnv,
     );
     expect(required).toBe(true);

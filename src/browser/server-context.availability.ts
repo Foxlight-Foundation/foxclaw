@@ -11,8 +11,8 @@ import {
 import {
   isChromeCdpReady,
   isChromeReachable,
-  launchOpenClawChrome,
-  stopOpenClawChrome,
+  launchFoxClawChrome,
+  stopFoxClawChrome,
 } from "./chrome.js";
 import type { ResolvedBrowserProfile } from "./config.js";
 import { BrowserConfigurationError, BrowserProfileUnavailableError } from "./errors.js";
@@ -116,7 +116,7 @@ export function createProfileAvailability({
 
     const previousProfile = reconcile.previousProfile;
     if (profileState.running) {
-      await stopOpenClawChrome(profileState.running).catch(() => {});
+      await stopFoxClawChrome(profileState.running).catch(() => {});
       setProfileRunning(null);
     }
     if (previousProfile.driver === "extension") {
@@ -202,12 +202,12 @@ export function createProfileAvailability({
             : `Browser attachOnly is enabled and profile "${profile.name}" is not running.`,
         );
       }
-      const launched = await launchOpenClawChrome(current.resolved, profile);
+      const launched = await launchFoxClawChrome(current.resolved, profile);
       attachRunning(launched);
       try {
         await waitForCdpReadyAfterLaunch();
       } catch (err) {
-        await stopOpenClawChrome(launched).catch(() => {});
+        await stopFoxClawChrome(launched).catch(() => {});
         setProfileRunning(null);
         throw err;
       }
@@ -238,15 +238,15 @@ export function createProfileAvailability({
     // HTTP responds but WebSocket fails - port in use by something else.
     if (!profileState.running) {
       throw new BrowserProfileUnavailableError(
-        `Port ${profile.cdpPort} is in use for profile "${profile.name}" but not by openclaw. ` +
+        `Port ${profile.cdpPort} is in use for profile "${profile.name}" but not by foxclaw. ` +
           `Run action=reset-profile profile=${profile.name} to kill the process.`,
       );
     }
 
-    await stopOpenClawChrome(profileState.running);
+    await stopFoxClawChrome(profileState.running);
     setProfileRunning(null);
 
-    const relaunched = await launchOpenClawChrome(current.resolved, profile);
+    const relaunched = await launchFoxClawChrome(current.resolved, profile);
     attachRunning(relaunched);
 
     if (!(await isReachable(PROFILE_POST_RESTART_WS_TIMEOUT_MS))) {
@@ -272,7 +272,7 @@ export function createProfileAvailability({
     if (!profileState.running) {
       return { stopped: false };
     }
-    await stopOpenClawChrome(profileState.running);
+    await stopFoxClawChrome(profileState.running);
     setProfileRunning(null);
     return { stopped: true };
   };

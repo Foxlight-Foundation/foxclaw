@@ -83,7 +83,7 @@ describe("foxclaw-tools: subagents scope isolation", () => {
     callGatewayMock.mockReset();
     storePath = path.join(
       os.tmpdir(),
-      `openclaw-subagents-scope-${Date.now()}-${Math.random().toString(16).slice(2)}.json`,
+      `foxclaw-subagents-scope-${Date.now()}-${Math.random().toString(16).slice(2)}.json`,
     );
     setSubagentsConfigOverride({
       session: createPerSenderSessionConfig({ store: storePath }),

@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { runCommandWithTimeout } from "../process/exec.js";
 import { defaultRuntime, type RuntimeEnv } from "../runtime.js";
-import { resolveOpenClawPackageRoot, resolveOpenClawPackageRootSync } from "./foxclaw-root.js";
+import { resolveFoxClawPackageRoot, resolveFoxClawPackageRootSync } from "./foxclaw-root.js";
 
 const CONTROL_UI_DIST_PATH_SEGMENTS = ["dist", "control-ui", "index.html"] as const;
 
@@ -98,7 +98,7 @@ export async function resolveControlUiDistIndexPath(
     }
   }
 
-  const packageRoot = await resolveOpenClawPackageRoot({ argv1: normalized, moduleUrl });
+  const packageRoot = await resolveFoxClawPackageRoot({ argv1: normalized, moduleUrl });
   if (packageRoot) {
     return path.join(packageRoot, "dist", "control-ui", "index.html");
   }
@@ -117,7 +117,7 @@ export async function resolveControlUiDistIndexPath(
         try {
           const raw = fs.readFileSync(pkgJsonPath, "utf-8");
           const parsed = JSON.parse(raw) as { name?: unknown };
-          if (parsed.name === "openclaw") {
+          if (parsed.name === "foxclaw") {
             return fs.existsSync(indexPath) ? indexPath : null;
           }
           // Stop at the first package boundary to avoid resolving through unrelated ancestors.
@@ -209,7 +209,7 @@ export function resolveControlUiRootSync(opts: ControlUiRootResolveOptions = {})
       return null;
     }
   })();
-  const packageRoot = resolveOpenClawPackageRootSync({
+  const packageRoot = resolveFoxClawPackageRootSync({
     argv1,
     moduleUrl: opts.moduleUrl,
     cwd,
@@ -255,7 +255,7 @@ export function isPackageProvenControlUiRootSync(
 ): boolean {
   const argv1 = opts.argv1 ?? process.argv[1];
   const cwd = opts.cwd ?? process.cwd();
-  const packageRoot = resolveOpenClawPackageRootSync({
+  const packageRoot = resolveFoxClawPackageRootSync({
     argv1,
     moduleUrl: opts.moduleUrl,
     cwd,

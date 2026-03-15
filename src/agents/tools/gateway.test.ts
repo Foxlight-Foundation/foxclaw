@@ -15,7 +15,7 @@ vi.mock("../../gateway/call.js", () => ({
 
 describe("gateway tool defaults", () => {
   const envSnapshot = {
-    openclaw: process.env.FOXCLAW_GATEWAY_TOKEN,
+    foxclaw: process.env.FOXCLAW_GATEWAY_TOKEN,
     clawdbot: process.env.CLAWDBOT_GATEWAY_TOKEN,
   };
 
@@ -27,10 +27,10 @@ describe("gateway tool defaults", () => {
   });
 
   afterAll(() => {
-    if (envSnapshot.openclaw === undefined) {
+    if (envSnapshot.foxclaw === undefined) {
       delete process.env.FOXCLAW_GATEWAY_TOKEN;
     } else {
-      process.env.FOXCLAW_GATEWAY_TOKEN = envSnapshot.openclaw;
+      process.env.FOXCLAW_GATEWAY_TOKEN = envSnapshot.foxclaw;
     }
     if (envSnapshot.clawdbot === undefined) {
       delete process.env.CLAWDBOT_GATEWAY_TOKEN;

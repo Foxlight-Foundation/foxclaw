@@ -7,7 +7,7 @@ import {
 } from "./cdp.helpers.js";
 import { getChromeWebSocketUrl } from "./chrome.js";
 
-const FOXCLAW_EXTENSION_RELAY_BROWSER = "OpenClaw/extension-relay";
+const FOXCLAW_EXTENSION_RELAY_BROWSER = "FoxClaw/extension-relay";
 
 type PageCdpSend = (method: string, params?: Record<string, unknown>) => Promise<unknown>;
 

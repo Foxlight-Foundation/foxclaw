@@ -146,7 +146,7 @@ export type PluginPackageInstall = {
   defaultChoice?: "npm" | "local";
 };
 
-export type OpenClawPackageManifest = {
+export type FoxClawPackageManifest = {
   extensions?: string[];
   channel?: PluginPackageChannel;
   install?: PluginPackageInstall;
@@ -170,11 +170,11 @@ export type PackageManifest = {
   name?: string;
   version?: string;
   description?: string;
-} & Partial<Record<ManifestKey, OpenClawPackageManifest>>;
+} & Partial<Record<ManifestKey, FoxClawPackageManifest>>;
 
 export function getPackageManifestMetadata(
   manifest: PackageManifest | undefined,
-): OpenClawPackageManifest | undefined {
+): FoxClawPackageManifest | undefined {
   if (!manifest) {
     return undefined;
   }

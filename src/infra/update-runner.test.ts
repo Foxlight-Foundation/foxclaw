@@ -31,7 +31,7 @@ describe("runGatewayUpdate", () => {
   let tempDir: string;
 
   beforeAll(async () => {
-    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-update-"));
+    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-update-"));
   });
 
   afterAll(async () => {
@@ -111,7 +111,7 @@ describe("runGatewayUpdate", () => {
 
   async function setupGitCheckout(options?: { packageManager?: string }) {
     await fs.mkdir(path.join(tempDir, ".git"));
-    const pkg: Record<string, string> = { name: "openclaw", version: "1.0.0" };
+    const pkg: Record<string, string> = { name: "foxclaw", version: "1.0.0" };
     if (options?.packageManager) {
       pkg.packageManager = options.packageManager;
     }
@@ -182,7 +182,7 @@ describe("runGatewayUpdate", () => {
     await fs.mkdir(pkgRoot, { recursive: true });
     await fs.writeFile(
       path.join(pkgRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version }),
+      JSON.stringify({ name: "foxclaw", version }),
       "utf-8",
     );
   }
@@ -190,14 +190,14 @@ describe("runGatewayUpdate", () => {
   async function writeGlobalPackageVersion(pkgRoot: string, version = "2.0.0") {
     await fs.writeFile(
       path.join(pkgRoot, "package.json"),
-      JSON.stringify({ name: "openclaw", version }),
+      JSON.stringify({ name: "foxclaw", version }),
       "utf-8",
     );
   }
 
   async function createGlobalPackageFixture(rootDir: string) {
     const nodeModules = path.join(rootDir, "node_modules");
-    const pkgRoot = path.join(nodeModules, "openclaw");
+    const pkgRoot = path.join(nodeModules, "foxclaw");
     await seedGlobalPackageRoot(pkgRoot);
     return { nodeModules, pkgRoot };
   }
@@ -328,7 +328,7 @@ describe("runGatewayUpdate", () => {
   it("skips update when no git root", async () => {
     await fs.writeFile(
       path.join(tempDir, "package.json"),
-      JSON.stringify({ name: "openclaw", packageManager: "pnpm@8.0.0" }),
+      JSON.stringify({ name: "foxclaw", packageManager: "pnpm@8.0.0" }),
       "utf-8",
     );
     await fs.writeFile(path.join(tempDir, "pnpm-lock.yaml"), "", "utf-8");
@@ -352,7 +352,7 @@ describe("runGatewayUpdate", () => {
     tag?: string;
   }): Promise<{ calls: string[]; result: Awaited<ReturnType<typeof runGatewayUpdate>> }> {
     const nodeModules = path.join(tempDir, "node_modules");
-    const pkgRoot = path.join(nodeModules, "openclaw");
+    const pkgRoot = path.join(nodeModules, "foxclaw");
     await seedGlobalPackageRoot(pkgRoot);
 
     const { calls, runCommand } = createGlobalInstallHarness({
@@ -362,7 +362,7 @@ describe("runGatewayUpdate", () => {
       onInstall: async () => {
         await fs.writeFile(
           path.join(pkgRoot, "package.json"),
-          JSON.stringify({ name: "openclaw", version: "2.0.0" }),
+          JSON.stringify({ name: "foxclaw", version: "2.0.0" }),
           "utf-8",
         );
       },
@@ -460,8 +460,8 @@ describe("runGatewayUpdate", () => {
 
   it("cleans stale npm rename dirs before global update", async () => {
     const nodeModules = path.join(tempDir, "node_modules");
-    const pkgRoot = path.join(nodeModules, "openclaw");
-    const staleDir = path.join(nodeModules, ".openclaw-stale");
+    const pkgRoot = path.join(nodeModules, "foxclaw");
+    const staleDir = path.join(nodeModules, ".foxclaw-stale");
     await fs.mkdir(staleDir, { recursive: true });
     await seedGlobalPackageRoot(pkgRoot);
 
@@ -484,7 +484,7 @@ describe("runGatewayUpdate", () => {
 
   it("retries global npm update with --omit=optional when initial install fails", async () => {
     const nodeModules = path.join(tempDir, "node_modules");
-    const pkgRoot = path.join(nodeModules, "openclaw");
+    const pkgRoot = path.join(nodeModules, "foxclaw");
     await seedGlobalPackageRoot(pkgRoot);
 
     let firstAttempt = true;
@@ -498,7 +498,7 @@ describe("runGatewayUpdate", () => {
       onOmitOptionalInstall: async () => {
         await fs.writeFile(
           path.join(pkgRoot, "package.json"),
-          JSON.stringify({ name: "openclaw", version: "2.0.0" }),
+          JSON.stringify({ name: "foxclaw", version: "2.0.0" }),
           "utf-8",
         );
         return { stdout: "ok", stderr: "", code: 0 };
@@ -521,7 +521,7 @@ describe("runGatewayUpdate", () => {
     const localAppData = path.join(tempDir, "local-app-data");
     const portableGitMingw = path.join(
       localAppData,
-      "OpenClaw",
+      "FoxClaw",
       "deps",
       "portable-git",
       "mingw64",
@@ -529,7 +529,7 @@ describe("runGatewayUpdate", () => {
     );
     const portableGitUsr = path.join(
       localAppData,
-      "OpenClaw",
+      "FoxClaw",
       "deps",
       "portable-git",
       "usr",
@@ -569,7 +569,7 @@ describe("runGatewayUpdate", () => {
   it("uses FOXCLAW_UPDATE_PACKAGE_SPEC for global package updates", async () => {
     const { nodeModules, pkgRoot } = await createGlobalPackageFixture(tempDir);
     const expectedInstallCommand =
-      "npm i -g http://10.211.55.2:8138/openclaw-next.tgz --no-fund --no-audit --loglevel=error";
+      "npm i -g http://10.211.55.2:8138/foxclaw-next.tgz --no-fund --no-audit --loglevel=error";
     const { calls, runCommand } = createGlobalInstallHarness({
       pkgRoot,
       npmRootOutput: nodeModules,
@@ -578,7 +578,7 @@ describe("runGatewayUpdate", () => {
     });
 
     await withEnvAsync(
-      { FOXCLAW_UPDATE_PACKAGE_SPEC: "http://10.211.55.2:8138/openclaw-next.tgz" },
+      { FOXCLAW_UPDATE_PACKAGE_SPEC: "http://10.211.55.2:8138/foxclaw-next.tgz" },
       async () => {
         const result = await runWithCommand(runCommand, { cwd: pkgRoot });
         expect(result.status).toBe("ok");
@@ -613,7 +613,7 @@ describe("runGatewayUpdate", () => {
     });
   });
 
-  it("rejects git roots that are not a openclaw checkout", async () => {
+  it("rejects git roots that are not a foxclaw checkout", async () => {
     await fs.mkdir(path.join(tempDir, ".git"));
     const cwdSpy = vi.spyOn(process, "cwd").mockReturnValue(tempDir);
     const { runner, calls } = createRunner({
@@ -645,7 +645,7 @@ describe("runGatewayUpdate", () => {
 
     expect(result.status).toBe("error");
     expect(result.reason).toBe("doctor-entry-missing");
-    expect(result.steps.at(-1)?.name).toBe("openclaw doctor entry");
+    expect(result.steps.at(-1)?.name).toBe("foxclaw doctor entry");
   });
 
   it("repairs UI assets when doctor run removes control-ui files", async () => {

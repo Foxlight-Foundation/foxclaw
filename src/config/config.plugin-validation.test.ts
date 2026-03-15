@@ -55,7 +55,7 @@ describe("config plugin validation", () => {
       ...process.env,
       HOME: suiteHome,
       FOXCLAW_HOME: undefined,
-      FOXCLAW_STATE_DIR: path.join(suiteHome, ".openclaw"),
+      FOXCLAW_STATE_DIR: path.join(suiteHome, ".foxclaw"),
       CLAWDBOT_STATE_DIR: undefined,
       FOXCLAW_PLUGIN_MANIFEST_CACHE_MS: "10000",
     }) satisfies NodeJS.ProcessEnv;
@@ -64,7 +64,7 @@ describe("config plugin validation", () => {
     validateConfigObjectWithPlugins(raw, { env: suiteEnv() });
 
   beforeAll(async () => {
-    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-config-plugin-validation-"));
+    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-config-plugin-validation-"));
     await chmodSafeDir(fixtureRoot);
     suiteHome = path.join(fixtureRoot, "home");
     await mkdirSafe(suiteHome);

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import { runEmbeddedPiAgentMock } from "./reply.directive.directive-behavior.e2e-mocks.js";
 import { createTempHomeHarness, makeReplyConfig } from "./reply.test-harness.js";
 
@@ -22,7 +22,7 @@ vi.mock("../../extensions/whatsapp/src/session.js", () => ({
 
 import { getReplyFromConfig } from "./reply.js";
 
-const { withTempHome } = createTempHomeHarness({ prefix: "openclaw-rawbody-" });
+const { withTempHome } = createTempHomeHarness({ prefix: "foxclaw-rawbody-" });
 
 describe("RawBody directive parsing", () => {
   beforeEach(() => {
@@ -65,7 +65,7 @@ describe("RawBody directive parsing", () => {
       const res = await getReplyFromConfig(
         groupMessageCtx,
         {},
-        makeReplyConfig(home) as OpenClawConfig,
+        makeReplyConfig(home) as FoxClawConfig,
       );
 
       const text = Array.isArray(res) ? res[0]?.text : res?.text;

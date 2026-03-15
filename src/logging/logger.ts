@@ -2,8 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { Logger as TsLogger } from "tslog";
 import { getCommandPathWithRootOptions } from "../cli/argv.js";
-import type { OpenClawConfig } from "../config/types.js";
-import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-foxclaw-dir.js";
+import type { FoxClawConfig } from "../config/types.js";
+import { resolvePreferredFoxClawTmpDir } from "../infra/tmp-foxclaw-dir.js";
 import { readLoggingConfig } from "./config.js";
 import type { ConsoleStyle } from "./console.js";
 import { resolveEnvLogLevelOverride } from "./env-log-level.js";
@@ -12,10 +12,10 @@ import { resolveNodeRequireFromMeta } from "./node-require.js";
 import { loggingState } from "./state.js";
 import { formatLocalIsoWithOffset } from "./timestamps.js";
 
-export const DEFAULT_LOG_DIR = resolvePreferredOpenClawTmpDir();
-export const DEFAULT_LOG_FILE = path.join(DEFAULT_LOG_DIR, "openclaw.log"); // legacy single-file path
+export const DEFAULT_LOG_DIR = resolvePreferredFoxClawTmpDir();
+export const DEFAULT_LOG_FILE = path.join(DEFAULT_LOG_DIR, "foxclaw.log"); // legacy single-file path
 
-const LOG_PREFIX = "openclaw";
+const LOG_PREFIX = "foxclaw";
 const LOG_SUFFIX = ".log";
 const MAX_LOG_AGE_MS = 24 * 60 * 60 * 1000; // 24h
 const DEFAULT_MAX_LOG_FILE_BYTES = 500 * 1024 * 1024; // 500 MB
@@ -82,13 +82,13 @@ function resolveSettings(): ResolvedSettings {
     };
   }
 
-  let cfg: OpenClawConfig["logging"] | undefined =
+  let cfg: FoxClawConfig["logging"] | undefined =
     (loggingState.overrideSettings as LoggerSettings | null) ?? readLoggingConfig();
   if (!cfg && !shouldSkipLoadConfigFallback()) {
     try {
       const loaded = requireConfig?.("../config/config.js") as
         | {
-            loadConfig?: () => OpenClawConfig;
+            loadConfig?: () => FoxClawConfig;
           }
         | undefined;
       cfg = loaded?.loadConfig?.().logging;
@@ -125,7 +125,7 @@ export function isFileLogLevelEnabled(level: LogLevel): boolean {
 
 function buildLogger(settings: ResolvedSettings): TsLogger<LogObj> {
   const logger = new TsLogger<LogObj>({
-    name: "openclaw",
+    name: "foxclaw",
     minLevel: levelToMinLevel(settings.level),
     type: "hidden", // no ansi formatting
   });
@@ -164,7 +164,7 @@ function buildLogger(settings: ResolvedSettings): TsLogger<LogObj> {
           });
           appendLogLine(settings.file, `${warningLine}\n`);
           process.stderr.write(
-            `[openclaw] log file size cap reached; suppressing writes file=${settings.file} maxFileBytes=${settings.maxFileBytes}\n`,
+            `[foxclaw] log file size cap reached; suppressing writes file=${settings.file} maxFileBytes=${settings.maxFileBytes}\n`,
           );
         }
         return;

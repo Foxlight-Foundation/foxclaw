@@ -1,5 +1,5 @@
 import { resolveSessionAgentId } from "../../agents/agent-scope.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { FoxClawConfig } from "../../config/config.js";
 import {
   loadSessionStore,
   parseSessionThreadInfo,
@@ -73,7 +73,7 @@ const isInboundAudioContext = (ctx: FinalizedMsgContext): boolean => {
 
 const resolveSessionStoreLookup = (
   ctx: FinalizedMsgContext,
-  cfg: OpenClawConfig,
+  cfg: FoxClawConfig,
 ): {
   sessionKey?: string;
   entry?: SessionEntry;
@@ -106,7 +106,7 @@ export type DispatchFromConfigResult = {
 
 export async function dispatchReplyFromConfig(params: {
   ctx: FinalizedMsgContext;
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   dispatcher: ReplyDispatcher;
   replyOptions?: Omit<GetReplyOptions, "onToolResult" | "onBlockReply">;
   replyResolver?: typeof getReplyFromConfig;

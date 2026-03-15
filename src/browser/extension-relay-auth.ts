@@ -4,9 +4,9 @@ import { normalizeSecretInputString, resolveSecretInputRef } from "../config/typ
 import { secretRefKey } from "../secrets/ref-contract.js";
 import { resolveSecretRefValues } from "../secrets/resolve.js";
 
-const RELAY_TOKEN_CONTEXT = "openclaw-extension-relay-v1";
+const RELAY_TOKEN_CONTEXT = "foxclaw-extension-relay-v1";
 const DEFAULT_RELAY_PROBE_TIMEOUT_MS = 500;
-const FOXCLAW_RELAY_BROWSER = "OpenClaw/extension-relay";
+const FOXCLAW_RELAY_BROWSER = "FoxClaw/extension-relay";
 
 class SecretRefUnavailableError extends Error {
   readonly isSecretRefUnavailable = true;
@@ -85,7 +85,7 @@ export async function resolveRelayAuthTokenForPort(port: number): Promise<string
   return (await resolveRelayAcceptedTokensForPort(port))[0];
 }
 
-export async function probeAuthenticatedOpenClawRelay(params: {
+export async function probeAuthenticatedFoxClawRelay(params: {
   baseUrl: string;
   relayAuthHeader: string;
   relayAuthToken: string;

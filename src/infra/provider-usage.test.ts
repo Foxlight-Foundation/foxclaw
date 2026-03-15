@@ -253,7 +253,7 @@ describe("provider usage loading", () => {
     await withTempHome(
       async (tempHome) => {
         const agentDir = path.join(
-          process.env.FOXCLAW_STATE_DIR ?? path.join(tempHome, ".openclaw"),
+          process.env.FOXCLAW_STATE_DIR ?? path.join(tempHome, ".foxclaw"),
           "agents",
           "main",
           "agent",
@@ -311,9 +311,9 @@ describe("provider usage loading", () => {
       },
       {
         env: {
-          FOXCLAW_STATE_DIR: (home) => path.join(home, ".openclaw"),
+          FOXCLAW_STATE_DIR: (home) => path.join(home, ".foxclaw"),
         },
-        prefix: "openclaw-provider-usage-",
+        prefix: "foxclaw-provider-usage-",
       },
     );
   });

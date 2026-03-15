@@ -39,8 +39,8 @@ function hasFinding(
 }
 
 async function createAuditFixture(): Promise<AuditFixture> {
-  const rootDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-secrets-audit-"));
-  const stateDir = path.join(rootDir, ".openclaw");
+  const rootDir = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-secrets-audit-"));
+  const stateDir = path.join(rootDir, ".foxclaw");
   const configPath = path.join(stateDir, "foxclaw.json");
   const authStorePath = path.join(stateDir, "agents", "main", "agent", "auth-profiles.json");
   const authJsonPath = path.join(stateDir, "agents", "main", "agent", "auth.json");
@@ -474,7 +474,7 @@ describe("secrets audit", () => {
     expect(report.filesScanned).toContain(externalModelsPath);
   });
 
-  it("does not flag non-sensitive routing headers in openclaw config", async () => {
+  it("does not flag non-sensitive routing headers in foxclaw config", async () => {
     await writeJsonFile(fixture.configPath, {
       models: {
         providers: {

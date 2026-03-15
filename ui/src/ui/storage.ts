@@ -1,6 +1,6 @@
-const KEY = "openclaw.control.settings.v1";
-const LEGACY_TOKEN_SESSION_KEY = "openclaw.control.token.v1";
-const TOKEN_SESSION_KEY_PREFIX = "openclaw.control.token.v1:";
+const KEY = "foxclaw.control.settings.v1";
+const LEGACY_TOKEN_SESSION_KEY = "foxclaw.control.token.v1";
+const TOKEN_SESSION_KEY_PREFIX = "foxclaw.control.token.v1:";
 
 type PersistedUiSettings = Omit<UiSettings, "token"> & { token?: never };
 

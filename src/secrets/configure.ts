@@ -5,7 +5,7 @@ import { listAgentIds, resolveAgentDir, resolveDefaultAgentId } from "../agents/
 import type { AuthProfileStore } from "../agents/auth-profiles.js";
 import { AUTH_STORE_VERSION } from "../agents/auth-profiles/constants.js";
 import { resolveAuthStorePath } from "../agents/auth-profiles/paths.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import type { SecretProviderConfig, SecretRef, SecretRefSource } from "../config/types.secrets.js";
 import { isSafeExecutableValue } from "../infra/exec-safety.js";
 import { normalizeAgentId } from "../routing/session-key.js";
@@ -70,7 +70,7 @@ function parseOptionalPositiveInt(value: string, max: number): number | undefine
   return parsed;
 }
 
-function getSecretProviders(config: OpenClawConfig): Record<string, SecretProviderConfig> {
+function getSecretProviders(config: FoxClawConfig): Record<string, SecretProviderConfig> {
   if (!isRecord(config.secrets?.providers)) {
     return {};
   }
@@ -78,7 +78,7 @@ function getSecretProviders(config: OpenClawConfig): Record<string, SecretProvid
 }
 
 function setSecretProvider(
-  config: OpenClawConfig,
+  config: FoxClawConfig,
   providerAlias: string,
   providerConfig: SecretProviderConfig,
 ): void {
@@ -89,7 +89,7 @@ function setSecretProvider(
   config.secrets.providers[providerAlias] = providerConfig;
 }
 
-function removeSecretProvider(config: OpenClawConfig, providerAlias: string): boolean {
+function removeSecretProvider(config: FoxClawConfig, providerAlias: string): boolean {
   if (!isRecord(config.secrets?.providers)) {
     return false;
   }
@@ -135,7 +135,7 @@ function providerHint(provider: SecretProviderConfig): string {
   return `exec (${provider.jsonOnly === false ? "json+text" : "json"})`;
 }
 
-function toSourceChoices(config: OpenClawConfig): Array<{ value: SecretRefSource; label: string }> {
+function toSourceChoices(config: FoxClawConfig): Array<{ value: SecretRefSource; label: string }> {
   const hasSource = (source: SecretRefSource) =>
     Object.values(config.secrets?.providers ?? {}).some((provider) => provider?.source === source);
   const choices: Array<{ value: SecretRefSource; label: string }> = [
@@ -222,7 +222,7 @@ function configureCandidateKey(candidate: {
   if (candidate.configFile === "auth-profiles.json") {
     return `auth-profiles:${String(candidate.agentId ?? "").trim()}:${candidate.path}`;
   }
-  return `openclaw:${candidate.path}`;
+  return `foxclaw:${candidate.path}`;
 }
 
 function hasSourceChoice(
@@ -254,7 +254,7 @@ function resolveSuggestedEnvSecretId(candidate: ConfigureCandidate): string | un
   return envCandidates[0];
 }
 
-function resolveConfigureAgentId(config: OpenClawConfig, explicitAgentId?: string): string {
+function resolveConfigureAgentId(config: FoxClawConfig, explicitAgentId?: string): string {
   const knownAgentIds = new Set(listAgentIds(config));
   if (!explicitAgentId) {
     return resolveDefaultAgentId(config);
@@ -297,7 +297,7 @@ function normalizeAuthStoreForConfigure(
 }
 
 function loadAuthProfileStoreForConfigure(params: {
-  config: OpenClawConfig;
+  config: FoxClawConfig;
   agentId: string;
 }): AuthProfileStore {
   const agentDir = resolveAgentDir(params.config, params.agentId);
@@ -634,7 +634,7 @@ async function promptProviderConfig(
   return await promptExecProvider(current?.source === "exec" ? current : undefined);
 }
 
-async function configureProvidersInteractive(config: OpenClawConfig): Promise<void> {
+async function configureProvidersInteractive(config: FoxClawConfig): Promise<void> {
   while (true) {
     const providers = getSecretProviders(config);
     const providerEntries = Object.entries(providers).toSorted(([left], [right]) =>
@@ -783,7 +783,7 @@ export async function runSecretsConfigureInteractive(
     });
     const candidates = buildConfigureCandidatesForScope({
       config: stagedConfig,
-      authoredOpenClawConfig: snapshot.resolved,
+      authoredFoxClawConfig: snapshot.resolved,
       authProfiles: {
         agentId: configureAgentId,
         store: authStore,

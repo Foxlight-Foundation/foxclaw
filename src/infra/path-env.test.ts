@@ -33,9 +33,9 @@ vi.mock("node:fs", async (importOriginal) => {
   return { ...wrapped, default: wrapped };
 });
 
-let ensureOpenClawCliOnPath: typeof import("./path-env.js").ensureOpenClawCliOnPath;
+let ensureFoxClawCliOnPath: typeof import("./path-env.js").ensureFoxClawCliOnPath;
 
-describe("ensureOpenClawCliOnPath", () => {
+describe("ensureFoxClawCliOnPath", () => {
   const envKeys = [
     "PATH",
     "FOXCLAW_PATH_BOOTSTRAPPED",
@@ -48,7 +48,7 @@ describe("ensureOpenClawCliOnPath", () => {
   let envSnapshot: Record<(typeof envKeys)[number], string | undefined>;
 
   beforeAll(async () => {
-    ({ ensureOpenClawCliOnPath } = await import("./path-env.js"));
+    ({ ensureFoxClawCliOnPath } = await import("./path-env.js"));
   });
 
   beforeEach(() => {
@@ -73,9 +73,9 @@ describe("ensureOpenClawCliOnPath", () => {
   });
 
   function setupAppCliRoot(name: string) {
-    const tmp = abs(`/tmp/openclaw-path/${name}`);
+    const tmp = abs(`/tmp/foxclaw-path/${name}`);
     const appBinDir = path.join(tmp, "AppBin");
-    const appCli = path.join(appBinDir, "openclaw");
+    const appCli = path.join(appBinDir, "foxclaw");
     setDir(tmp);
     setDir(appBinDir);
     setExe(appCli);
@@ -89,11 +89,11 @@ describe("ensureOpenClawCliOnPath", () => {
     platform: NodeJS.Platform;
     allowProjectLocalBin?: boolean;
   }) {
-    ensureOpenClawCliOnPath(params);
+    ensureFoxClawCliOnPath(params);
     return (process.env.PATH ?? "").split(path.delimiter);
   }
 
-  it("prepends the bundled app bin dir when a sibling openclaw exists", () => {
+  it("prepends the bundled app bin dir when a sibling foxclaw exists", () => {
     const { tmp, appBinDir, appCli } = setupAppCliRoot("case-bundled");
     process.env.PATH = "/usr/bin";
     delete process.env.FOXCLAW_PATH_BOOTSTRAPPED;
@@ -110,7 +110,7 @@ describe("ensureOpenClawCliOnPath", () => {
   it("is idempotent", () => {
     process.env.PATH = "/bin";
     process.env.FOXCLAW_PATH_BOOTSTRAPPED = "1";
-    ensureOpenClawCliOnPath({
+    ensureFoxClawCliOnPath({
       execPath: "/tmp/does-not-matter",
       cwd: "/tmp",
       homeDir: "/tmp",
@@ -158,7 +158,7 @@ describe("ensureOpenClawCliOnPath", () => {
     ({ envValue, allowProjectLocalBin }) => {
       const { tmp, appCli } = setupAppCliRoot("case-project-local");
       const localBinDir = path.join(tmp, "node_modules", ".bin");
-      const localCli = path.join(localBinDir, "openclaw");
+      const localCli = path.join(localBinDir, "foxclaw");
       setDir(path.join(tmp, "node_modules"));
       setDir(localBinDir);
       setExe(localCli);
@@ -219,7 +219,7 @@ describe("ensureOpenClawCliOnPath", () => {
   });
 
   it("prepends Linuxbrew dirs when present", () => {
-    const tmp = abs("/tmp/openclaw-path/case-linuxbrew");
+    const tmp = abs("/tmp/foxclaw-path/case-linuxbrew");
     const execDir = path.join(tmp, "exec");
     setDir(tmp);
     setDir(execDir);

@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import { withEnvAsync } from "../test-utils/env.js";
 import { resolveNodeHostGatewayCredentials } from "./runner.js";
 
-function createRemoteGatewayTokenRefConfig(tokenId: string): OpenClawConfig {
+function createRemoteGatewayTokenRefConfig(tokenId: string): FoxClawConfig {
   return {
     secrets: {
       providers: {
@@ -16,11 +16,11 @@ function createRemoteGatewayTokenRefConfig(tokenId: string): OpenClawConfig {
         token: { source: "env", provider: "default", id: tokenId },
       },
     },
-  } as OpenClawConfig;
+  } as FoxClawConfig;
 }
 
 async function expectNoGatewayCredentials(
-  config: OpenClawConfig,
+  config: FoxClawConfig,
   env: Record<string, string | undefined>,
 ) {
   await withEnvAsync(env, async () => {
@@ -37,7 +37,7 @@ describe("resolveNodeHostGatewayCredentials", () => {
         mode: "local",
         remote: { token: "remote-only-token" },
       },
-    } as OpenClawConfig;
+    } as FoxClawConfig;
 
     await expectNoGatewayCredentials(config, {
       FOXCLAW_GATEWAY_TOKEN: undefined,
@@ -58,7 +58,7 @@ describe("resolveNodeHostGatewayCredentials", () => {
           token: { source: "env", provider: "default", id: "MISSING_REMOTE_GATEWAY_TOKEN" },
         },
       },
-    } as OpenClawConfig;
+    } as FoxClawConfig;
 
     await expectNoGatewayCredentials(config, {
       FOXCLAW_GATEWAY_TOKEN: undefined,
@@ -130,7 +130,7 @@ describe("resolveNodeHostGatewayCredentials", () => {
           password: { source: "env", provider: "default", id: "MISSING_REMOTE_GATEWAY_PASSWORD" },
         },
       },
-    } as OpenClawConfig;
+    } as FoxClawConfig;
 
     await withEnvAsync(
       {

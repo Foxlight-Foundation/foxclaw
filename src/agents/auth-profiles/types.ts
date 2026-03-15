@@ -1,5 +1,5 @@
 import type { OAuthCredentials } from "@mariozechner/pi-ai";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { FoxClawConfig } from "../../config/config.js";
 import type { SecretRef } from "../../config/types.secrets.js";
 
 export type ApiKeyCredential = {
@@ -73,7 +73,7 @@ export type AuthProfileStore = {
 };
 
 export type AuthProfileIdRepairResult = {
-  config: OpenClawConfig;
+  config: FoxClawConfig;
   changes: string[];
   migrated: boolean;
   fromProfileId?: string;

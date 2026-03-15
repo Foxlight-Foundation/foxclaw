@@ -22,7 +22,7 @@ function winRuntime(env: NodeJS.ProcessEnv) {
 }
 
 async function createTempDir(): Promise<string> {
-  const dir = await mkdtemp(path.join(tmpdir(), "openclaw-acpx-process-test-"));
+  const dir = await mkdtemp(path.join(tmpdir(), "foxclaw-acpx-process-test-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -258,7 +258,7 @@ describe("spawnAndCollect", () => {
     openai?: string;
     github?: string;
     hf?: string;
-    openclaw?: string;
+    foxclaw?: string;
     shell?: string;
   };
 
@@ -281,7 +281,7 @@ describe("spawnAndCollect", () => {
       command: process.execPath,
       args: [
         "-e",
-        `process.stdout.write(JSON.stringify({openai:process.env.${openAiEnvKey},github:process.env.${githubEnvKey},hf:process.env.${hfEnvKey},openclaw:process.env.FOXCLAW_API_KEY,shell:process.env.FOXCLAW_SHELL}))`,
+        `process.stdout.write(JSON.stringify({openai:process.env.${openAiEnvKey},github:process.env.${githubEnvKey},hf:process.env.${hfEnvKey},foxclaw:process.env.FOXCLAW_API_KEY,shell:process.env.FOXCLAW_SHELL}))`,
       ],
       cwd: process.cwd(),
       stripProviderAuthEnvVars: options?.stripProviderAuthEnvVars,
@@ -342,7 +342,7 @@ describe("spawnAndCollect", () => {
     expect(parsed.openai).toBeUndefined();
     expect(parsed.github).toBeUndefined();
     expect(parsed.hf).toBeUndefined();
-    expect(parsed.openclaw).toBe("keep-me");
+    expect(parsed.foxclaw).toBe("keep-me");
     expect(parsed.shell).toBe("acp");
   });
 
@@ -359,7 +359,7 @@ describe("spawnAndCollect", () => {
     });
     expect(parsed.openai).toBeUndefined();
     expect(parsed.github).toBeUndefined();
-    expect(parsed.openclaw).toBe("keep-me");
+    expect(parsed.foxclaw).toBe("keep-me");
     expect(parsed.shell).toBe("acp");
   });
 
@@ -374,7 +374,7 @@ describe("spawnAndCollect", () => {
     expect(parsed.openai).toBe("openai-secret");
     expect(parsed.github).toBe("gh-secret");
     expect(parsed.hf).toBe("hf-secret");
-    expect(parsed.openclaw).toBe("keep-me");
+    expect(parsed.foxclaw).toBe("keep-me");
     expect(parsed.shell).toBe("acp");
   });
 });

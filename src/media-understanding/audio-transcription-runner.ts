@@ -1,5 +1,5 @@
 import type { MsgContext } from "../auto-reply/templating.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import {
   type ActiveMediaModel,
   buildProviderRegistry,
@@ -11,7 +11,7 @@ import type { MediaAttachment, MediaUnderstandingProvider } from "./types.js";
 
 export async function runAudioTranscription(params: {
   ctx: MsgContext;
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   attachments?: MediaAttachment[];
   agentDir?: string;
   providers?: Record<string, MediaUnderstandingProvider>;

@@ -36,7 +36,7 @@ const defaultProgramArguments = ["node", "-e", "process.exit(0)"];
 
 function expectLaunchctlEnableBootstrapOrder(env: Record<string, string | undefined>) {
   const domain = typeof process.getuid === "function" ? `gui/${process.getuid()}` : "gui/501";
-  const label = "ai.openclaw.gateway";
+  const label = "ai.foxclaw.gateway";
   const plistPath = resolveLaunchAgentPlistPath(env);
   const serviceId = `${domain}/${label}`;
   const enableIndex = state.launchctlCalls.findIndex(
@@ -222,7 +222,7 @@ describe("launchd runtime parsing", () => {
 
 describe("launchctl list detection", () => {
   it("detects the resolved label in launchctl list", async () => {
-    state.listOutput = "123 0 ai.openclaw.gateway\n";
+    state.listOutput = "123 0 ai.foxclaw.gateway\n";
     const listed = await isLaunchAgentListed({
       env: { HOME: "/Users/test", FOXCLAW_PROFILE: "default" },
     });
@@ -347,7 +347,7 @@ describe("launchd install", () => {
     });
 
     const domain = typeof process.getuid === "function" ? `gui/${process.getuid()}` : "gui/501";
-    const label = "ai.openclaw.gateway";
+    const label = "ai.foxclaw.gateway";
     const serviceId = `${domain}/${label}`;
     expect(result).toEqual({ outcome: "completed" });
     expect(cleanStaleGatewayProcessesSync).toHaveBeenCalledWith(18789);
@@ -451,7 +451,7 @@ describe("launchd install", () => {
     }
     expect(message).toContain("logged-in macOS GUI session");
     expect(message).toContain("wrong user (including sudo)");
-    expect(message).toContain("https://docs.openclaw.ai/gateway");
+    expect(message).toContain("https://docs.foxclaw.ai/gateway");
   });
 
   it("surfaces generic bootstrap failures without GUI-specific guidance", async () => {
@@ -473,12 +473,12 @@ describe("resolveLaunchAgentPlistPath", () => {
     {
       name: "uses default label when FOXCLAW_PROFILE is unset",
       env: { HOME: "/Users/test" },
-      expected: "/Users/test/Library/LaunchAgents/ai.openclaw.gateway.plist",
+      expected: "/Users/test/Library/LaunchAgents/ai.foxclaw.gateway.plist",
     },
     {
       name: "uses profile-specific label when FOXCLAW_PROFILE is set to a custom value",
       env: { HOME: "/Users/test", FOXCLAW_PROFILE: "jbphoenix" },
-      expected: "/Users/test/Library/LaunchAgents/ai.openclaw.jbphoenix.plist",
+      expected: "/Users/test/Library/LaunchAgents/ai.foxclaw.jbphoenix.plist",
     },
     {
       name: "prefers FOXCLAW_LAUNCHD_LABEL over FOXCLAW_PROFILE",
@@ -504,7 +504,7 @@ describe("resolveLaunchAgentPlistPath", () => {
         FOXCLAW_PROFILE: "myprofile",
         FOXCLAW_LAUNCHD_LABEL: "   ",
       },
-      expected: "/Users/test/Library/LaunchAgents/ai.openclaw.myprofile.plist",
+      expected: "/Users/test/Library/LaunchAgents/ai.foxclaw.myprofile.plist",
     },
   ])("$name", ({ env, expected }) => {
     expect(resolveLaunchAgentPlistPath(env)).toBe(expected);

@@ -4,7 +4,7 @@ import {
   discoverOpenAICompatibleSelfHostedProvider,
   emptyPluginConfigSchema,
   promptAndConfigureOpenAICompatibleSelfHostedProviderAuth,
-  type OpenClawPluginApi,
+  type FoxClawPluginApi,
   type ProviderAuthMethodNonInteractiveContext,
 } from "openclaw/plugin-sdk/core";
 
@@ -16,7 +16,7 @@ const vllmPlugin = {
   name: "vLLM Provider",
   description: "Bundled vLLM provider plugin",
   configSchema: emptyPluginConfigSchema(),
-  register(api: OpenClawPluginApi) {
+  register(api: FoxClawPluginApi) {
     api.registerProvider({
       id: PROVIDER_ID,
       label: "vLLM",

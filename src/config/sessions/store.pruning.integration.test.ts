@@ -69,7 +69,7 @@ describe("Integration: saveSessionStore with pruning", () => {
   let savedCacheTtl: string | undefined;
 
   beforeAll(async () => {
-    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-pruning-integ-"));
+    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-pruning-integ-"));
   });
 
   afterAll(async () => {
@@ -258,7 +258,7 @@ describe("Integration: saveSessionStore with pruning", () => {
     applyCappedMaintenanceConfig(mockLoadConfig);
 
     const now = Date.now();
-    const externalDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-external-cap-"));
+    const externalDir = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-external-cap-"));
     const externalTranscript = path.join(externalDir, "outside.jsonl");
     await fs.writeFile(externalTranscript, "external", "utf-8");
     const store: Record<string, SessionEntry> = {
@@ -362,7 +362,7 @@ describe("Integration: saveSessionStore with pruning", () => {
     });
 
     const now = Date.now();
-    const externalDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-external-session-"));
+    const externalDir = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-external-session-"));
     const externalTranscript = path.join(externalDir, "outside.jsonl");
     await fs.writeFile(externalTranscript, "z".repeat(400), "utf-8");
 

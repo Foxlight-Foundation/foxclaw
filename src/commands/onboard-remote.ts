@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import type { SecretInput } from "../config/types.secrets.js";
 import { isSecureWebSocketUrl } from "../gateway/net.js";
 import type { GatewayBonjourBeacon } from "../infra/bonjour-discovery.js";
@@ -55,10 +55,10 @@ function validateGatewayWebSocketUrl(value: string): string | undefined {
 }
 
 export async function promptRemoteGatewayConfig(
-  cfg: OpenClawConfig,
+  cfg: FoxClawConfig,
   prompter: WizardPrompter,
   options?: { secretInputMode?: SecretInputMode },
-): Promise<OpenClawConfig> {
+): Promise<FoxClawConfig> {
   let selectedBeacon: GatewayBonjourBeacon | null = null;
   let suggestedUrl = cfg.gateway?.remote?.url ?? DEFAULT_GATEWAY_URL;
 
@@ -74,7 +74,7 @@ export async function promptRemoteGatewayConfig(
     await prompter.note(
       [
         "Bonjour discovery requires dns-sd (macOS) or avahi-browse (Linux).",
-        "Docs: https://docs.openclaw.ai/gateway/discovery",
+        "Docs: https://docs.foxclaw.ai/gateway/discovery",
       ].join("\n"),
       "Discovery",
     );
@@ -138,7 +138,7 @@ export async function promptRemoteGatewayConfig(
             `ssh -N -L 18789:127.0.0.1:18789 <user>@${host}${
               selectedBeacon.sshPort ? ` -p ${selectedBeacon.sshPort}` : ""
             }`,
-            "Docs: https://docs.openclaw.ai/gateway/remote",
+            "Docs: https://docs.foxclaw.ai/gateway/remote",
           ].join("\n"),
           "SSH tunnel",
         );
@@ -171,7 +171,7 @@ export async function promptRemoteGatewayConfig(
       copy: {
         modeMessage: "How do you want to provide this gateway token?",
         plaintextLabel: "Enter token now",
-        plaintextHint: "Stores the token directly in OpenClaw config",
+        plaintextHint: "Stores the token directly in FoxClaw config",
       },
     });
     if (selectedMode === "ref") {
@@ -203,7 +203,7 @@ export async function promptRemoteGatewayConfig(
       copy: {
         modeMessage: "How do you want to provide this gateway password?",
         plaintextLabel: "Enter password now",
-        plaintextHint: "Stores the password directly in OpenClaw config",
+        plaintextHint: "Stores the password directly in FoxClaw config",
       },
     });
     if (selectedMode === "ref") {

@@ -85,7 +85,7 @@ describe("security fix", () => {
   };
 
   beforeAll(async () => {
-    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-security-fix-suite-"));
+    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-security-fix-suite-"));
   });
 
   afterAll(async () => {

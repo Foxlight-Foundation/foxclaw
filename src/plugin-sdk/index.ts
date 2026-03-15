@@ -81,10 +81,10 @@ export { ACP_ERROR_CODES, AcpRuntimeError } from "../acp/runtime/errors.js";
 export type { AcpRuntimeErrorCode } from "../acp/runtime/errors.js";
 export type {
   AnyAgentTool,
-  OpenClawPluginConfigSchema,
-  OpenClawPluginApi,
-  OpenClawPluginService,
-  OpenClawPluginServiceContext,
+  FoxClawPluginConfigSchema,
+  FoxClawPluginApi,
+  FoxClawPluginService,
+  FoxClawPluginServiceContext,
   PluginLogger,
   ProviderAuthContext,
   ProviderAuthResult,
@@ -110,9 +110,9 @@ export type {
 export { normalizePluginHttpPath } from "../plugins/http-path.js";
 export { registerPluginHttpRoute } from "../plugins/http-registry.js";
 export { emptyPluginConfigSchema } from "../plugins/config-schema.js";
-export type { OpenClawConfig } from "../config/config.js";
+export type { FoxClawConfig } from "../config/config.js";
 /** @deprecated Use FoxClawConfig instead */
-export type { OpenClawConfig as ClawdbotConfig } from "../config/config.js";
+export type { FoxClawConfig as ClawdbotConfig } from "../config/config.js";
 export { isDangerousNameMatchingEnabled } from "../config/dangerous-name-matching.js";
 
 export type { FileLockHandle, FileLockOptions } from "./file-lock.js";
@@ -339,7 +339,7 @@ export type {
   WindowsSpawnProgram,
   WindowsSpawnResolution,
 } from "./windows-spawn.js";
-export { resolvePreferredOpenClawTmpDir } from "../infra/tmp-foxclaw-dir.js";
+export { resolvePreferredFoxClawTmpDir } from "../infra/tmp-foxclaw-dir.js";
 export {
   runPluginCommandWithTimeout,
   type PluginCommandRunOptions,

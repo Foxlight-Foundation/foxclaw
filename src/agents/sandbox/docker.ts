@@ -163,7 +163,7 @@ export function execDockerRaw(
 }
 
 import { formatCliCommand } from "../../cli/command-format.js";
-import { markOpenClawExecEnv } from "../../infra/foxclaw-exec-env.js";
+import { markFoxClawExecEnv } from "../../infra/foxclaw-exec-env.js";
 import { defaultRuntime } from "../../runtime.js";
 import { computeSandboxConfigHash } from "./config-hash.js";
 import { DEFAULT_SANDBOX_IMAGE } from "./constants.js";
@@ -345,11 +345,11 @@ export function buildSandboxCreateArgs(params: {
 
   const createdAtMs = params.createdAtMs ?? Date.now();
   const args = ["create", "--name", params.name];
-  args.push("--label", "openclaw.sandbox=1");
-  args.push("--label", `openclaw.sessionKey=${params.scopeKey}`);
-  args.push("--label", `openclaw.createdAtMs=${createdAtMs}`);
+  args.push("--label", "foxclaw.sandbox=1");
+  args.push("--label", `foxclaw.sessionKey=${params.scopeKey}`);
+  args.push("--label", `foxclaw.createdAtMs=${createdAtMs}`);
   if (params.configHash) {
-    args.push("--label", `openclaw.configHash=${params.configHash}`);
+    args.push("--label", `foxclaw.configHash=${params.configHash}`);
   }
   for (const [key, value] of Object.entries(params.labels ?? {})) {
     if (key && value) {
@@ -375,7 +375,7 @@ export function buildSandboxCreateArgs(params: {
   if (envSanitization.warnings.length > 0) {
     log.warn(`Suspicious environment variables: ${envSanitization.warnings.join(", ")}`);
   }
-  for (const [key, value] of Object.entries(markOpenClawExecEnv(envSanitization.allowed))) {
+  for (const [key, value] of Object.entries(markFoxClawExecEnv(envSanitization.allowed))) {
     args.push("--env", `${key}=${value}`);
   }
   for (const cap of params.cfg.capDrop) {
@@ -475,18 +475,18 @@ async function createSandboxContainer(params: {
 }
 
 async function readContainerConfigHash(containerName: string): Promise<string | null> {
-  return await readDockerContainerLabel(containerName, "openclaw.configHash");
+  return await readDockerContainerLabel(containerName, "foxclaw.configHash");
 }
 
 function formatSandboxRecreateHint(params: { scope: SandboxConfig["scope"]; sessionKey: string }) {
   if (params.scope === "session") {
-    return formatCliCommand(`openclaw sandbox recreate --session ${params.sessionKey}`);
+    return formatCliCommand(`foxclaw sandbox recreate --session ${params.sessionKey}`);
   }
   if (params.scope === "agent") {
     const agentId = resolveSandboxAgentId(params.sessionKey) ?? "main";
-    return formatCliCommand(`openclaw sandbox recreate --agent ${agentId}`);
+    return formatCliCommand(`foxclaw sandbox recreate --agent ${agentId}`);
   }
-  return formatCliCommand("openclaw sandbox recreate --all");
+  return formatCliCommand("foxclaw sandbox recreate --all");
 }
 
 export async function ensureSandboxContainer(params: {

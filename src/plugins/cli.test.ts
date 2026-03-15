@@ -1,15 +1,15 @@
 import { Command } from "commander";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 
 const mocks = vi.hoisted(() => ({
   memoryRegister: vi.fn(),
   otherRegister: vi.fn(),
-  loadOpenClawPlugins: vi.fn(),
+  loadFoxClawPlugins: vi.fn(),
 }));
 
 vi.mock("./loader.js", () => ({
-  loadOpenClawPlugins: (...args: unknown[]) => mocks.loadOpenClawPlugins(...args),
+  loadFoxClawPlugins: (...args: unknown[]) => mocks.loadFoxClawPlugins(...args),
 }));
 
 import { registerPluginCliCommands } from "./cli.js";
@@ -18,8 +18,8 @@ describe("registerPluginCliCommands", () => {
   beforeEach(() => {
     mocks.memoryRegister.mockClear();
     mocks.otherRegister.mockClear();
-    mocks.loadOpenClawPlugins.mockReset();
-    mocks.loadOpenClawPlugins.mockReturnValue({
+    mocks.loadFoxClawPlugins.mockReset();
+    mocks.loadFoxClawPlugins.mockReturnValue({
       cliRegistrars: [
         {
           pluginId: "memory-core",
@@ -50,11 +50,11 @@ describe("registerPluginCliCommands", () => {
 
   it("forwards an explicit env to plugin loading", () => {
     const program = new Command();
-    const env = { FOXCLAW_HOME: "/srv/openclaw-home" } as NodeJS.ProcessEnv;
+    const env = { FOXCLAW_HOME: "/srv/foxclaw-home" } as NodeJS.ProcessEnv;
 
-    registerPluginCliCommands(program, {} as OpenClawConfig, env);
+    registerPluginCliCommands(program, {} as FoxClawConfig, env);
 
-    expect(mocks.loadOpenClawPlugins).toHaveBeenCalledWith(
+    expect(mocks.loadFoxClawPlugins).toHaveBeenCalledWith(
       expect.objectContaining({
         env,
       }),

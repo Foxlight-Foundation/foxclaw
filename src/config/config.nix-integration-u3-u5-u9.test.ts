@@ -53,8 +53,8 @@ describe("Nix integration (U3, U5, U9)", () => {
   });
 
   describe("U5: CONFIG_PATH and STATE_DIR env var overrides", () => {
-    it("STATE_DIR defaults to ~/.openclaw when env not set", () => {
-      expect(resolveStateDir(envWith({ FOXCLAW_STATE_DIR: undefined }))).toMatch(/\.openclaw$/);
+    it("STATE_DIR defaults to ~/.foxclaw when env not set", () => {
+      expect(resolveStateDir(envWith({ FOXCLAW_STATE_DIR: undefined }))).toMatch(/\.foxclaw$/);
     });
 
     it("STATE_DIR respects FOXCLAW_STATE_DIR override", () => {
@@ -67,10 +67,10 @@ describe("Nix integration (U3, U5, U9)", () => {
       const customHome = path.join(path.sep, "custom", "home");
       expect(
         resolveStateDir(envWith({ FOXCLAW_HOME: customHome, FOXCLAW_STATE_DIR: undefined })),
-      ).toBe(path.join(path.resolve(customHome), ".openclaw"));
+      ).toBe(path.join(path.resolve(customHome), ".foxclaw"));
     });
 
-    it("CONFIG_PATH defaults to FOXCLAW_HOME/.openclaw/openclaw.json", () => {
+    it("CONFIG_PATH defaults to FOXCLAW_HOME/.foxclaw/foxclaw.json", () => {
       const customHome = path.join(path.sep, "custom", "home");
       expect(
         resolveConfigPathCandidate(
@@ -80,33 +80,33 @@ describe("Nix integration (U3, U5, U9)", () => {
             FOXCLAW_STATE_DIR: undefined,
           }),
         ),
-      ).toBe(path.join(path.resolve(customHome), ".openclaw", "foxclaw.json"));
+      ).toBe(path.join(path.resolve(customHome), ".foxclaw", "foxclaw.json"));
     });
 
-    it("CONFIG_PATH defaults to ~/.openclaw/openclaw.json when env not set", () => {
+    it("CONFIG_PATH defaults to ~/.foxclaw/foxclaw.json when env not set", () => {
       expect(
         resolveConfigPathCandidate(
           envWith({ FOXCLAW_CONFIG_PATH: undefined, FOXCLAW_STATE_DIR: undefined }),
         ),
-      ).toMatch(/\.openclaw[\\/]openclaw\.json$/);
+      ).toMatch(/\.foxclaw[\\/]foxclaw.json$/);
     });
 
     it("CONFIG_PATH respects FOXCLAW_CONFIG_PATH override", () => {
       expect(
         resolveConfigPathCandidate(
-          envWith({ FOXCLAW_CONFIG_PATH: "/nix/store/abc/openclaw.json" }),
+          envWith({ FOXCLAW_CONFIG_PATH: "/nix/store/abc/foxclaw.json" }),
         ),
-      ).toBe(path.resolve("/nix/store/abc/openclaw.json"));
+      ).toBe(path.resolve("/nix/store/abc/foxclaw.json"));
     });
 
     it("CONFIG_PATH expands ~ in FOXCLAW_CONFIG_PATH override", async () => {
       await withTempHome(async (home) => {
         expect(
           resolveConfigPathCandidate(
-            envWith({ FOXCLAW_HOME: home, FOXCLAW_CONFIG_PATH: "~/.openclaw/custom.json" }),
+            envWith({ FOXCLAW_HOME: home, FOXCLAW_CONFIG_PATH: "~/.foxclaw/custom.json" }),
             () => home,
           ),
-        ).toBe(path.join(home, ".openclaw", "custom.json"));
+        ).toBe(path.join(home, ".foxclaw", "custom.json"));
       });
     });
 
@@ -114,7 +114,7 @@ describe("Nix integration (U3, U5, U9)", () => {
       expect(
         resolveConfigPathCandidate(
           envWith({ FOXCLAW_STATE_DIR: "/custom/state", FOXCLAW_TEST_FAST: "1" }),
-          () => path.join(path.sep, "tmp", "openclaw-config-home"),
+          () => path.join(path.sep, "tmp", "foxclaw-config-home"),
         ),
       ).toBe(path.join(path.resolve("/custom/state"), "foxclaw.json"));
     });
@@ -123,7 +123,7 @@ describe("Nix integration (U3, U5, U9)", () => {
   describe("U5b: tilde expansion for config paths", () => {
     it("expands ~ in common path-ish config fields", async () => {
       await withTempHome(async (home) => {
-        const configDir = path.join(home, ".openclaw");
+        const configDir = path.join(home, ".foxclaw");
         await fs.mkdir(configDir, { recursive: true });
         const pluginDir = path.join(home, "plugins", "demo-plugin");
         await fs.mkdir(pluginDir, { recursive: true });
@@ -159,7 +159,7 @@ describe("Nix integration (U3, U5, U9)", () => {
                   {
                     id: "main",
                     workspace: "~/ws-agent",
-                    agentDir: "~/.openclaw/agents/main",
+                    agentDir: "~/.foxclaw/agents/main",
                     sandbox: { workspaceRoot: "~/sandbox-root" },
                   },
                 ],
@@ -168,7 +168,7 @@ describe("Nix integration (U3, U5, U9)", () => {
                 whatsapp: {
                   accounts: {
                     personal: {
-                      authDir: "~/.openclaw/credentials/wa-personal",
+                      authDir: "~/.foxclaw/credentials/wa-personal",
                     },
                   },
                 },
@@ -186,11 +186,11 @@ describe("Nix integration (U3, U5, U9)", () => {
         expect(cfg.agents?.defaults?.workspace).toBe(path.join(home, "ws-default"));
         expect(cfg.agents?.list?.[0]?.workspace).toBe(path.join(home, "ws-agent"));
         expect(cfg.agents?.list?.[0]?.agentDir).toBe(
-          path.join(home, ".openclaw", "agents", "main"),
+          path.join(home, ".foxclaw", "agents", "main"),
         );
         expect(cfg.agents?.list?.[0]?.sandbox?.workspaceRoot).toBe(path.join(home, "sandbox-root"));
         expect(cfg.channels?.whatsapp?.accounts?.personal?.authDir).toBe(
-          path.join(home, ".openclaw", "credentials", "wa-personal"),
+          path.join(home, ".foxclaw", "credentials", "wa-personal"),
         );
       });
     });

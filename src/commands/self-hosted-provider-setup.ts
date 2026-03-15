@@ -1,6 +1,6 @@
 import { upsertAuthProfileWithLock } from "../agents/auth-profiles.js";
 import type { ApiKeyCredential, AuthProfileCredential } from "../agents/auth-profiles/types.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import type {
   ProviderDiscoveryContext,
   ProviderAuthResult,
@@ -19,7 +19,7 @@ export const SELF_HOSTED_DEFAULT_COST = {
   cacheWrite: 0,
 };
 
-export function applyProviderDefaultModel(cfg: OpenClawConfig, modelRef: string): OpenClawConfig {
+export function applyProviderDefaultModel(cfg: FoxClawConfig, modelRef: string): FoxClawConfig {
   const existingModel = cfg.agents?.defaults?.model;
   const fallbacks =
     existingModel && typeof existingModel === "object" && "fallbacks" in existingModel
@@ -42,7 +42,7 @@ export function applyProviderDefaultModel(cfg: OpenClawConfig, modelRef: string)
 }
 
 function buildOpenAICompatibleSelfHostedProviderConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   providerId: string;
   baseUrl: string;
   providerApiKey: string;
@@ -51,7 +51,7 @@ function buildOpenAICompatibleSelfHostedProviderConfig(params: {
   reasoning?: boolean;
   contextWindow?: number;
   maxTokens?: number;
-}): { config: OpenClawConfig; modelId: string; modelRef: string; profileId: string } {
+}): { config: FoxClawConfig; modelId: string; modelRef: string; profileId: string } {
   const modelRef = `${params.providerId}/${params.modelId}`;
   const profileId = `${params.providerId}:default`;
   return {
@@ -88,7 +88,7 @@ function buildOpenAICompatibleSelfHostedProviderConfig(params: {
 }
 
 type OpenAICompatibleSelfHostedProviderSetupParams = {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   prompter: WizardPrompter;
   providerId: string;
   providerLabel: string;
@@ -102,7 +102,7 @@ type OpenAICompatibleSelfHostedProviderSetupParams = {
 };
 
 type OpenAICompatibleSelfHostedProviderPromptResult = {
-  config: OpenClawConfig;
+  config: FoxClawConfig;
   credential: AuthProfileCredential;
   modelId: string;
   modelRef: string;
@@ -237,7 +237,7 @@ export async function configureOpenAICompatibleSelfHostedProviderNonInteractive(
   reasoning?: boolean;
   contextWindow?: number;
   maxTokens?: number;
-}): Promise<OpenClawConfig | null> {
+}): Promise<FoxClawConfig | null> {
   const baseUrl = (params.ctx.opts.customBaseUrl?.trim() || params.defaultBaseUrl).replace(
     /\/+$/,
     "",

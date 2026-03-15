@@ -197,7 +197,7 @@ describe("cdp.helpers", () => {
 
   it("does not add relay header for unknown loopback ports", () => {
     const headers = getHeadersWithAuth("http://127.0.0.1:19444/json/version");
-    expect(headers["x-openclaw-relay-token"]).toBeUndefined();
+    expect(headers["x-foxclaw-relay-token"]).toBeUndefined();
   });
 
   it("adds relay header for known relay ports", async () => {
@@ -208,8 +208,8 @@ describe("cdp.helpers", () => {
     try {
       await ensureChromeExtensionRelayServer({ cdpUrl });
       const headers = getHeadersWithAuth(`${cdpUrl}/json/version`);
-      expect(headers["x-openclaw-relay-token"]).toBeTruthy();
-      expect(headers["x-openclaw-relay-token"]).not.toBe("test-gateway-token");
+      expect(headers["x-foxclaw-relay-token"]).toBeTruthy();
+      expect(headers["x-foxclaw-relay-token"]).not.toBe("test-gateway-token");
     } finally {
       await stopChromeExtensionRelayServer({ cdpUrl }).catch(() => {});
       if (prev === undefined) {
@@ -241,14 +241,14 @@ describe("fetchBrowserJson loopback auth (bridge auth registry)", () => {
 describe("browser server-context listKnownProfileNames", () => {
   it("includes configured and runtime-only profile names", () => {
     const resolved = resolveBrowserConfig({
-      defaultProfile: "openclaw",
+      defaultProfile: "foxclaw",
       profiles: {
-        openclaw: { cdpPort: 18800, color: "#FF4500" },
+        foxclaw: { cdpPort: 18800, color: "#FF4500" },
       },
     });
-    const openclaw = resolveProfile(resolved, "openclaw");
-    if (!openclaw) {
-      throw new Error("expected openclaw profile");
+    const foxclaw = resolveProfile(resolved, "foxclaw");
+    if (!foxclaw) {
+      throw new Error("expected foxclaw profile");
     }
 
     const state: BrowserServerState = {
@@ -259,13 +259,13 @@ describe("browser server-context listKnownProfileNames", () => {
         [
           "stale-removed",
           {
-            profile: { ...openclaw, name: "stale-removed" },
+            profile: { ...foxclaw, name: "stale-removed" },
             running: null,
           },
         ],
       ]),
     };
 
-    expect(listKnownProfileNames(state).toSorted()).toEqual(["openclaw", "stale-removed", "user"]);
+    expect(listKnownProfileNames(state).toSorted()).toEqual(["foxclaw", "stale-removed", "user"]);
   });
 });

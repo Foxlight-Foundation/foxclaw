@@ -2,14 +2,14 @@ import {
   inspectSlackAccount,
   type InspectedSlackAccount,
 } from "../../extensions/slack/src/account-inspect.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import type { ChannelId } from "./plugins/types.js";
 
 export type ReadOnlyInspectedAccount = InspectedSlackAccount;
 
 export function inspectReadOnlyChannelAccount(params: {
   channelId: ChannelId;
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   accountId?: string | null;
 }): ReadOnlyInspectedAccount | null {
   if (params.channelId === "slack") {

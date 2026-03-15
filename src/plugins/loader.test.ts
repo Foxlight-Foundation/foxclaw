@@ -31,7 +31,7 @@ const {
   clearPluginLoaderCache,
   createHookRunner,
   getGlobalHookRunner,
-  loadOpenClawPlugins,
+  loadFoxClawPlugins,
   resetGlobalHookRunner,
 } = await importFreshPluginTestModules();
 
@@ -55,7 +55,7 @@ function mkdirSafe(dir: string) {
   chmodSafeDir(dir);
 }
 
-const fixtureRoot = mkdtempSafe(path.join(os.tmpdir(), "openclaw-plugin-"));
+const fixtureRoot = mkdtempSafe(path.join(os.tmpdir(), "foxclaw-plugin-"));
 let tempDirIndex = 0;
 const prevBundledDir = process.env.FOXCLAW_BUNDLED_PLUGINS_DIR;
 const EMPTY_PLUGIN_SCHEMA = { type: "object", additionalProperties: false, properties: {} };
@@ -124,7 +124,7 @@ function loadBundledMemoryPluginRegistry(options?: {
 }) {
   if (!options && cachedBundledMemoryDir) {
     process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = cachedBundledMemoryDir;
-    return loadOpenClawPlugins({
+    return loadFoxClawPlugins({
       cache: false,
       workspaceDir: cachedBundledMemoryDir,
       config: {
@@ -152,7 +152,7 @@ function loadBundledMemoryPluginRegistry(options?: {
           name: options.packageMeta.name,
           version: options.packageMeta.version,
           description: options.packageMeta.description,
-          openclaw: { extensions: [`./${pluginFilename}`] },
+          foxclaw: { extensions: [`./${pluginFilename}`] },
         },
         null,
         2,
@@ -174,7 +174,7 @@ function loadBundledMemoryPluginRegistry(options?: {
   }
   process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
-  return loadOpenClawPlugins({
+  return loadFoxClawPlugins({
     cache: false,
     workspaceDir: bundledDir,
     config: {
@@ -200,7 +200,7 @@ function setupBundledTelegramPlugin() {
   process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = cachedBundledTelegramDir;
 }
 
-function expectTelegramLoaded(registry: ReturnType<typeof loadOpenClawPlugins>) {
+function expectTelegramLoaded(registry: ReturnType<typeof loadFoxClawPlugins>) {
   const telegram = registry.plugins.find((entry) => entry.id === "telegram");
   expect(telegram?.status).toBe("loaded");
   expect(registry.channels.some((entry) => entry.plugin.id === "telegram")).toBe(true);
@@ -214,10 +214,10 @@ function loadRegistryFromSinglePlugin(params: {
   plugin: TempPlugin;
   pluginConfig?: Record<string, unknown>;
   includeWorkspaceDir?: boolean;
-  options?: Omit<Parameters<typeof loadOpenClawPlugins>[0], "cache" | "workspaceDir" | "config">;
+  options?: Omit<Parameters<typeof loadFoxClawPlugins>[0], "cache" | "workspaceDir" | "config">;
 }) {
   const pluginConfig = params.pluginConfig ?? {};
-  return loadOpenClawPlugins({
+  return loadFoxClawPlugins({
     cache: false,
     ...(params.includeWorkspaceDir === false ? {} : { workspaceDir: params.plugin.dir }),
     ...params.options,
@@ -304,7 +304,7 @@ afterAll(() => {
   }
 });
 
-describe("loadOpenClawPlugins", () => {
+describe("loadFoxClawPlugins", () => {
   it("disables bundled plugins by default", () => {
     const bundledDir = makeTempDir();
     writePlugin({
@@ -315,7 +315,7 @@ describe("loadOpenClawPlugins", () => {
     });
     process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -331,7 +331,7 @@ describe("loadOpenClawPlugins", () => {
   it("loads bundled telegram plugin when enabled", () => {
     setupBundledTelegramPlugin();
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       workspaceDir: cachedBundledTelegramDir,
       config: {
@@ -350,7 +350,7 @@ describe("loadOpenClawPlugins", () => {
   it("loads bundled channel plugins when channels.<id>.enabled=true", () => {
     setupBundledTelegramPlugin();
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       workspaceDir: cachedBundledTelegramDir,
       config: {
@@ -371,7 +371,7 @@ describe("loadOpenClawPlugins", () => {
   it("still respects explicit disable via plugins.entries for bundled channels", () => {
     setupBundledTelegramPlugin();
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       workspaceDir: cachedBundledTelegramDir,
       config: {
@@ -423,7 +423,7 @@ describe("loadOpenClawPlugins", () => {
 };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -457,13 +457,13 @@ describe("loadOpenClawPlugins", () => {
       },
     };
 
-    const first = loadOpenClawPlugins(options);
+    const first = loadFoxClawPlugins(options);
     expect(getGlobalHookRunner()).not.toBeNull();
 
     resetGlobalHookRunner();
     expect(getGlobalHookRunner()).toBeNull();
 
-    const second = loadOpenClawPlugins(options);
+    const second = loadFoxClawPlugins(options);
     expect(second).toBe(first);
     expect(getGlobalHookRunner()).not.toBeNull();
 
@@ -497,14 +497,14 @@ describe("loadOpenClawPlugins", () => {
       },
     };
 
-    const first = loadOpenClawPlugins({
+    const first = loadFoxClawPlugins({
       ...options,
       env: {
         ...process.env,
         FOXCLAW_BUNDLED_PLUGINS_DIR: bundledA,
       },
     });
-    const second = loadOpenClawPlugins({
+    const second = loadFoxClawPlugins({
       ...options,
       env: {
         ...process.env,
@@ -553,7 +553,7 @@ describe("loadOpenClawPlugins", () => {
       },
     };
 
-    const first = loadOpenClawPlugins({
+    const first = loadFoxClawPlugins({
       ...options,
       env: {
         ...process.env,
@@ -563,7 +563,7 @@ describe("loadOpenClawPlugins", () => {
         FOXCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
       },
     });
-    const second = loadOpenClawPlugins({
+    const second = loadFoxClawPlugins({
       ...options,
       env: {
         ...process.env,
@@ -585,10 +585,10 @@ describe("loadOpenClawPlugins", () => {
 
   it("does not reuse cached registries when env-resolved install paths change", () => {
     useNoBundledPlugins();
-    const openclawHome = makeTempDir();
+    const foxclawHome = makeTempDir();
     const ignoredHome = makeTempDir();
     const stateDir = makeTempDir();
-    const pluginDir = path.join(openclawHome, "plugins", "tracked-install-cache");
+    const pluginDir = path.join(foxclawHome, "plugins", "tracked-install-cache");
     mkdirSafe(pluginDir);
     const plugin = writePlugin({
       id: "tracked-install-cache",
@@ -613,11 +613,11 @@ describe("loadOpenClawPlugins", () => {
       },
     };
 
-    const first = loadOpenClawPlugins({
+    const first = loadFoxClawPlugins({
       ...options,
       env: {
         ...process.env,
-        FOXCLAW_HOME: openclawHome,
+        FOXCLAW_HOME: foxclawHome,
         HOME: ignoredHome,
         FOXCLAW_STATE_DIR: stateDir,
         CLAWDBOT_STATE_DIR: undefined,
@@ -636,8 +636,8 @@ describe("loadOpenClawPlugins", () => {
         FOXCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
       },
     };
-    const second = loadOpenClawPlugins(secondOptions);
-    const third = loadOpenClawPlugins(secondOptions);
+    const second = loadFoxClawPlugins(secondOptions);
+    const third = loadFoxClawPlugins(secondOptions);
 
     expect(second).not.toBe(first);
     expect(third).toBe(second);
@@ -655,7 +655,7 @@ describe("loadOpenClawPlugins", () => {
     );
 
     const loadWithStateDir = (stateDir: string) =>
-      loadOpenClawPlugins({
+      loadFoxClawPlugins({
         env: {
           ...process.env,
           FOXCLAW_STATE_DIR: stateDir,
@@ -695,7 +695,7 @@ describe("loadOpenClawPlugins", () => {
       body: `module.exports = { id: "tilde-bundled", register() {} };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       env: {
         ...process.env,
         HOME: homeDir,
@@ -719,32 +719,32 @@ describe("loadOpenClawPlugins", () => {
 
   it("prefers FOXCLAW_HOME over HOME for env-expanded load paths", () => {
     const ignoredHome = makeTempDir();
-    const openclawHome = makeTempDir();
+    const foxclawHome = makeTempDir();
     const stateDir = makeTempDir();
     const bundledDir = makeTempDir();
     const plugin = writePlugin({
-      id: "openclaw-home-demo",
-      dir: path.join(openclawHome, "plugins", "openclaw-home-demo"),
+      id: "foxclaw-home-demo",
+      dir: path.join(foxclawHome, "plugins", "foxclaw-home-demo"),
       filename: "index.cjs",
-      body: `module.exports = { id: "openclaw-home-demo", register() {} };`,
+      body: `module.exports = { id: "foxclaw-home-demo", register() {} };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       env: {
         ...process.env,
         HOME: ignoredHome,
-        FOXCLAW_HOME: openclawHome,
+        FOXCLAW_HOME: foxclawHome,
         FOXCLAW_STATE_DIR: stateDir,
         FOXCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
       },
       config: {
         plugins: {
-          allow: ["openclaw-home-demo"],
+          allow: ["foxclaw-home-demo"],
           entries: {
-            "openclaw-home-demo": { enabled: true },
+            "foxclaw-home-demo": { enabled: true },
           },
           load: {
-            paths: ["~/plugins/openclaw-home-demo"],
+            paths: ["~/plugins/foxclaw-home-demo"],
           },
         },
       },
@@ -752,7 +752,7 @@ describe("loadOpenClawPlugins", () => {
 
     expect(
       fs.realpathSync(
-        registry.plugins.find((entry) => entry.id === "openclaw-home-demo")?.source ?? "",
+        registry.plugins.find((entry) => entry.id === "foxclaw-home-demo")?.source ?? "",
       ),
     ).toBe(fs.realpathSync(plugin.file));
   });
@@ -1141,7 +1141,7 @@ describe("loadOpenClawPlugins", () => {
 } };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -1220,7 +1220,7 @@ describe("loadOpenClawPlugins", () => {
       body: `module.exports = { id: "config-disable", register() {} };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -1363,7 +1363,7 @@ describe("loadOpenClawPlugins", () => {
       body: `module.exports = { id: "memory-b", kind: "memory", register() {} };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -1425,7 +1425,7 @@ describe("loadOpenClawPlugins", () => {
     );
     process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -1453,7 +1453,7 @@ describe("loadOpenClawPlugins", () => {
       body: `module.exports = { id: "memory-off", kind: "memory", register() {} };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -1482,7 +1482,7 @@ describe("loadOpenClawPlugins", () => {
       body: `module.exports = { id: "shadow", register() {} };`,
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -1522,7 +1522,7 @@ describe("loadOpenClawPlugins", () => {
         filename: "index.cjs",
       });
 
-      const registry = loadOpenClawPlugins({
+      const registry = loadFoxClawPlugins({
         cache: false,
         config: {
           plugins: {
@@ -1550,7 +1550,7 @@ describe("loadOpenClawPlugins", () => {
       body: `module.exports = { id: "warn-open-allow", register() {} };`,
     });
     const warnings: string[] = [];
-    loadOpenClawPlugins({
+    loadFoxClawPlugins({
       cache: false,
       logger: createWarningLogger(warnings),
       config: {
@@ -1582,8 +1582,8 @@ describe("loadOpenClawPlugins", () => {
       },
     };
 
-    loadOpenClawPlugins(options);
-    loadOpenClawPlugins(options);
+    loadFoxClawPlugins(options);
+    loadFoxClawPlugins(options);
 
     expect(warnings.filter((msg) => msg.includes("plugins.allow is empty"))).toHaveLength(1);
   });
@@ -1591,7 +1591,7 @@ describe("loadOpenClawPlugins", () => {
   it("does not auto-load workspace-discovered plugins unless explicitly trusted", () => {
     useNoBundledPlugins();
     const workspaceDir = makeTempDir();
-    const workspaceExtDir = path.join(workspaceDir, ".openclaw", "extensions", "workspace-helper");
+    const workspaceExtDir = path.join(workspaceDir, ".foxclaw", "extensions", "workspace-helper");
     mkdirSafe(workspaceExtDir);
     writePlugin({
       id: "workspace-helper",
@@ -1600,7 +1600,7 @@ describe("loadOpenClawPlugins", () => {
       filename: "index.cjs",
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       workspaceDir,
       config: {
@@ -1619,7 +1619,7 @@ describe("loadOpenClawPlugins", () => {
   it("loads workspace-discovered plugins when plugins.allow explicitly trusts them", () => {
     useNoBundledPlugins();
     const workspaceDir = makeTempDir();
-    const workspaceExtDir = path.join(workspaceDir, ".openclaw", "extensions", "workspace-helper");
+    const workspaceExtDir = path.join(workspaceDir, ".foxclaw", "extensions", "workspace-helper");
     mkdirSafe(workspaceExtDir);
     writePlugin({
       id: "workspace-helper",
@@ -1628,7 +1628,7 @@ describe("loadOpenClawPlugins", () => {
       filename: "index.cjs",
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       workspaceDir,
       config: {
@@ -1655,7 +1655,7 @@ describe("loadOpenClawPlugins", () => {
     process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
     const workspaceDir = makeTempDir();
-    const workspaceExtDir = path.join(workspaceDir, ".openclaw", "extensions", "shadowed");
+    const workspaceExtDir = path.join(workspaceDir, ".foxclaw", "extensions", "shadowed");
     mkdirSafe(workspaceExtDir);
     writePlugin({
       id: "shadowed",
@@ -1664,7 +1664,7 @@ describe("loadOpenClawPlugins", () => {
       filename: "index.cjs",
     });
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       workspaceDir,
       config: {
@@ -1696,7 +1696,7 @@ describe("loadOpenClawPlugins", () => {
       });
 
       const warnings: string[] = [];
-      const registry = loadOpenClawPlugins({
+      const registry = loadFoxClawPlugins({
         cache: false,
         logger: createWarningLogger(warnings),
         config: {
@@ -1719,10 +1719,10 @@ describe("loadOpenClawPlugins", () => {
 
   it("does not warn about missing provenance for env-resolved load paths", () => {
     useNoBundledPlugins();
-    const openclawHome = makeTempDir();
+    const foxclawHome = makeTempDir();
     const ignoredHome = makeTempDir();
     const stateDir = makeTempDir();
-    const pluginDir = path.join(openclawHome, "plugins", "tracked-load-path");
+    const pluginDir = path.join(foxclawHome, "plugins", "tracked-load-path");
     mkdirSafe(pluginDir);
     const plugin = writePlugin({
       id: "tracked-load-path",
@@ -1732,12 +1732,12 @@ describe("loadOpenClawPlugins", () => {
     });
 
     const warnings: string[] = [];
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       logger: createWarningLogger(warnings),
       env: {
         ...process.env,
-        FOXCLAW_HOME: openclawHome,
+        FOXCLAW_HOME: foxclawHome,
         HOME: ignoredHome,
         FOXCLAW_STATE_DIR: stateDir,
         CLAWDBOT_STATE_DIR: undefined,
@@ -1761,10 +1761,10 @@ describe("loadOpenClawPlugins", () => {
 
   it("does not warn about missing provenance for env-resolved install paths", () => {
     useNoBundledPlugins();
-    const openclawHome = makeTempDir();
+    const foxclawHome = makeTempDir();
     const ignoredHome = makeTempDir();
     const stateDir = makeTempDir();
-    const pluginDir = path.join(openclawHome, "plugins", "tracked-install-path");
+    const pluginDir = path.join(foxclawHome, "plugins", "tracked-install-path");
     mkdirSafe(pluginDir);
     const plugin = writePlugin({
       id: "tracked-install-path",
@@ -1774,12 +1774,12 @@ describe("loadOpenClawPlugins", () => {
     });
 
     const warnings: string[] = [];
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       logger: createWarningLogger(warnings),
       env: {
         ...process.env,
-        FOXCLAW_HOME: openclawHome,
+        FOXCLAW_HOME: foxclawHome,
         HOME: ignoredHome,
         FOXCLAW_STATE_DIR: stateDir,
         CLAWDBOT_STATE_DIR: undefined,
@@ -1821,7 +1821,7 @@ describe("loadOpenClawPlugins", () => {
       return;
     }
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -1855,7 +1855,7 @@ describe("loadOpenClawPlugins", () => {
       throw err;
     }
 
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -1902,7 +1902,7 @@ describe("loadOpenClawPlugins", () => {
     }
 
     process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
-    const registry = loadOpenClawPlugins({
+    const registry = loadFoxClawPlugins({
       cache: false,
       workspaceDir: bundledDir,
       config: {
@@ -1969,8 +1969,8 @@ describe("loadOpenClawPlugins", () => {
       path.join(process.cwd(), "src", "plugins", "loader.ts"),
     ).href;
     const script = `
-      import { loadOpenClawPlugins } from ${JSON.stringify(loaderModuleUrl)};
-      const registry = loadOpenClawPlugins({
+      import { loadFoxClawPlugins } from ${JSON.stringify(loaderModuleUrl)};
+      const registry = loadFoxClawPlugins({
         cache: false,
         workspaceDir: ${JSON.stringify(plugin.dir)},
         config: {

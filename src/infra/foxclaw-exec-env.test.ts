@@ -1,15 +1,15 @@
 import { describe, expect, it } from "vitest";
 import {
-  ensureOpenClawExecMarkerOnProcess,
-  markOpenClawExecEnv,
+  ensureFoxClawExecMarkerOnProcess,
+  markFoxClawExecEnv,
   FOXCLAW_CLI_ENV_VALUE,
   FOXCLAW_CLI_ENV_VAR,
 } from "./foxclaw-exec-env.js";
 
-describe("markOpenClawExecEnv", () => {
+describe("markFoxClawExecEnv", () => {
   it("returns a cloned env object with the exec marker set", () => {
     const env = { PATH: "/usr/bin", FOXCLAW_CLI: "0" };
-    const marked = markOpenClawExecEnv(env);
+    const marked = markFoxClawExecEnv(env);
 
     expect(marked).toEqual({
       PATH: "/usr/bin",
@@ -20,11 +20,11 @@ describe("markOpenClawExecEnv", () => {
   });
 });
 
-describe("ensureOpenClawExecMarkerOnProcess", () => {
+describe("ensureFoxClawExecMarkerOnProcess", () => {
   it("mutates and returns the provided process env", () => {
     const env: NodeJS.ProcessEnv = { PATH: "/usr/bin" };
 
-    expect(ensureOpenClawExecMarkerOnProcess(env)).toBe(env);
+    expect(ensureFoxClawExecMarkerOnProcess(env)).toBe(env);
     expect(env[FOXCLAW_CLI_ENV_VAR]).toBe(FOXCLAW_CLI_ENV_VALUE);
   });
 
@@ -33,7 +33,7 @@ describe("ensureOpenClawExecMarkerOnProcess", () => {
     delete process.env[FOXCLAW_CLI_ENV_VAR];
 
     try {
-      expect(ensureOpenClawExecMarkerOnProcess()).toBe(process.env);
+      expect(ensureFoxClawExecMarkerOnProcess()).toBe(process.env);
       expect(process.env[FOXCLAW_CLI_ENV_VAR]).toBe(FOXCLAW_CLI_ENV_VALUE);
     } finally {
       if (previous === undefined) {

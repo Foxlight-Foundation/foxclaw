@@ -12,7 +12,7 @@ vi.mock("./install-source-utils.js", async (importOriginal) => {
   return {
     ...actual,
     withTempDir: vi.fn(async (_prefix: string, fn: (tmpDir: string) => Promise<unknown>) => {
-      return await fn("/tmp/openclaw-npm-pack-install-test");
+      return await fn("/tmp/foxclaw-npm-pack-install-test");
     }),
     packNpmSpecToArchive: vi.fn(),
   };
@@ -20,7 +20,7 @@ vi.mock("./install-source-utils.js", async (importOriginal) => {
 
 describe("installFromNpmSpecArchive", () => {
   const baseSpec = "@openclaw/test@1.0.0";
-  const baseArchivePath = "/tmp/openclaw-test.tgz";
+  const baseArchivePath = "/tmp/foxclaw-test.tgz";
 
   const mockPackedSuccess = (overrides?: {
     resolvedSpec?: string;
@@ -49,7 +49,7 @@ describe("installFromNpmSpecArchive", () => {
     }) => Promise<{ ok: boolean; [k: string]: unknown }>;
   }) =>
     await installFromNpmSpecArchive({
-      tempDirPrefix: "openclaw-test-",
+      tempDirPrefix: "foxclaw-test-",
       spec: baseSpec,
       timeoutMs: 1000,
       expectedIntegrity: overrides.expectedIntegrity,
@@ -80,7 +80,7 @@ describe("installFromNpmSpecArchive", () => {
     const installFromArchive = vi.fn(async () => ({ ok: true as const }));
 
     const result = await installFromNpmSpecArchive({
-      tempDirPrefix: "openclaw-test-",
+      tempDirPrefix: "foxclaw-test-",
       spec: "@openclaw/test@1.0.0",
       timeoutMs: 1000,
       installFromArchive,
@@ -88,15 +88,15 @@ describe("installFromNpmSpecArchive", () => {
 
     expect(result).toEqual({ ok: false, error: "pack failed" });
     expect(installFromArchive).not.toHaveBeenCalled();
-    expect(withTempDir).toHaveBeenCalledWith("openclaw-test-", expect.any(Function));
+    expect(withTempDir).toHaveBeenCalledWith("foxclaw-test-", expect.any(Function));
   });
 
   it("rejects unsupported npm specs before packing", async () => {
     const installFromArchive = vi.fn(async () => ({ ok: true as const }));
 
     const result = await installFromNpmSpecArchive({
-      tempDirPrefix: "openclaw-test-",
-      spec: "file:/tmp/openclaw.tgz",
+      tempDirPrefix: "foxclaw-test-",
+      spec: "file:/tmp/foxclaw.tgz",
       timeoutMs: 1000,
       installFromArchive,
     });
@@ -122,7 +122,7 @@ describe("installFromNpmSpecArchive", () => {
     expect(okResult.integrityDrift).toBeUndefined();
     expect(okResult.npmResolution.resolvedSpec).toBe("@openclaw/test@1.0.0");
     expect(okResult.npmResolution.resolvedAt).toBeTruthy();
-    expect(installFromArchive).toHaveBeenCalledWith({ archivePath: "/tmp/openclaw-test.tgz" });
+    expect(installFromArchive).toHaveBeenCalledWith({ archivePath: "/tmp/foxclaw-test.tgz" });
   });
 
   it("proceeds when integrity drift callback accepts drift", async () => {
@@ -208,7 +208,7 @@ describe("installFromNpmSpecArchive", () => {
     const installFromArchive = vi.fn(async () => ({ ok: true as const }));
 
     const result = await installFromNpmSpecArchive({
-      tempDirPrefix: "openclaw-test-",
+      tempDirPrefix: "foxclaw-test-",
       spec: "@openclaw/test@latest",
       timeoutMs: 1000,
       installFromArchive,
@@ -235,7 +235,7 @@ describe("installFromNpmSpecArchive", () => {
     const installFromArchive = vi.fn(async () => ({ ok: true as const, pluginId: "beta-plugin" }));
 
     const result = await installFromNpmSpecArchive({
-      tempDirPrefix: "openclaw-test-",
+      tempDirPrefix: "foxclaw-test-",
       spec: "@openclaw/test@beta",
       timeoutMs: 1000,
       installFromArchive,
@@ -254,7 +254,7 @@ describe("installFromNpmSpecArchiveWithInstaller", () => {
   it("passes archive path and installer params to installFromArchive", async () => {
     vi.mocked(packNpmSpecToArchive).mockResolvedValue({
       ok: true,
-      archivePath: "/tmp/openclaw-plugin.tgz",
+      archivePath: "/tmp/foxclaw-plugin.tgz",
       metadata: {
         resolvedSpec: "@openclaw/voice-call@1.0.0",
         integrity: "sha512-same",
@@ -266,7 +266,7 @@ describe("installFromNpmSpecArchiveWithInstaller", () => {
     );
 
     const result = await installFromNpmSpecArchiveWithInstaller({
-      tempDirPrefix: "openclaw-test-",
+      tempDirPrefix: "foxclaw-test-",
       spec: "@openclaw/voice-call@1.0.0",
       timeoutMs: 1000,
       installFromArchive,
@@ -278,7 +278,7 @@ describe("installFromNpmSpecArchiveWithInstaller", () => {
       return;
     }
     expect(installFromArchive).toHaveBeenCalledWith({
-      archivePath: "/tmp/openclaw-plugin.tgz",
+      archivePath: "/tmp/foxclaw-plugin.tgz",
       pluginId: "voice-call",
     });
     expect(result.installResult).toEqual({ ok: true, pluginId: "voice-call" });

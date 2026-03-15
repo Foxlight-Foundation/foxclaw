@@ -4,7 +4,7 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 type FakeFsEntry = { kind: "file"; content: string } | { kind: "dir" };
 
-const VITEST_FS_BASE = path.join(path.parse(process.cwd()).root, "__openclaw_vitest__");
+const VITEST_FS_BASE = path.join(path.parse(process.cwd()).root, "__foxclaw_vitest__");
 const FIXTURE_BASE = path.join(VITEST_FS_BASE, "foxclaw-root");
 
 const state = vi.hoisted(() => ({
@@ -89,12 +89,12 @@ vi.mock("node:fs/promises", async (importOriginal) => {
   return { ...wrapped, default: wrapped };
 });
 
-describe("resolveOpenClawPackageRoot", () => {
-  let resolveOpenClawPackageRoot: typeof import("./foxclaw-root.js").resolveOpenClawPackageRoot;
-  let resolveOpenClawPackageRootSync: typeof import("./foxclaw-root.js").resolveOpenClawPackageRootSync;
+describe("resolveFoxClawPackageRoot", () => {
+  let resolveFoxClawPackageRoot: typeof import("./foxclaw-root.js").resolveFoxClawPackageRoot;
+  let resolveFoxClawPackageRootSync: typeof import("./foxclaw-root.js").resolveFoxClawPackageRootSync;
 
   beforeAll(async () => {
-    ({ resolveOpenClawPackageRoot, resolveOpenClawPackageRootSync } =
+    ({ resolveFoxClawPackageRoot, resolveFoxClawPackageRootSync } =
       await import("./foxclaw-root.js"));
   });
 
@@ -106,91 +106,91 @@ describe("resolveOpenClawPackageRoot", () => {
 
   it("resolves package root from .bin argv1", async () => {
     const project = fx("bin-scenario");
-    const argv1 = path.join(project, "node_modules", ".bin", "openclaw");
-    const pkgRoot = path.join(project, "node_modules", "openclaw");
-    setFile(path.join(pkgRoot, "package.json"), JSON.stringify({ name: "openclaw" }));
+    const argv1 = path.join(project, "node_modules", ".bin", "foxclaw");
+    const pkgRoot = path.join(project, "node_modules", "foxclaw");
+    setFile(path.join(pkgRoot, "package.json"), JSON.stringify({ name: "foxclaw" }));
 
-    expect(resolveOpenClawPackageRootSync({ argv1 })).toBe(pkgRoot);
+    expect(resolveFoxClawPackageRootSync({ argv1 })).toBe(pkgRoot);
   });
 
   it("resolves package root via symlinked argv1", async () => {
     const project = fx("symlink-scenario");
-    const bin = path.join(project, "bin", "openclaw");
+    const bin = path.join(project, "bin", "foxclaw");
     const realPkg = path.join(project, "real-pkg");
     state.realpaths.set(abs(bin), abs(path.join(realPkg, "foxclaw.mjs")));
-    setFile(path.join(realPkg, "package.json"), JSON.stringify({ name: "openclaw" }));
+    setFile(path.join(realPkg, "package.json"), JSON.stringify({ name: "foxclaw" }));
 
-    expect(resolveOpenClawPackageRootSync({ argv1: bin })).toBe(realPkg);
+    expect(resolveFoxClawPackageRootSync({ argv1: bin })).toBe(realPkg);
   });
 
   it("falls back when argv1 realpath throws", async () => {
     const project = fx("realpath-throw-scenario");
-    const argv1 = path.join(project, "node_modules", ".bin", "openclaw");
-    const pkgRoot = path.join(project, "node_modules", "openclaw");
+    const argv1 = path.join(project, "node_modules", ".bin", "foxclaw");
+    const pkgRoot = path.join(project, "node_modules", "foxclaw");
     state.realpathErrors.add(abs(argv1));
-    setFile(path.join(pkgRoot, "package.json"), JSON.stringify({ name: "openclaw" }));
+    setFile(path.join(pkgRoot, "package.json"), JSON.stringify({ name: "foxclaw" }));
 
-    expect(resolveOpenClawPackageRootSync({ argv1 })).toBe(pkgRoot);
+    expect(resolveFoxClawPackageRootSync({ argv1 })).toBe(pkgRoot);
   });
 
   it("prefers moduleUrl candidates", async () => {
     const pkgRoot = fx("moduleurl");
-    setFile(path.join(pkgRoot, "package.json"), JSON.stringify({ name: "openclaw" }));
+    setFile(path.join(pkgRoot, "package.json"), JSON.stringify({ name: "foxclaw" }));
     const moduleUrl = pathToFileURL(path.join(pkgRoot, "dist", "index.js")).toString();
 
-    expect(resolveOpenClawPackageRootSync({ moduleUrl })).toBe(pkgRoot);
+    expect(resolveFoxClawPackageRootSync({ moduleUrl })).toBe(pkgRoot);
   });
 
-  it("falls through from a non-openclaw moduleUrl candidate to cwd", async () => {
+  it("falls through from a non-foxclaw moduleUrl candidate to cwd", async () => {
     const wrongPkgRoot = fx("moduleurl-fallthrough", "wrong");
     const cwdPkgRoot = fx("moduleurl-fallthrough", "cwd");
-    setFile(path.join(wrongPkgRoot, "package.json"), JSON.stringify({ name: "not-openclaw" }));
-    setFile(path.join(cwdPkgRoot, "package.json"), JSON.stringify({ name: "openclaw" }));
+    setFile(path.join(wrongPkgRoot, "package.json"), JSON.stringify({ name: "not-foxclaw" }));
+    setFile(path.join(cwdPkgRoot, "package.json"), JSON.stringify({ name: "foxclaw" }));
     const moduleUrl = pathToFileURL(path.join(wrongPkgRoot, "dist", "index.js")).toString();
 
-    expect(resolveOpenClawPackageRootSync({ moduleUrl, cwd: cwdPkgRoot })).toBe(cwdPkgRoot);
-    await expect(resolveOpenClawPackageRoot({ moduleUrl, cwd: cwdPkgRoot })).resolves.toBe(
+    expect(resolveFoxClawPackageRootSync({ moduleUrl, cwd: cwdPkgRoot })).toBe(cwdPkgRoot);
+    await expect(resolveFoxClawPackageRoot({ moduleUrl, cwd: cwdPkgRoot })).resolves.toBe(
       cwdPkgRoot,
     );
   });
 
   it("ignores invalid moduleUrl values and falls back to cwd", async () => {
     const pkgRoot = fx("invalid-moduleurl");
-    setFile(path.join(pkgRoot, "package.json"), JSON.stringify({ name: "openclaw" }));
+    setFile(path.join(pkgRoot, "package.json"), JSON.stringify({ name: "foxclaw" }));
 
-    expect(resolveOpenClawPackageRootSync({ moduleUrl: "not-a-file-url", cwd: pkgRoot })).toBe(
+    expect(resolveFoxClawPackageRootSync({ moduleUrl: "not-a-file-url", cwd: pkgRoot })).toBe(
       pkgRoot,
     );
     await expect(
-      resolveOpenClawPackageRoot({ moduleUrl: "not-a-file-url", cwd: pkgRoot }),
+      resolveFoxClawPackageRoot({ moduleUrl: "not-a-file-url", cwd: pkgRoot }),
     ).resolves.toBe(pkgRoot);
   });
 
-  it("returns null for non-openclaw package roots", async () => {
-    const pkgRoot = fx("not-openclaw");
-    setFile(path.join(pkgRoot, "package.json"), JSON.stringify({ name: "not-openclaw" }));
+  it("returns null for non-foxclaw package roots", async () => {
+    const pkgRoot = fx("not-foxclaw");
+    setFile(path.join(pkgRoot, "package.json"), JSON.stringify({ name: "not-foxclaw" }));
 
-    expect(resolveOpenClawPackageRootSync({ cwd: pkgRoot })).toBeNull();
+    expect(resolveFoxClawPackageRootSync({ cwd: pkgRoot })).toBeNull();
   });
 
   it("falls back from a symlinked argv1 to the node_modules package root", () => {
     const project = fx("symlink-node-modules-fallback");
-    const argv1 = path.join(project, "node_modules", ".bin", "openclaw");
+    const argv1 = path.join(project, "node_modules", ".bin", "foxclaw");
     state.realpaths.set(abs(argv1), abs(path.join(project, "versions", "current", "foxclaw.mjs")));
-    const pkgRoot = path.join(project, "node_modules", "openclaw");
-    setFile(path.join(pkgRoot, "package.json"), JSON.stringify({ name: "openclaw" }));
+    const pkgRoot = path.join(project, "node_modules", "foxclaw");
+    setFile(path.join(pkgRoot, "package.json"), JSON.stringify({ name: "foxclaw" }));
 
-    expect(resolveOpenClawPackageRootSync({ argv1 })).toBe(pkgRoot);
+    expect(resolveFoxClawPackageRootSync({ argv1 })).toBe(pkgRoot);
   });
 
   it("async resolver matches sync behavior", async () => {
     const pkgRoot = fx("async");
-    setFile(path.join(pkgRoot, "package.json"), JSON.stringify({ name: "openclaw" }));
+    setFile(path.join(pkgRoot, "package.json"), JSON.stringify({ name: "foxclaw" }));
 
-    await expect(resolveOpenClawPackageRoot({ cwd: pkgRoot })).resolves.toBe(pkgRoot);
+    await expect(resolveFoxClawPackageRoot({ cwd: pkgRoot })).resolves.toBe(pkgRoot);
   });
 
   it("async resolver returns null when no package roots exist", async () => {
-    await expect(resolveOpenClawPackageRoot({ cwd: fx("missing") })).resolves.toBeNull();
+    await expect(resolveFoxClawPackageRoot({ cwd: fx("missing") })).resolves.toBeNull();
   });
 });

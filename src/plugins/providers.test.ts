@@ -1,22 +1,22 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { resolvePluginProviders } from "./providers.js";
 
-const loadOpenClawPluginsMock = vi.fn();
+const loadFoxClawPluginsMock = vi.fn();
 
 vi.mock("./loader.js", () => ({
-  loadOpenClawPlugins: (...args: unknown[]) => loadOpenClawPluginsMock(...args),
+  loadFoxClawPlugins: (...args: unknown[]) => loadFoxClawPluginsMock(...args),
 }));
 
 describe("resolvePluginProviders", () => {
   beforeEach(() => {
-    loadOpenClawPluginsMock.mockReset();
-    loadOpenClawPluginsMock.mockReturnValue({
+    loadFoxClawPluginsMock.mockReset();
+    loadFoxClawPluginsMock.mockReturnValue({
       providers: [{ provider: { id: "demo-provider" } }],
     });
   });
 
   it("forwards an explicit env to plugin loading", () => {
-    const env = { FOXCLAW_HOME: "/srv/openclaw-home" } as NodeJS.ProcessEnv;
+    const env = { FOXCLAW_HOME: "/srv/foxclaw-home" } as NodeJS.ProcessEnv;
 
     const providers = resolvePluginProviders({
       workspaceDir: "/workspace/explicit",
@@ -24,7 +24,7 @@ describe("resolvePluginProviders", () => {
     });
 
     expect(providers).toEqual([{ id: "demo-provider" }]);
-    expect(loadOpenClawPluginsMock).toHaveBeenCalledWith(
+    expect(loadFoxClawPluginsMock).toHaveBeenCalledWith(
       expect.objectContaining({
         workspaceDir: "/workspace/explicit",
         env,

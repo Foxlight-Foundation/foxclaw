@@ -93,10 +93,10 @@ export async function writeSessionStore(params: {
 
 async function setupGatewayTestHome() {
   gatewayEnvSnapshot = captureEnv([...GATEWAY_TEST_ENV_KEYS]);
-  tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gateway-home-"));
+  tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-gateway-home-"));
   process.env.HOME = tempHome;
   process.env.USERPROFILE = tempHome;
-  process.env.FOXCLAW_STATE_DIR = path.join(tempHome, ".openclaw");
+  process.env.FOXCLAW_STATE_DIR = path.join(tempHome, ".foxclaw");
   delete process.env.FOXCLAW_CONFIG_PATH;
 }
 
@@ -109,8 +109,8 @@ function applyGatewaySkipEnv() {
   process.env.FOXCLAW_SKIP_CRON = "1";
   process.env.FOXCLAW_TEST_MINIMAL_GATEWAY = "1";
   process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = tempHome
-    ? path.join(tempHome, "openclaw-test-no-bundled-extensions")
-    : "openclaw-test-no-bundled-extensions";
+    ? path.join(tempHome, "foxclaw-test-no-bundled-extensions")
+    : "foxclaw-test-no-bundled-extensions";
 }
 
 async function resetGatewayTestState(options: { uniqueConfigRoot: boolean }) {
@@ -122,13 +122,13 @@ async function resetGatewayTestState(options: { uniqueConfigRoot: boolean }) {
   }
   applyGatewaySkipEnv();
   if (options.uniqueConfigRoot) {
-    const suiteRoot = path.join(tempHome, ".openclaw-test-suite");
+    const suiteRoot = path.join(tempHome, ".foxclaw-test-suite");
     await fs.mkdir(suiteRoot, { recursive: true });
     tempConfigRoot = path.join(suiteRoot, `case-${suiteConfigRootSeq++}`);
     await fs.rm(tempConfigRoot, { recursive: true, force: true });
     await fs.mkdir(tempConfigRoot, { recursive: true });
   } else {
-    tempConfigRoot = path.join(tempHome, ".openclaw-test");
+    tempConfigRoot = path.join(tempHome, ".foxclaw-test");
     await fs.rm(tempConfigRoot, { recursive: true, force: true });
     await fs.mkdir(tempConfigRoot, { recursive: true });
   }
@@ -250,8 +250,8 @@ type GatewayTestMessage = {
   [key: string]: unknown;
 };
 
-const CONNECT_CHALLENGE_NONCE_KEY = "__openclawTestConnectChallengeNonce";
-const CONNECT_CHALLENGE_TRACKED_KEY = "__openclawTestConnectChallengeTracked";
+const CONNECT_CHALLENGE_NONCE_KEY = "__foxclawTestConnectChallengeNonce";
+const CONNECT_CHALLENGE_TRACKED_KEY = "__foxclawTestConnectChallengeTracked";
 type TrackedWs = WebSocket & Record<string, unknown>;
 
 export function getTrackedConnectChallengeNonce(ws: WebSocket): string | undefined {

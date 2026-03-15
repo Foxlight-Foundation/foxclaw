@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { normalizePackageTagInput } from "./package-tag.js";
 
 describe("normalizePackageTagInput", () => {
-  const packageNames = ["openclaw", "@openclaw/plugin"] as const;
+  const packageNames = ["foxclaw", "@openclaw/plugin"] as const;
 
   it("returns null for blank inputs", () => {
     expect(normalizePackageTagInput(undefined, packageNames)).toBeNull();
@@ -16,7 +16,7 @@ describe("normalizePackageTagInput", () => {
   });
 
   it("treats exact known package names as an empty tag", () => {
-    expect(normalizePackageTagInput("openclaw", packageNames)).toBeNull();
+    expect(normalizePackageTagInput("foxclaw", packageNames)).toBeNull();
     expect(normalizePackageTagInput(" @openclaw/plugin ", packageNames)).toBeNull();
   });
 

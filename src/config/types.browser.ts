@@ -4,7 +4,7 @@ export type BrowserProfileConfig = {
   /** CDP URL for this profile (use for remote Chrome). */
   cdpUrl?: string;
   /** Profile driver (default: foxclaw). */
-  driver?: "openclaw" | "clawd" | "extension" | "existing-session";
+  driver?: "foxclaw" | "clawd" | "extension" | "existing-session";
   /** If true, never launch a browser for this profile; only attach. Falls back to browser.attachOnly. */
   attachOnly?: boolean;
   /** Profile color (hex). Auto-assigned at creation. */
