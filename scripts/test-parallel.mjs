@@ -20,13 +20,10 @@ const unitIsolatedFilesRaw = [
   "src/auto-reply/tool-meta.test.ts",
   "src/auto-reply/envelope.test.ts",
   "src/commands/auth-choice.test.ts",
-  // Process supervision + docker setup suites are stable but setup-heavy.
+  // Process supervision suite is stable but setup-heavy.
   "src/process/supervisor/supervisor.test.ts",
-  "src/docker-setup.test.ts",
   // Filesystem-heavy skills sync suite.
   "src/agents/skills.build-workspace-skills-prompt.syncs-merged-skills-into-target-workspace.test.ts",
-  // Real git hook integration test; keep signal, move off unit-fast critical path.
-  "test/git-hooks-pre-commit.test.ts",
   // Setup-heavy doctor command suites; keep them off the unit-fast critical path.
   "src/commands/doctor.warns-state-directory-is-missing.test.ts",
   "src/commands/doctor.warns-per-agent-sandbox-docker-browser-prune.test.ts",
