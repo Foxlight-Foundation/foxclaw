@@ -241,32 +241,15 @@ authoring plugins:
 
 - `foxclaw/plugin-sdk/core` for generic plugin APIs, provider auth types, and shared helpers.
 - `foxclaw/plugin-sdk/compat` for bundled/internal plugin code that needs broader shared runtime helpers than `core`.
-- `foxclaw/plugin-sdk/telegram` for Telegram channel plugins.
-- `foxclaw/plugin-sdk/discord` for Discord channel plugins.
 - `foxclaw/plugin-sdk/slack` for Slack channel plugins.
-- `foxclaw/plugin-sdk/signal` for Signal channel plugins.
-- `foxclaw/plugin-sdk/imessage` for iMessage channel plugins.
-- `foxclaw/plugin-sdk/whatsapp` for WhatsApp channel plugins.
-- `foxclaw/plugin-sdk/line` for LINE channel plugins.
-- `foxclaw/plugin-sdk/msteams` for the bundled Microsoft Teams plugin surface.
-- Bundled extension-specific subpaths are also available:
-  `foxclaw/plugin-sdk/acpx`, `foxclaw/plugin-sdk/bluebubbles`,
-  `foxclaw/plugin-sdk/copilot-proxy`, `foxclaw/plugin-sdk/device-pair`,
-  `foxclaw/plugin-sdk/diagnostics-otel`, `foxclaw/plugin-sdk/diffs`,
-  `foxclaw/plugin-sdk/feishu`,
-  `foxclaw/plugin-sdk/google-gemini-cli-auth`, `foxclaw/plugin-sdk/googlechat`,
-  `foxclaw/plugin-sdk/irc`, `foxclaw/plugin-sdk/llm-task`,
-  `foxclaw/plugin-sdk/lobster`, `foxclaw/plugin-sdk/matrix`,
-  `foxclaw/plugin-sdk/mattermost`, `foxclaw/plugin-sdk/memory-core`,
-  `foxclaw/plugin-sdk/memory-lancedb`,
-  `foxclaw/plugin-sdk/minimax-portal-auth`,
-  `foxclaw/plugin-sdk/nextcloud-talk`, `foxclaw/plugin-sdk/nostr`,
-  `foxclaw/plugin-sdk/open-prose`, `foxclaw/plugin-sdk/phone-control`,
-  `foxclaw/plugin-sdk/qwen-portal-auth`, `foxclaw/plugin-sdk/synology-chat`,
-  `foxclaw/plugin-sdk/talk-voice`, `foxclaw/plugin-sdk/test-utils`,
-  `foxclaw/plugin-sdk/thread-ownership`, `foxclaw/plugin-sdk/tlon`,
-  `foxclaw/plugin-sdk/twitch`, `foxclaw/plugin-sdk/voice-call`,
-  `foxclaw/plugin-sdk/zalo`, and `foxclaw/plugin-sdk/zalouser`.
+- Bundled extension-specific subpaths are also available for plugin authors:
+  `foxclaw/plugin-sdk/acpx`, `foxclaw/plugin-sdk/copilot-proxy`,
+  `foxclaw/plugin-sdk/device-pair`, `foxclaw/plugin-sdk/diagnostics-otel`,
+  `foxclaw/plugin-sdk/diffs`, `foxclaw/plugin-sdk/llm-task`,
+  `foxclaw/plugin-sdk/lobster`, `foxclaw/plugin-sdk/memory-core`,
+  `foxclaw/plugin-sdk/memory-lancedb`, `foxclaw/plugin-sdk/open-prose`,
+  `foxclaw/plugin-sdk/test-utils`, `foxclaw/plugin-sdk/thread-ownership`,
+  `foxclaw/plugin-sdk/voice-call`, and others.
 
 Compatibility note:
 

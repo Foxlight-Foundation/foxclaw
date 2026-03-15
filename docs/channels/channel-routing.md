@@ -1,5 +1,5 @@
 ---
-summary: "Routing rules per channel (WhatsApp, Telegram, Discord, Slack) and shared context"
+summary: "Routing rules per channel and shared context"
 read_when:
   - Changing channel routing or inbox behavior
 title: "Channel Routing"
@@ -13,7 +13,7 @@ host configuration.
 
 ## Key terms
 
-- **Channel**: `whatsapp`, `telegram`, `discord`, `slack`, `signal`, `imessage`, `webchat`.
+- **Channel**: `slack` (additional channels available via plugins).
 - **AccountId**: per‑channel account instance (when supported).
 - Optional channel default account: `channels.<channel>.defaultAccount` chooses
   which account is used when an outbound path does not specify `accountId`.
@@ -34,13 +34,11 @@ Groups and channels remain isolated per channel:
 
 Threads:
 
-- Slack/Discord threads append `:thread:<threadId>` to the base key.
-- Telegram forum topics embed `:topic:<topicId>` in the group key.
+- Slack threads append `:thread:<threadId>` to the base key.
 
 Examples:
 
-- `agent:main:telegram:group:-1001234567890:topic:42`
-- `agent:main:discord:channel:123456:thread:987654`
+- `agent:main:slack:channel:C0123456:thread:1234567890`
 
 ## Main DM route pinning
 
@@ -61,20 +59,18 @@ Routing picks **one agent** for each inbound message:
 
 1. **Exact peer match** (`bindings` with `peer.kind` + `peer.id`).
 2. **Parent peer match** (thread inheritance).
-3. **Guild + roles match** (Discord) via `guildId` + `roles`.
-4. **Guild match** (Discord) via `guildId`.
-5. **Team match** (Slack) via `teamId`.
-6. **Account match** (`accountId` on the channel).
-7. **Channel match** (any account on that channel, `accountId: "*"`).
-8. **Default agent** (`agents.list[].default`, else first list entry, fallback to `main`).
+3. **Team match** (Slack) via `teamId`.
+4. **Account match** (`accountId` on the channel).
+5. **Channel match** (any account on that channel, `accountId: "*"`).
+6. **Default agent** (`agents.list[].default`, else first list entry, fallback to `main`).
 
-When a binding includes multiple match fields (`peer`, `guildId`, `teamId`, `roles`), **all provided fields must match** for that binding to apply.
+When a binding includes multiple match fields (`peer`, `teamId`), **all provided fields must match** for that binding to apply.
 
 The matched agent determines which workspace and session store are used.
 
 ## Broadcast groups (run multiple agents)
 
-Broadcast groups let you run **multiple agents** for the same peer **when FoxClaw would normally reply** (for example: in WhatsApp groups, after mention/activation gating).
+Broadcast groups let you run **multiple agents** for the same peer **when FoxClaw would normally reply** (for example: in Slack channels, after mention gating).
 
 Config:
 
@@ -82,8 +78,8 @@ Config:
 {
   broadcast: {
     strategy: "parallel",
-    "120363403215116621@g.us": ["alfred", "baerbel"],
-    "+15555550123": ["support", "logger"],
+    "C0123456": ["alfred", "baerbel"],
+    "C0789012": ["support", "logger"],
   },
 }
 ```
@@ -104,7 +100,6 @@ Example:
   },
   bindings: [
     { match: { channel: "slack", teamId: "T123" }, agentId: "support" },
-    { match: { channel: "telegram", peer: { kind: "group", id: "-100123" } }, agentId: "support" },
   ],
 }
 ```

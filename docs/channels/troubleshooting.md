@@ -28,44 +28,6 @@ Healthy baseline:
 - `RPC probe: ok`
 - Channel probe shows connected/ready
 
-## WhatsApp
-
-### WhatsApp failure signatures
-
-| Symptom                         | Fastest check                                       | Fix                                                     |
-| ------------------------------- | --------------------------------------------------- | ------------------------------------------------------- |
-| Connected but no DM replies     | `foxclaw pairing list whatsapp`                    | Approve sender or switch DM policy/allowlist.           |
-| Group messages ignored          | Check `requireMention` + mention patterns in config | Mention the bot or relax mention policy for that group. |
-| Random disconnect/relogin loops | `foxclaw channels status --probe` + logs           | Re-login and verify credentials directory is healthy.   |
-
-Full troubleshooting: [/channels/whatsapp#troubleshooting-quick](/channels/whatsapp#troubleshooting-quick)
-
-## Telegram
-
-### Telegram failure signatures
-
-| Symptom                             | Fastest check                                   | Fix                                                                         |
-| ----------------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------- |
-| `/start` but no usable reply flow   | `foxclaw pairing list telegram`                | Approve pairing or change DM policy.                                        |
-| Bot online but group stays silent   | Verify mention requirement and bot privacy mode | Disable privacy mode for group visibility or mention bot.                   |
-| Send failures with network errors   | Inspect logs for Telegram API call failures     | Fix DNS/IPv6/proxy routing to `api.telegram.org`.                           |
-| `setMyCommands` rejected at startup | Inspect logs for `BOT_COMMANDS_TOO_MUCH`        | Reduce plugin/skill/custom Telegram commands or disable native menus.       |
-| Upgraded and allowlist blocks you   | `foxclaw security audit` and config allowlists | Run `foxclaw doctor --fix` or replace `@username` with numeric sender IDs. |
-
-Full troubleshooting: [/channels/telegram#troubleshooting](/channels/telegram#troubleshooting)
-
-## Discord
-
-### Discord failure signatures
-
-| Symptom                         | Fastest check                       | Fix                                                       |
-| ------------------------------- | ----------------------------------- | --------------------------------------------------------- |
-| Bot online but no guild replies | `foxclaw channels status --probe`  | Allow guild/channel and verify message content intent.    |
-| Group messages ignored          | Check logs for mention gating drops | Mention bot or set guild/channel `requireMention: false`. |
-| DM replies missing              | `foxclaw pairing list discord`     | Approve DM pairing or adjust DM policy.                   |
-
-Full troubleshooting: [/channels/discord#troubleshooting](/channels/discord#troubleshooting)
-
 ## Slack
 
 ### Slack failure signatures
@@ -78,41 +40,6 @@ Full troubleshooting: [/channels/discord#troubleshooting](/channels/discord#trou
 
 Full troubleshooting: [/channels/slack#troubleshooting](/channels/slack#troubleshooting)
 
-## iMessage and BlueBubbles
+## Plugin channels
 
-### iMessage and BlueBubbles failure signatures
-
-| Symptom                          | Fastest check                                                           | Fix                                                   |
-| -------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------- |
-| No inbound events                | Verify webhook/server reachability and app permissions                  | Fix webhook URL or BlueBubbles server state.          |
-| Can send but no receive on macOS | Check macOS privacy permissions for Messages automation                 | Re-grant TCC permissions and restart channel process. |
-| DM sender blocked                | `foxclaw pairing list imessage` or `foxclaw pairing list bluebubbles` | Approve pairing or update allowlist.                  |
-
-Full troubleshooting:
-
-- [/channels/imessage#troubleshooting-macos-privacy-and-security-tcc](/channels/imessage#troubleshooting-macos-privacy-and-security-tcc)
-- [/channels/bluebubbles#troubleshooting](/channels/bluebubbles#troubleshooting)
-
-## Signal
-
-### Signal failure signatures
-
-| Symptom                         | Fastest check                              | Fix                                                      |
-| ------------------------------- | ------------------------------------------ | -------------------------------------------------------- |
-| Daemon reachable but bot silent | `foxclaw channels status --probe`         | Verify `signal-cli` daemon URL/account and receive mode. |
-| DM blocked                      | `foxclaw pairing list signal`             | Approve sender or adjust DM policy.                      |
-| Group replies do not trigger    | Check group allowlist and mention patterns | Add sender/group or loosen gating.                       |
-
-Full troubleshooting: [/channels/signal#troubleshooting](/channels/signal#troubleshooting)
-
-## Matrix
-
-### Matrix failure signatures
-
-| Symptom                             | Fastest check                                | Fix                                             |
-| ----------------------------------- | -------------------------------------------- | ----------------------------------------------- |
-| Logged in but ignores room messages | `foxclaw channels status --probe`           | Check `groupPolicy` and room allowlist.         |
-| DMs do not process                  | `foxclaw pairing list matrix`               | Approve sender or adjust DM policy.             |
-| Encrypted rooms fail                | Verify crypto module and encryption settings | Enable encryption support and rejoin/sync room. |
-
-Full troubleshooting: [/channels/matrix#troubleshooting](/channels/matrix#troubleshooting)
+If you have additional channels installed via plugins, check the plugin's own documentation for channel-specific troubleshooting steps. The command ladder above applies to all channels.

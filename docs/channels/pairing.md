@@ -2,7 +2,7 @@
 summary: "Pairing overview: approve who can DM you + which nodes can join"
 read_when:
   - Setting up DM access control
-  - Pairing a new iOS/Android node
+  - Pairing a new node
   - Reviewing FoxClaw security posture
 title: "Pairing"
 ---
@@ -32,11 +32,11 @@ Pairing codes:
 ### Approve a sender
 
 ```bash
-foxclaw pairing list telegram
-foxclaw pairing approve telegram <CODE>
+foxclaw pairing list slack
+foxclaw pairing approve slack <CODE>
 ```
 
-Supported channels: `telegram`, `whatsapp`, `signal`, `imessage`, `discord`, `slack`, `feishu`.
+Supported channels: `slack`. Additional channels may be available via plugins.
 
 ### Where the state lives
 
@@ -54,27 +54,10 @@ Account scoping behavior:
 
 Treat these as sensitive (they gate access to your assistant).
 
-## 2) Node device pairing (iOS/Android/macOS/headless nodes)
+## 2) Node device pairing (headless nodes)
 
 Nodes connect to the Gateway as **devices** with `role: node`. The Gateway
 creates a device pairing request that must be approved.
-
-### Pair via Telegram (recommended for iOS)
-
-If you use the `device-pair` plugin, you can do first-time device pairing entirely from Telegram:
-
-1. In Telegram, message your bot: `/pair`
-2. The bot replies with two messages: an instruction message and a separate **setup code** message (easy to copy/paste in Telegram).
-3. On your phone, open the FoxClaw iOS app → Settings → Gateway.
-4. Paste the setup code and connect.
-5. Back in Telegram: `/pair approve`
-
-The setup code is a base64-encoded JSON payload that contains:
-
-- `url`: the Gateway WebSocket URL (`ws://...` or `wss://...`)
-- `bootstrapToken`: a short-lived single-device bootstrap token used for the initial pairing handshake
-
-Treat the setup code like a password while it is valid.
 
 ### Approve a node device
 
@@ -101,10 +84,4 @@ Stored under `~/.foxclaw/devices/`:
 - Security model + prompt injection: [Security](/gateway/security)
 - Updating safely (run doctor): [Updating](/install/updating)
 - Channel configs:
-  - Telegram: [Telegram](/channels/telegram)
-  - WhatsApp: [WhatsApp](/channels/whatsapp)
-  - Signal: [Signal](/channels/signal)
-  - BlueBubbles (iMessage): [BlueBubbles](/channels/bluebubbles)
-  - iMessage (legacy): [iMessage](/channels/imessage)
-  - Discord: [Discord](/channels/discord)
   - Slack: [Slack](/channels/slack)
