@@ -307,7 +307,7 @@ export async function configureGatewayForOnboarding(
 
   // If this is a new gateway setup (no existing gateway settings), start with a
   // denylist for high-risk node commands. Users can arm these temporarily via
-  // /phone arm ... (phone-control plugin).
+  // /phone arm ... command.
   if (
     !quickstartGateway.hasExisting &&
     nextConfig.gateway?.nodes?.denyCommands === undefined &&

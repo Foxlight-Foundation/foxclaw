@@ -21,7 +21,7 @@ const bundledExtensionSubpathLoaders = [
     load: () => import("openclaw/plugin-sdk/minimax-portal-auth"),
   },
   { id: "open-prose", load: () => import("openclaw/plugin-sdk/open-prose") },
-  { id: "phone-control", load: () => import("openclaw/plugin-sdk/phone-control") },
+
   { id: "qwen-portal-auth", load: () => import("openclaw/plugin-sdk/qwen-portal-auth") },
   { id: "test-utils", load: () => import("openclaw/plugin-sdk/test-utils") },
   { id: "thread-ownership", load: () => import("openclaw/plugin-sdk/thread-ownership") },
