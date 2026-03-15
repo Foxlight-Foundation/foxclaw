@@ -1,5 +1,3 @@
-import { resolveTelegramAccount } from "../../../extensions/telegram/src/accounts.js";
-import { deleteTelegramUpdateOffset } from "../../../extensions/telegram/src/update-offset-store.js";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import { listChannelPluginCatalogEntries } from "../../channels/plugins/catalog.js";
 import { parseOptionalDelimitedEntries } from "../../channels/plugins/helpers.js";
@@ -269,11 +267,6 @@ export async function channelsAddCommand(
     return;
   }
 
-  const previousTelegramToken =
-    channel === "telegram"
-      ? resolveTelegramAccount({ cfg: nextConfig, accountId }).token.trim()
-      : "";
-
   if (accountId !== DEFAULT_ACCOUNT_ID) {
     nextConfig = moveSingleAccountChannelSectionToDefaultAccount({
       cfg: nextConfig,
@@ -287,14 +280,6 @@ export async function channelsAddCommand(
     accountId,
     input,
   });
-
-  if (channel === "telegram") {
-    const nextTelegramToken = resolveTelegramAccount({ cfg: nextConfig, accountId }).token.trim();
-    if (previousTelegramToken !== nextTelegramToken) {
-      // Clear stale polling offsets after Telegram token rotation.
-      await deleteTelegramUpdateOffset({ accountId });
-    }
-  }
 
   await writeConfigFile(nextConfig);
   runtime.log(`Added ${channelLabel(channel)} account "${accountId}".`);

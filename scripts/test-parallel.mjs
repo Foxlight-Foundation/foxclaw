@@ -40,8 +40,6 @@ const unitIsolatedFilesRaw = [
   "src/commands/agent.test.ts",
   "src/media/store.test.ts",
   "src/media/store.header-ext.test.ts",
-  "extensions/whatsapp/src/media.test.ts",
-  "extensions/whatsapp/src/auto-reply.web-auto-reply.falls-back-text-media-send-fails.test.ts",
   "src/browser/server.covers-additional-endpoint-branches.test.ts",
   "src/browser/server.post-tabs-open-profile-unknown-returns-404.test.ts",
   "src/browser/server.agent-contract-snapshot-endpoints.test.ts",
@@ -78,15 +76,8 @@ const unitIsolatedFilesRaw = [
   "src/auto-reply/reply.triggers.trigger-handling.targets-active-session-native-stop.test.ts",
   "src/auto-reply/reply.triggers.group-intro-prompts.test.ts",
   "src/auto-reply/reply.triggers.trigger-handling.handles-inline-commands-strips-it-before-agent.test.ts",
-  "extensions/whatsapp/src/auto-reply.web-auto-reply.compresses-common-formats-jpeg-cap.test.ts",
-  // Setup-heavy bot bootstrap suite.
-  "extensions/telegram/src/bot.create-telegram-bot.test.ts",
-  // Medium-heavy bot behavior suite; move off unit-fast critical path.
-  "extensions/telegram/src/bot.test.ts",
   // Slack slash registration tests are setup-heavy and can bottleneck unit-fast.
   "extensions/slack/src/monitor/slash.test.ts",
-  // Uses process-level unhandledRejection listeners; keep it off vmForks to avoid cross-file leakage.
-  "extensions/imessage/src/monitor.shutdown.unhandled-rejection.test.ts",
   // Mutates process.cwd() and mocks core module loaders; isolate from the shared fast lane.
   "src/infra/git-commit.test.ts",
 ];

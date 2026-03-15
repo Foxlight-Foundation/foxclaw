@@ -1,5 +1,3 @@
-import { buildTelegramExecApprovalButtons } from "../../extensions/telegram/src/approval-buttons.js";
-import { sendTypingTelegram } from "../../extensions/telegram/src/send.js";
 import type { ReplyPayload } from "../auto-reply/types.js";
 import type { OpenClawConfig } from "../config/config.js";
 import { loadConfig } from "../config/config.js";
@@ -8,7 +6,7 @@ import type {
   ExecApprovalForwardTarget,
 } from "../config/types.approvals.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
-import { normalizeAccountId, parseAgentSessionKey } from "../routing/session-key.js";
+import { parseAgentSessionKey } from "../routing/session-key.js";
 import { compileSafeRegex, testRegexWithBoundedInput } from "../security/safe-regex.js";
 import {
   isDeliverableMessageChannel,
@@ -16,7 +14,6 @@ import {
   type DeliverableMessageChannel,
 } from "../utils/message-channel.js";
 import { resolveExecApprovalCommandDisplay } from "./exec-approval-command-display.js";
-import { buildExecApprovalPendingReplyPayload } from "./exec-approval-reply.js";
 import { resolveExecApprovalSessionTarget } from "./exec-approval-session-target.js";
 import type {
   ExecApprovalDecision,
@@ -108,93 +105,6 @@ function buildTargetKey(target: ExecApprovalForwardTarget): string {
   const accountId = target.accountId ?? "";
   const threadId = target.threadId ?? "";
   return [channel, target.to, accountId, threadId].join(":");
-}
-
-function resolveChannelAccountConfig<T>(
-  accounts: Record<string, T> | undefined,
-  accountId?: string,
-): T | undefined {
-  if (!accounts || !accountId?.trim()) {
-    return undefined;
-  }
-  const normalized = normalizeAccountId(accountId);
-  const direct = accounts[normalized];
-  if (direct) {
-    return direct;
-  }
-  const fallbackKey = Object.keys(accounts).find(
-    (key) => key.toLowerCase() === normalized.toLowerCase(),
-  );
-  return fallbackKey ? accounts[fallbackKey] : undefined;
-}
-
-// Discord has component-based exec approvals; skip text fallback only when the
-// Discord-specific handler is enabled for the same target account.
-function shouldSkipDiscordForwarding(
-  target: ExecApprovalForwardTarget,
-  cfg: OpenClawConfig,
-): boolean {
-  const channel = normalizeMessageChannel(target.channel) ?? target.channel;
-  if (channel !== "discord") {
-    return false;
-  }
-  const discord = cfg.channels?.discord as
-    | {
-        execApprovals?: { enabled?: boolean; approvers?: Array<string | number> };
-        accounts?: Record<
-          string,
-          { execApprovals?: { enabled?: boolean; approvers?: Array<string | number> } }
-        >;
-      }
-    | undefined;
-  if (!discord) {
-    return false;
-  }
-  const account = resolveChannelAccountConfig(discord.accounts, target.accountId);
-  const execApprovals = account?.execApprovals ?? discord.execApprovals;
-  return Boolean(execApprovals?.enabled && (execApprovals.approvers?.length ?? 0) > 0);
-}
-
-function shouldSkipTelegramForwarding(params: {
-  target: ExecApprovalForwardTarget;
-  cfg: OpenClawConfig;
-  request: ExecApprovalRequest;
-}): boolean {
-  const channel = normalizeMessageChannel(params.target.channel) ?? params.target.channel;
-  if (channel !== "telegram") {
-    return false;
-  }
-  const requestChannel = normalizeMessageChannel(params.request.request.turnSourceChannel ?? "");
-  if (requestChannel !== "telegram") {
-    return false;
-  }
-  const telegram = params.cfg.channels?.telegram;
-  if (!telegram) {
-    return false;
-  }
-  const telegramConfig = telegram as
-    | {
-        execApprovals?: { enabled?: boolean; approvers?: Array<string | number> };
-        accounts?: Record<
-          string,
-          { execApprovals?: { enabled?: boolean; approvers?: Array<string | number> } }
-        >;
-      }
-    | undefined;
-  if (!telegramConfig) {
-    return false;
-  }
-  const accountId =
-    params.target.accountId?.trim() || params.request.request.turnSourceAccountId?.trim();
-  const account = accountId
-    ? (resolveChannelAccountConfig<{
-        execApprovals?: { enabled?: boolean; approvers?: Array<string | number> };
-      }>(telegramConfig.accounts, accountId) as
-        | { execApprovals?: { enabled?: boolean; approvers?: Array<string | number> } }
-        | undefined)
-    : undefined;
-  const execApprovals = account?.execApprovals ?? telegramConfig.execApprovals;
-  return Boolean(execApprovals?.enabled && (execApprovals.approvers?.length ?? 0) > 0);
 }
 
 function formatApprovalCommand(command: string): { inline: boolean; text: string } {
@@ -320,25 +230,6 @@ async function deliverToTargets(params: {
     }
     try {
       const payload = params.buildPayload(target);
-      if (
-        channel === "telegram" &&
-        payload.channelData &&
-        typeof payload.channelData === "object" &&
-        !Array.isArray(payload.channelData) &&
-        payload.channelData.execApproval
-      ) {
-        const threadId =
-          typeof target.threadId === "number"
-            ? target.threadId
-            : typeof target.threadId === "string"
-              ? Number.parseInt(target.threadId, 10)
-              : undefined;
-        await sendTypingTelegram(target.to, {
-          cfg: params.cfg,
-          accountId: target.accountId,
-          ...(Number.isFinite(threadId) ? { messageThreadId: threadId } : {}),
-        }).catch(() => {});
-      }
       await params.deliver({
         cfg: params.cfg,
         channel,
@@ -360,33 +251,6 @@ function buildRequestPayloadForTarget(
   nowMsValue: number,
   target: ForwardTarget,
 ): ReplyPayload {
-  const channel = normalizeMessageChannel(target.channel) ?? target.channel;
-  if (channel === "telegram") {
-    const payload = buildExecApprovalPendingReplyPayload({
-      approvalId: request.id,
-      approvalSlug: request.id.slice(0, 8),
-      approvalCommandId: request.id,
-      command: resolveExecApprovalCommandDisplay(request.request).commandText,
-      cwd: request.request.cwd ?? undefined,
-      host: request.request.host === "node" ? "node" : "gateway",
-      nodeId: request.request.nodeId ?? undefined,
-      expiresAtMs: request.expiresAtMs,
-      nowMs: nowMsValue,
-    });
-    const buttons = buildTelegramExecApprovalButtons(request.id);
-    if (!buttons) {
-      return payload;
-    }
-    return {
-      ...payload,
-      channelData: {
-        ...payload.channelData,
-        telegram: {
-          buttons,
-        },
-      },
-    };
-  }
   return { text: buildRequestMessage(request, nowMsValue) };
 }
 
@@ -444,20 +308,14 @@ export function createExecApprovalForwarder(
   const handleRequested = async (request: ExecApprovalRequest): Promise<boolean> => {
     const cfg = getConfig();
     const config = cfg.approvals?.exec;
-    const filteredTargets = [
-      ...(shouldForward({ config, request })
-        ? resolveForwardTargets({
-            cfg,
-            config,
-            request,
-            resolveSessionTarget,
-          })
-        : []),
-    ].filter(
-      (target) =>
-        !shouldSkipDiscordForwarding(target, cfg) &&
-        !shouldSkipTelegramForwarding({ target, cfg, request }),
-    );
+    const filteredTargets = shouldForward({ config, request })
+      ? resolveForwardTargets({
+          cfg,
+          config,
+          request,
+          resolveSessionTarget,
+        })
+      : [];
 
     if (filteredTargets.length === 0) {
       return false;
@@ -519,20 +377,14 @@ export function createExecApprovalForwarder(
         expiresAtMs: resolved.ts,
       };
       const config = cfg.approvals?.exec;
-      targets = [
-        ...(shouldForward({ config, request })
-          ? resolveForwardTargets({
-              cfg,
-              config,
-              request,
-              resolveSessionTarget,
-            })
-          : []),
-      ].filter(
-        (target) =>
-          !shouldSkipDiscordForwarding(target, cfg) &&
-          !shouldSkipTelegramForwarding({ target, cfg, request }),
-      );
+      targets = shouldForward({ config, request })
+        ? resolveForwardTargets({
+            cfg,
+            config,
+            request,
+            resolveSessionTarget,
+          })
+        : [];
     }
     if (!targets || targets.length === 0) {
       return;

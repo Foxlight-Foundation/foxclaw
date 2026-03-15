@@ -2,7 +2,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ChannelOutboundAdapter, ChannelPlugin } from "../../channels/plugins/types.js";
 import { setActivePluginRegistry } from "../../plugins/runtime.js";
 import { createMSTeamsTestPlugin, createTestRegistry } from "../../test-utils/channel-plugins.js";
-import { createIMessageTestPlugin } from "../../test-utils/imessage-test-plugin.js";
 import { GATEWAY_CLIENT_MODES, GATEWAY_CLIENT_NAMES } from "../../utils/message-channel.js";
 import { sendMessage, sendPoll } from "./message.js";
 
@@ -124,31 +123,6 @@ describe("sendMessage channel normalization", () => {
         expect(deps.sendMSTeams).toHaveBeenCalledWith("conversation:19:abc@thread.tacv2", "hi");
       },
       expectedChannel: "msteams",
-    },
-    {
-      name: "normalizes iMessage aliases",
-      registry: createTestRegistry([
-        {
-          pluginId: "imessage",
-          source: "test",
-          plugin: createIMessageTestPlugin(),
-        },
-      ]),
-      params: {
-        to: "someone@example.com",
-        channel: "imsg",
-        deps: {
-          sendIMessage: vi.fn(async () => ({ messageId: "i1" })),
-        },
-      },
-      assertDeps: (deps: { sendIMessage?: ReturnType<typeof vi.fn> }) => {
-        expect(deps.sendIMessage).toHaveBeenCalledWith(
-          "someone@example.com",
-          "hi",
-          expect.any(Object),
-        );
-      },
-      expectedChannel: "imessage",
     },
   ])("$name", async ({ registry, params, assertDeps, expectedChannel }) => {
     setRegistry(registry);

@@ -4,13 +4,17 @@ import {
   resolveApiKeyForProvider as resolveApiKeyForProviderRaw,
 } from "../../agents/model-auth.js";
 import { resolveStateDir } from "../../config/paths.js";
+import { isVoiceCompatibleAudio } from "../../media/audio.js";
+import { mediaKindFromMime } from "../../media/constants.js";
+import { getImageMetadata, resizeToJpeg } from "../../media/image-ops.js";
+import { detectMime } from "../../media/mime.js";
+import { loadWebMedia } from "../../media/web-media.js";
 import { transcribeAudioFile } from "../../media-understanding/transcribe-audio.js";
 import { textToSpeechTelephony } from "../../tts/tts.js";
 import { createRuntimeChannel } from "./runtime-channel.js";
 import { createRuntimeConfig } from "./runtime-config.js";
 import { createRuntimeEvents } from "./runtime-events.js";
 import { createRuntimeLogging } from "./runtime-logging.js";
-import { createRuntimeMedia } from "./runtime-media.js";
 import { createRuntimeSystem } from "./runtime-system.js";
 import { createRuntimeTools } from "./runtime-tools.js";
 import type { PluginRuntime } from "./types.js";
@@ -55,7 +59,14 @@ export function createPluginRuntime(_options: CreatePluginRuntimeOptions = {}): 
     config: createRuntimeConfig(),
     subagent: _options.subagent ?? createUnavailableSubagentRuntime(),
     system: createRuntimeSystem(),
-    media: createRuntimeMedia(),
+    media: {
+      loadWebMedia,
+      detectMime,
+      mediaKindFromMime,
+      isVoiceCompatibleAudio,
+      getImageMetadata,
+      resizeToJpeg,
+    },
     tts: { textToSpeechTelephony },
     stt: { transcribeAudioFile },
     tools: createRuntimeTools(),

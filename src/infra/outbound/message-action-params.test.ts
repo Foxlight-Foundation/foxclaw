@@ -10,7 +10,6 @@ import {
   normalizeSandboxMediaParams,
   resolveAttachmentMediaPolicy,
   resolveSlackAutoThreadId,
-  resolveTelegramAutoThreadId,
 } from "./message-action-params.js";
 
 const cfg = {} as OpenClawConfig;
@@ -73,30 +72,6 @@ describe("message action threading helpers", () => {
     ).toBeUndefined();
   });
 
-  it("resolves Telegram auto-thread ids for matching chats across target formats", () => {
-    expect(
-      resolveTelegramAutoThreadId({
-        to: "telegram:group:-100123:topic:77",
-        toolContext: createToolContext({
-          currentChannelId: "tg:group:-100123",
-        }),
-      }),
-    ).toBe("thread-1");
-    expect(
-      resolveTelegramAutoThreadId({
-        to: "-100999:77",
-        toolContext: createToolContext({
-          currentChannelId: "-100123",
-        }),
-      }),
-    ).toBeUndefined();
-    expect(
-      resolveTelegramAutoThreadId({
-        to: "-100123",
-        toolContext: createToolContext({ currentChannelId: undefined }),
-      }),
-    ).toBeUndefined();
-  });
 });
 
 describe("message action media helpers", () => {

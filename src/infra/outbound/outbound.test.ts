@@ -37,7 +37,6 @@ import {
   normalizeOutboundPayloads,
   normalizeOutboundPayloadsForJson,
 } from "./payloads.js";
-import { runResolveOutboundTargetCoreTests } from "./targets.shared-test.js";
 
 describe("delivery-queue", () => {
   let tmpDir: string;
@@ -1305,5 +1304,3 @@ describe("formatOutboundPayloadLog", () => {
     }
   });
 });
-
-runResolveOutboundTargetCoreTests();

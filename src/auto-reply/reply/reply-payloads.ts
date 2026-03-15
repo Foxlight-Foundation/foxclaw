@@ -1,4 +1,3 @@
-import { parseTelegramTarget } from "../../../extensions/telegram/src/targets.js";
 import { isMessagingToolDuplicate } from "../../agents/pi-embedded-helpers.js";
 import type { MessagingToolSend } from "../../agents/pi-embedded-runner.js";
 import { normalizeChannelId } from "../../channels/plugins/index.js";
@@ -176,17 +175,6 @@ function normalizeProviderForComparison(value?: string): string | undefined {
   return PROVIDER_ALIAS_MAP[lowered] ?? lowered;
 }
 
-function normalizeThreadIdForComparison(value?: string): string | undefined {
-  const trimmed = value?.trim();
-  if (!trimmed) {
-    return undefined;
-  }
-  if (/^-?\d+$/.test(trimmed)) {
-    return String(Number.parseInt(trimmed, 10));
-  }
-  return trimmed.toLowerCase();
-}
-
 function resolveTargetProviderForComparison(params: {
   currentProvider: string;
   targetProvider?: string;
@@ -204,32 +192,7 @@ function targetsMatchForSuppression(params: {
   targetKey: string;
   targetThreadId?: string;
 }): boolean {
-  if (params.provider !== "telegram") {
-    return params.targetKey === params.originTarget;
-  }
-
-  const origin = parseTelegramTarget(params.originTarget);
-  const target = parseTelegramTarget(params.targetKey);
-  const explicitTargetThreadId = normalizeThreadIdForComparison(params.targetThreadId);
-  const targetThreadId =
-    explicitTargetThreadId ??
-    (target.messageThreadId != null ? String(target.messageThreadId) : undefined);
-  const originThreadId =
-    origin.messageThreadId != null ? String(origin.messageThreadId) : undefined;
-  if (origin.chatId.trim().toLowerCase() !== target.chatId.trim().toLowerCase()) {
-    return false;
-  }
-  if (originThreadId && targetThreadId != null) {
-    return originThreadId === targetThreadId;
-  }
-  if (originThreadId && targetThreadId == null) {
-    return false;
-  }
-  if (!originThreadId && targetThreadId != null) {
-    return false;
-  }
-  // chatId already matched and neither side carries thread context.
-  return true;
+  return params.targetKey === params.originTarget;
 }
 
 export function shouldSuppressMessagingToolReplies(params: {

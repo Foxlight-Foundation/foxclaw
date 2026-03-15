@@ -1,16 +1,16 @@
-import { loadWebMedia } from "../../extensions/whatsapp/src/media.js";
+import { loadWebMedia } from "../media/web-media.js";
 
 export type OutboundMediaLoadOptions = {
   maxBytes?: number;
   mediaLocalRoots?: readonly string[];
 };
 
-export async function loadOutboundMediaFromUrl(
+export const loadOutboundMediaFromUrl = async (
   mediaUrl: string,
   options: OutboundMediaLoadOptions = {},
-) {
+) => {
   return await loadWebMedia(mediaUrl, {
     maxBytes: options.maxBytes,
     localRoots: options.mediaLocalRoots,
   });
-}
+};

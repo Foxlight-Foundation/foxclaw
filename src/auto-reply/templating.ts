@@ -1,5 +1,13 @@
-import type { StickerMetadata } from "../../extensions/telegram/src/bot/types.js";
 import type { ChannelId } from "../channels/plugins/types.js";
+
+/** Sticker metadata (originally from Telegram extension). */
+type StickerMetadata = {
+  emoji?: string;
+  setName?: string;
+  fileId?: string;
+  fileUniqueId?: string;
+  description?: string;
+};
 import type {
   MediaUnderstandingDecision,
   MediaUnderstandingOutput,

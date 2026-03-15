@@ -7,7 +7,7 @@ import { DISCORD_THREAD_BINDING_CHANNEL } from "../../../channels/thread-binding
 import { resolveConversationIdFromTargets } from "../../../infra/outbound/conversation-id.js";
 import type { HandleCommandsParams } from "../commands-types.js";
 import { parseDiscordParentChannelFromSessionKey } from "../discord-parent-channel.js";
-import { resolveTelegramConversationId } from "../telegram-context.js";
+import { resolveTelegramConversationId } from "../commands-subagents/shared.js";
 
 export function resolveAcpCommandChannel(params: HandleCommandsParams): string {
   const raw =

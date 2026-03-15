@@ -1,4 +1,3 @@
-import { hasAnyWhatsAppAuth } from "../../extensions/whatsapp/src/accounts.js";
 import { normalizeProviderId } from "../agents/model-selection.js";
 import {
   getChannelPluginCatalogEntry,
@@ -163,9 +162,6 @@ function isStructuredChannelConfigured(
 }
 
 function isWhatsAppConfigured(cfg: OpenClawConfig): boolean {
-  if (hasAnyWhatsAppAuth(cfg)) {
-    return true;
-  }
   const entry = resolveChannelConfig(cfg, "whatsapp");
   if (!entry) {
     return false;

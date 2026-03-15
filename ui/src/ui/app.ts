@@ -4,12 +4,6 @@ import { i18n, I18nController, isSupportedLocale } from "../i18n/index.ts";
 import {
   handleChannelConfigReload as handleChannelConfigReloadInternal,
   handleChannelConfigSave as handleChannelConfigSaveInternal,
-  handleNostrProfileCancel as handleNostrProfileCancelInternal,
-  handleNostrProfileEdit as handleNostrProfileEditInternal,
-  handleNostrProfileFieldChange as handleNostrProfileFieldChangeInternal,
-  handleNostrProfileImport as handleNostrProfileImportInternal,
-  handleNostrProfileSave as handleNostrProfileSaveInternal,
-  handleNostrProfileToggleAdvanced as handleNostrProfileToggleAdvancedInternal,
   handleWhatsAppLogout as handleWhatsAppLogoutInternal,
   handleWhatsAppStart as handleWhatsAppStartInternal,
   handleWhatsAppWait as handleWhatsAppWaitInternal,
@@ -81,12 +75,10 @@ import type {
   SessionsListResult,
   SkillStatusReport,
   StatusSummary,
-  NostrProfile,
   ToolsCatalogResult,
 } from "./types.ts";
 import { type ChatAttachment, type ChatQueueItem, type CronFormState } from "./ui-types.ts";
 import { generateUUID } from "./uuid.ts";
-import type { NostrProfileFormState } from "./views/channels.nostr-profile-form.ts";
 
 declare global {
   interface Window {
@@ -243,8 +235,6 @@ export class OpenClawApp extends LitElement {
   @state() whatsappLoginQrDataUrl: string | null = null;
   @state() whatsappLoginConnected: boolean | null = null;
   @state() whatsappBusy = false;
-  @state() nostrProfileFormState: NostrProfileFormState | null = null;
-  @state() nostrProfileAccountId: string | null = null;
 
   @state() presenceLoading = false;
   @state() presenceEntries: PresenceEntry[] = [];
@@ -615,30 +605,6 @@ export class OpenClawApp extends LitElement {
 
   async handleChannelConfigReload() {
     await handleChannelConfigReloadInternal(this);
-  }
-
-  handleNostrProfileEdit(accountId: string, profile: NostrProfile | null) {
-    handleNostrProfileEditInternal(this, accountId, profile);
-  }
-
-  handleNostrProfileCancel() {
-    handleNostrProfileCancelInternal(this);
-  }
-
-  handleNostrProfileFieldChange(field: keyof NostrProfile, value: string) {
-    handleNostrProfileFieldChangeInternal(this, field, value);
-  }
-
-  async handleNostrProfileSave() {
-    await handleNostrProfileSaveInternal(this);
-  }
-
-  async handleNostrProfileImport() {
-    await handleNostrProfileImportInternal(this);
-  }
-
-  handleNostrProfileToggleAdvanced() {
-    handleNostrProfileToggleAdvancedInternal(this);
   }
 
   async handleExecApprovalDecision(decision: "allow-once" | "allow-always" | "deny") {

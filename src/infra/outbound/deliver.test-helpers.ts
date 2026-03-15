@@ -1,11 +1,8 @@
 import { vi } from "vitest";
-import { signalOutbound } from "../../channels/plugins/outbound/signal.js";
-import { telegramOutbound } from "../../channels/plugins/outbound/telegram.js";
-import { whatsappOutbound } from "../../channels/plugins/outbound/whatsapp.js";
+import type { ChannelOutboundAdapter } from "../../channels/plugins/types.js";
 import type { OpenClawConfig } from "../../config/config.js";
 import { setActivePluginRegistry } from "../../plugins/runtime.js";
 import { createOutboundTestPlugin, createTestRegistry } from "../../test-utils/channel-plugins.js";
-import { createIMessageTestPlugin } from "../../test-utils/imessage-test-plugin.js";
 import { createInternalHookEventPayload } from "../../test-utils/internal-hook-event-payload.js";
 import type { DeliverOutboundPayloadsParams, OutboundDeliveryResult } from "./deliver.js";
 
@@ -145,13 +142,19 @@ export const whatsappChunkConfig: OpenClawConfig = {
   channels: { whatsapp: { textChunkLimit: 4000 } },
 };
 
+const createMockOutbound = (channel: string): ChannelOutboundAdapter => ({
+  deliveryMode: "direct",
+  sendText: async () => ({ channel, messageId: "mock", chatId: "mock" }),
+  sendMedia: async () => ({ channel, messageId: "mock", chatId: "mock" }),
+});
+
 export const defaultRegistry = createTestRegistry([
   {
     pluginId: "signal",
     source: "test",
     plugin: createOutboundTestPlugin({
       id: "signal",
-      outbound: signalOutbound,
+      outbound: createMockOutbound("signal"),
     }),
   },
   {
@@ -159,7 +162,7 @@ export const defaultRegistry = createTestRegistry([
     source: "test",
     plugin: createOutboundTestPlugin({
       id: "telegram",
-      outbound: telegramOutbound,
+      outbound: createMockOutbound("telegram"),
     }),
   },
   {
@@ -167,13 +170,16 @@ export const defaultRegistry = createTestRegistry([
     source: "test",
     plugin: createOutboundTestPlugin({
       id: "whatsapp",
-      outbound: whatsappOutbound,
+      outbound: createMockOutbound("whatsapp"),
     }),
   },
   {
     pluginId: "imessage",
     source: "test",
-    plugin: createIMessageTestPlugin(),
+    plugin: createOutboundTestPlugin({
+      id: "imessage",
+      outbound: createMockOutbound("imessage"),
+    }),
   },
 ]);
 

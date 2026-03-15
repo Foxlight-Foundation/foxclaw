@@ -1,15 +1,5 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { inspectTelegramAccount } from "../../extensions/telegram/src/account-inspect.js";
-import {
-  listTelegramAccountIds,
-  resolveTelegramAccount,
-} from "../../extensions/telegram/src/accounts.js";
-import {
-  isNumericTelegramUserId,
-  normalizeTelegramAllowFromEntry,
-} from "../../extensions/telegram/src/allow-from.js";
-import { fetchTelegramChatId } from "../../extensions/telegram/src/api-fetch.js";
 import { normalizeChatChannelId } from "../channels/registry.js";
 import { formatCliCommand } from "../cli/command-format.js";
 import { resolveCommandSecretRefsViaGateway } from "../cli/command-secret-gateway.js";
@@ -63,14 +53,6 @@ import {
 import { normalizeCompatibilityConfigValues } from "./doctor-legacy-config.js";
 import type { DoctorOptions } from "./doctor-prompter.js";
 import { autoMigrateLegacyStateDir } from "./doctor-state-migrations.js";
-
-type TelegramAllowFromUsernameHit = { path: string; entry: string };
-
-type TelegramAllowFromListRef = {
-  pathLabel: string;
-  holder: Record<string, unknown>;
-  key: "allowFrom" | "groupAllowFrom";
-};
 
 function asObjectRecord(value: unknown): Record<string, unknown> | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
@@ -220,246 +202,6 @@ export function collectMissingExplicitDefaultAccountWarnings(cfg: OpenClawConfig
   }
 
   return warnings;
-}
-
-function collectTelegramAccountScopes(
-  cfg: OpenClawConfig,
-): Array<{ prefix: string; account: Record<string, unknown> }> {
-  const scopes: Array<{ prefix: string; account: Record<string, unknown> }> = [];
-  const telegram = asObjectRecord(cfg.channels?.telegram);
-  if (!telegram) {
-    return scopes;
-  }
-
-  scopes.push({ prefix: "channels.telegram", account: telegram });
-  const accounts = asObjectRecord(telegram.accounts);
-  if (!accounts) {
-    return scopes;
-  }
-  for (const key of Object.keys(accounts)) {
-    const account = asObjectRecord(accounts[key]);
-    if (!account) {
-      continue;
-    }
-    scopes.push({ prefix: `channels.telegram.accounts.${key}`, account });
-  }
-
-  return scopes;
-}
-
-function collectTelegramAllowFromLists(
-  prefix: string,
-  account: Record<string, unknown>,
-): TelegramAllowFromListRef[] {
-  const refs: TelegramAllowFromListRef[] = [
-    { pathLabel: `${prefix}.allowFrom`, holder: account, key: "allowFrom" },
-    { pathLabel: `${prefix}.groupAllowFrom`, holder: account, key: "groupAllowFrom" },
-  ];
-  const groups = asObjectRecord(account.groups);
-  if (!groups) {
-    return refs;
-  }
-
-  for (const groupId of Object.keys(groups)) {
-    const group = asObjectRecord(groups[groupId]);
-    if (!group) {
-      continue;
-    }
-    refs.push({
-      pathLabel: `${prefix}.groups.${groupId}.allowFrom`,
-      holder: group,
-      key: "allowFrom",
-    });
-    const topics = asObjectRecord(group.topics);
-    if (!topics) {
-      continue;
-    }
-    for (const topicId of Object.keys(topics)) {
-      const topic = asObjectRecord(topics[topicId]);
-      if (!topic) {
-        continue;
-      }
-      refs.push({
-        pathLabel: `${prefix}.groups.${groupId}.topics.${topicId}.allowFrom`,
-        holder: topic,
-        key: "allowFrom",
-      });
-    }
-  }
-  return refs;
-}
-
-function scanTelegramAllowFromUsernameEntries(cfg: OpenClawConfig): TelegramAllowFromUsernameHit[] {
-  const hits: TelegramAllowFromUsernameHit[] = [];
-
-  const scanList = (pathLabel: string, list: unknown) => {
-    if (!Array.isArray(list)) {
-      return;
-    }
-    for (const entry of list) {
-      const normalized = normalizeTelegramAllowFromEntry(entry);
-      if (!normalized || normalized === "*") {
-        continue;
-      }
-      if (isNumericTelegramUserId(normalized)) {
-        continue;
-      }
-      hits.push({ path: pathLabel, entry: String(entry).trim() });
-    }
-  };
-
-  for (const scope of collectTelegramAccountScopes(cfg)) {
-    for (const ref of collectTelegramAllowFromLists(scope.prefix, scope.account)) {
-      scanList(ref.pathLabel, ref.holder[ref.key]);
-    }
-  }
-
-  return hits;
-}
-
-async function maybeRepairTelegramAllowFromUsernames(cfg: OpenClawConfig): Promise<{
-  config: OpenClawConfig;
-  changes: string[];
-}> {
-  const hits = scanTelegramAllowFromUsernameEntries(cfg);
-  if (hits.length === 0) {
-    return { config: cfg, changes: [] };
-  }
-
-  const { resolvedConfig } = await resolveCommandSecretRefsViaGateway({
-    config: cfg,
-    commandName: "doctor --fix",
-    targetIds: getChannelsCommandSecretTargetIds(),
-    mode: "summary",
-  });
-  const hasConfiguredUnavailableToken = listTelegramAccountIds(cfg).some((accountId) => {
-    const inspected = inspectTelegramAccount({ cfg, accountId });
-    return inspected.enabled && inspected.tokenStatus === "configured_unavailable";
-  });
-  const tokens = Array.from(
-    new Set(
-      listTelegramAccountIds(resolvedConfig)
-        .map((accountId) => resolveTelegramAccount({ cfg: resolvedConfig, accountId }))
-        .map((account) => (account.tokenSource === "none" ? "" : account.token))
-        .map((token) => token.trim())
-        .filter(Boolean),
-    ),
-  );
-
-  if (tokens.length === 0) {
-    return {
-      config: cfg,
-      changes: [
-        hasConfiguredUnavailableToken
-          ? `- Telegram allowFrom contains @username entries, but configured Telegram bot credentials are unavailable in this command path; cannot auto-resolve (start the gateway or make the secret source available, then rerun doctor --fix).`
-          : `- Telegram allowFrom contains @username entries, but no Telegram bot token is configured; cannot auto-resolve (run onboarding or replace with numeric sender IDs).`,
-      ],
-    };
-  }
-
-  const resolveUserId = async (raw: string): Promise<string | null> => {
-    const trimmed = raw.trim();
-    if (!trimmed) {
-      return null;
-    }
-    const stripped = normalizeTelegramAllowFromEntry(trimmed);
-    if (!stripped || stripped === "*") {
-      return null;
-    }
-    if (isNumericTelegramUserId(stripped)) {
-      return stripped;
-    }
-    if (/\s/.test(stripped)) {
-      return null;
-    }
-    const username = stripped.startsWith("@") ? stripped : `@${stripped}`;
-    for (const token of tokens) {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 4000);
-      try {
-        const id = await fetchTelegramChatId({
-          token,
-          chatId: username,
-          signal: controller.signal,
-        });
-        if (id) {
-          return id;
-        }
-      } catch {
-        // ignore and try next token
-      } finally {
-        clearTimeout(timeout);
-      }
-    }
-    return null;
-  };
-
-  const changes: string[] = [];
-  const next = structuredClone(cfg);
-
-  const repairList = async (pathLabel: string, holder: Record<string, unknown>, key: string) => {
-    const raw = holder[key];
-    if (!Array.isArray(raw)) {
-      return;
-    }
-    const out: Array<string | number> = [];
-    const replaced: Array<{ from: string; to: string }> = [];
-    for (const entry of raw) {
-      const normalized = normalizeTelegramAllowFromEntry(entry);
-      if (!normalized) {
-        continue;
-      }
-      if (normalized === "*") {
-        out.push("*");
-        continue;
-      }
-      if (isNumericTelegramUserId(normalized)) {
-        out.push(normalized);
-        continue;
-      }
-      const resolved = await resolveUserId(String(entry));
-      if (resolved) {
-        out.push(resolved);
-        replaced.push({ from: String(entry).trim(), to: resolved });
-      } else {
-        out.push(String(entry).trim());
-      }
-    }
-    const deduped: Array<string | number> = [];
-    const seen = new Set<string>();
-    for (const entry of out) {
-      const k = String(entry).trim();
-      if (!k || seen.has(k)) {
-        continue;
-      }
-      seen.add(k);
-      deduped.push(entry);
-    }
-    holder[key] = deduped;
-    if (replaced.length > 0) {
-      for (const rep of replaced.slice(0, 5)) {
-        changes.push(`- ${pathLabel}: resolved ${rep.from} -> ${rep.to}`);
-      }
-      if (replaced.length > 5) {
-        changes.push(`- ${pathLabel}: resolved ${replaced.length - 5} more @username entries`);
-      }
-    }
-  };
-
-  const repairAccount = async (prefix: string, account: Record<string, unknown>) => {
-    for (const ref of collectTelegramAllowFromLists(prefix, account)) {
-      await repairList(ref.pathLabel, ref.holder, ref.key);
-    }
-  };
-
-  for (const scope of collectTelegramAccountScopes(next)) {
-    await repairAccount(scope.prefix, scope.account);
-  }
-
-  if (changes.length === 0) {
-    return { config: cfg, changes: [] };
-  }
-  return { config: next, changes };
 }
 
 type DiscordNumericIdHit = { path: string; entry: number };
@@ -1769,14 +1511,6 @@ export async function loadAndMaybeMigrateDoctorConfig(params: {
   }
 
   if (shouldRepair) {
-    const repair = await maybeRepairTelegramAllowFromUsernames(candidate);
-    if (repair.changes.length > 0) {
-      note(repair.changes.join("\n"), "Doctor changes");
-      candidate = repair.config;
-      pendingChanges = true;
-      cfg = repair.config;
-    }
-
     const discordRepair = maybeRepairDiscordNumericIds(candidate);
     if (discordRepair.changes.length > 0) {
       note(discordRepair.changes.join("\n"), "Doctor changes");
@@ -1825,28 +1559,6 @@ export async function loadAndMaybeMigrateDoctorConfig(params: {
       note(safeBinProfileRepair.warnings.join("\n"), "Doctor warnings");
     }
   } else {
-    const hits = scanTelegramAllowFromUsernameEntries(candidate);
-    if (hits.length > 0) {
-      note(
-        [
-          `- Telegram allowFrom contains ${hits.length} non-numeric entries (e.g. ${hits[0]?.entry ?? "@"}); Telegram authorization requires numeric sender IDs.`,
-          `- Run "${formatCliCommand("openclaw doctor --fix")}" to auto-resolve @username entries to numeric IDs (requires a Telegram bot token).`,
-        ].join("\n"),
-        "Doctor warnings",
-      );
-    }
-
-    const discordHits = scanDiscordNumericIdEntries(candidate);
-    if (discordHits.length > 0) {
-      note(
-        [
-          `- Discord allowlists contain ${discordHits.length} numeric entries (e.g. ${discordHits[0]?.path}=${discordHits[0]?.entry}).`,
-          `- Discord IDs must be strings; run "${formatCliCommand("openclaw doctor --fix")}" to convert numeric IDs to quoted strings.`,
-        ].join("\n"),
-        "Doctor warnings",
-      );
-    }
-
     const allowFromScan = maybeRepairOpenPolicyAllowFrom(candidate);
     if (allowFromScan.changes.length > 0) {
       note(

@@ -1,8 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { telegramOutbound } from "../channels/plugins/outbound/telegram.js";
 import type { OpenClawConfig } from "../config/config.js";
 import { setActivePluginRegistry } from "../plugins/runtime.js";
-import { createOutboundTestPlugin, createTestRegistry } from "../test-utils/channel-plugins.js";
+import { createTestRegistry } from "../test-utils/channel-plugins.js";
 import { createExecApprovalForwarder } from "./exec-approval-forwarder.js";
 
 const baseRequest = {
@@ -22,13 +21,7 @@ afterEach(() => {
 });
 
 const emptyRegistry = createTestRegistry([]);
-const defaultRegistry = createTestRegistry([
-  {
-    pluginId: "telegram",
-    plugin: createOutboundTestPlugin({ id: "telegram", outbound: telegramOutbound }),
-    source: "test",
-  },
-]);
+const defaultRegistry = createTestRegistry([]);
 
 function getFirstDeliveryText(deliver: ReturnType<typeof vi.fn>): string {
   const firstCall = deliver.mock.calls[0]?.[0] as

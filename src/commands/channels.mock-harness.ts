@@ -9,26 +9,11 @@ export const configMocks: {
   writeConfigFile: vi.fn().mockResolvedValue(undefined) as unknown as MockFn,
 };
 
-export const offsetMocks: {
-  deleteTelegramUpdateOffset: MockFn;
-} = {
-  deleteTelegramUpdateOffset: vi.fn().mockResolvedValue(undefined) as unknown as MockFn,
-};
-
 vi.mock("../config/config.js", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../config/config.js")>();
   return {
     ...actual,
     readConfigFileSnapshot: configMocks.readConfigFileSnapshot,
     writeConfigFile: configMocks.writeConfigFile,
-  };
-});
-
-vi.mock("../../extensions/telegram/src/update-offset-store.js", async (importOriginal) => {
-  const actual =
-    await importOriginal<typeof import("../../extensions/telegram/src/update-offset-store.js")>();
-  return {
-    ...actual,
-    deleteTelegramUpdateOffset: offsetMocks.deleteTelegramUpdateOffset,
   };
 });

@@ -24,7 +24,6 @@ import type {
 } from "../config/types.tts.js";
 import { logVerbose } from "../globals.js";
 import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-openclaw-dir.js";
-import { stripMarkdown } from "../line/markdown-to-line.js";
 import { isVoiceCompatibleAudio } from "../media/audio.js";
 import { CONFIG_DIR, resolveUserPath } from "../utils.js";
 import {
@@ -44,6 +43,31 @@ import {
   summarizeText,
 } from "./tts-core.js";
 export { OPENAI_TTS_MODELS, OPENAI_TTS_VOICES } from "./tts-core.js";
+
+/**
+ * Strip markdown formatting from text so TTS engines don't read formatting
+ * symbols aloud (e.g. "hashtag hashtag hashtag" for ### headers).
+ */
+const stripMarkdown = (text: string): string =>
+  text
+    // Fenced code blocks (``` ... ```)
+    .replace(/```[\s\S]*?```/g, "")
+    // Headers (##, ###, etc.)
+    .replace(/^#{1,6}\s+/gm, "")
+    // Bold/italic (**text**, __text__, *text*, _text_)
+    .replace(/(\*\*|__)(.*?)\1/g, "$2")
+    .replace(/(\*|_)(.*?)\1/g, "$2")
+    // Strikethrough (~~text~~)
+    .replace(/~~(.*?)~~/g, "$1")
+    // Inline code (`text`)
+    .replace(/`([^`]+)`/g, "$1")
+    // Blockquotes (> text)
+    .replace(/^>\s?/gm, "")
+    // Horizontal rules (---, ***, ___)
+    .replace(/^[-*_]{3,}\s*$/gm, "")
+    // Collapse resulting blank lines
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 
 const DEFAULT_TIMEOUT_MS = 30_000;
 const DEFAULT_TTS_MAX_LENGTH = 1500;

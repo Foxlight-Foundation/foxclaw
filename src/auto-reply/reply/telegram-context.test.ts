@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { resolveTelegramConversationId } from "./telegram-context.js";
+import { resolveTelegramConversationId } from "./commands-subagents/shared.js";
 
 describe("resolveTelegramConversationId", () => {
   it("builds canonical topic ids from chat target and message thread id", () => {

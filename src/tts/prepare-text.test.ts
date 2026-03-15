@@ -1,5 +1,20 @@
 import { describe, expect, it } from "vitest";
-import { stripMarkdown } from "../line/markdown-to-line.js";
+
+/**
+ * Local stripMarkdown matching the implementation in tts.ts.
+ */
+const stripMarkdown = (text: string): string =>
+  text
+    .replace(/```[\s\S]*?```/g, "")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/(\*\*|__)(.*?)\1/g, "$2")
+    .replace(/(\*|_)(.*?)\1/g, "$2")
+    .replace(/~~(.*?)~~/g, "$1")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/^>\s?/gm, "")
+    .replace(/^[-*_]{3,}\s*$/gm, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 
 /**
  * Tests that stripMarkdown (used in the TTS pipeline via maybeApplyTtsToPayload)

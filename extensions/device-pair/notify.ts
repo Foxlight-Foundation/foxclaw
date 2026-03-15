@@ -218,34 +218,17 @@ function shouldNotifySubscriberForRequest(
   return ts >= subscriber.addedAtMs;
 }
 
-async function notifySubscriber(params: {
+// Pairing notifications were previously sent via Telegram's channel runtime.
+// That channel has been removed; this is now a best-effort no-op until a
+// generic outbound delivery path is wired up.
+const notifySubscriber = async (_params: {
   api: OpenClawPluginApi;
   subscriber: NotifySubscription;
   text: string;
-}): Promise<boolean> {
-  const send = params.api.runtime?.channel?.telegram?.sendMessageTelegram;
-  if (!send) {
-    params.api.logger.warn("device-pair: telegram runtime unavailable for pairing notifications");
-    return false;
-  }
-
-  try {
-    await send(params.subscriber.to, params.text, {
-      ...(params.subscriber.accountId ? { accountId: params.subscriber.accountId } : {}),
-      ...(params.subscriber.messageThreadId != null
-        ? { messageThreadId: params.subscriber.messageThreadId }
-        : {}),
-    });
-    return true;
-  } catch (err) {
-    params.api.logger.warn(
-      `device-pair: failed to send pairing notification to ${params.subscriber.to}: ${String(
-        (err as Error)?.message ?? err,
-      )}`,
-    );
-    return false;
-  }
-}
+}): Promise<boolean> => {
+  _params.api.logger.debug?.("device-pair: pairing notification skipped (no channel runtime)");
+  return false;
+};
 
 async function notifyPendingPairingRequests(params: {
   api: OpenClawPluginApi;

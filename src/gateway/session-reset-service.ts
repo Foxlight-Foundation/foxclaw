@@ -1,5 +1,4 @@
 import { randomUUID } from "node:crypto";
-import { unbindThreadBindingsBySessionKey } from "../../extensions/discord/src/monitor/thread-bindings.js";
 import { getAcpSessionManager } from "../acp/control-plane/manager.js";
 import { resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { clearBootstrapSnapshot } from "../agents/bootstrap-cache.js";
@@ -70,12 +69,6 @@ export async function emitSessionUnboundLifecycleEvent(params: {
   emitHooks?: boolean;
 }) {
   const targetKind = isSubagentSessionKey(params.targetSessionKey) ? "subagent" : "acp";
-  unbindThreadBindingsBySessionKey({
-    targetSessionKey: params.targetSessionKey,
-    targetKind,
-    reason: params.reason,
-    sendFarewell: true,
-  });
 
   if (params.emitHooks === false) {
     return;

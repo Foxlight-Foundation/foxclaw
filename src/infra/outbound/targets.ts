@@ -1,9 +1,4 @@
-import { parseDiscordTarget } from "../../../extensions/discord/src/targets.js";
 import { parseSlackTarget } from "../../../extensions/slack/src/targets.js";
-import {
-  parseTelegramTarget,
-  resolveTelegramTargetChatType,
-} from "../../../extensions/telegram/src/targets.js";
 import { normalizeChatType, type ChatType } from "../../channels/chat-type.js";
 import type { ChannelOutboundTargetMode } from "../../channels/plugins/types.js";
 import { formatCliCommand } from "../../cli/command-format.js";
@@ -22,7 +17,6 @@ import {
   isDeliverableMessageChannel,
   normalizeMessageChannel,
 } from "../../utils/message-channel.js";
-import { isWhatsAppGroupJid, normalizeWhatsAppTarget } from "../../whatsapp/normalize.js";
 import {
   normalizeDeliverableOutboundChannel,
   resolveOutboundChannelPlugin,
@@ -124,22 +118,11 @@ export function resolveSessionDeliveryTarget(params: {
     channel = params.fallbackChannel;
   }
 
-  // Parse :topic:NNN from explicitTo (Telegram topic syntax).
-  // Only applies when we positively know the channel is Telegram.
-  // When channel is unknown, the downstream send path (resolveTelegramSession)
-  // handles :topic: parsing independently.
-  const isTelegramContext = channel === "telegram" || (!channel && lastChannel === "telegram");
-  let explicitTo = rawExplicitTo;
-  let parsedThreadId: number | undefined;
-  if (isTelegramContext && rawExplicitTo && rawExplicitTo.includes(":topic:")) {
-    const parsed = parseTelegramTarget(rawExplicitTo);
-    explicitTo = parsed.chatId;
-    parsedThreadId = parsed.messageThreadId;
-  }
+  const explicitTo = rawExplicitTo;
   const explicitThreadId =
     params.explicitThreadId != null && params.explicitThreadId !== ""
       ? params.explicitThreadId
-      : parsedThreadId;
+      : undefined;
 
   let to = explicitTo;
   if (!to && lastTo) {
@@ -387,37 +370,12 @@ function buildNoHeartbeatDeliveryTarget(params: {
   };
 }
 
-function inferDiscordTargetChatType(to: string): ChatType | undefined {
-  try {
-    const target = parseDiscordTarget(to, { defaultKind: "channel" });
-    if (!target) {
-      return undefined;
-    }
-    return target.kind === "user" ? "direct" : "channel";
-  } catch {
-    return undefined;
-  }
-}
-
 function inferSlackTargetChatType(to: string): ChatType | undefined {
   const target = parseSlackTarget(to, { defaultKind: "channel" });
   if (!target) {
     return undefined;
   }
   return target.kind === "user" ? "direct" : "channel";
-}
-
-function inferTelegramTargetChatType(to: string): ChatType | undefined {
-  const chatType = resolveTelegramTargetChatType(to);
-  return chatType === "unknown" ? undefined : chatType;
-}
-
-function inferWhatsAppTargetChatType(to: string): ChatType | undefined {
-  const normalized = normalizeWhatsAppTarget(to);
-  if (!normalized) {
-    return undefined;
-  }
-  return isWhatsAppGroupJid(normalized) ? "group" : "direct";
 }
 
 function inferSignalTargetChatType(rawTo: string): ChatType | undefined {
@@ -444,10 +402,7 @@ function inferSignalTargetChatType(rawTo: string): ChatType | undefined {
 const HEARTBEAT_TARGET_CHAT_TYPE_INFERERS: Partial<
   Record<DeliverableMessageChannel, (to: string) => ChatType | undefined>
 > = {
-  discord: inferDiscordTargetChatType,
   slack: inferSlackTargetChatType,
-  telegram: inferTelegramTargetChatType,
-  whatsapp: inferWhatsAppTargetChatType,
   signal: inferSignalTargetChatType,
 };
 

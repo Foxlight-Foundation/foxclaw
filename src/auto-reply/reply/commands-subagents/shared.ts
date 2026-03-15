@@ -1,4 +1,3 @@
-import { parseDiscordTarget } from "../../../../extensions/discord/src/targets.js";
 import { resolveStoredSubagentCapabilities } from "../../../agents/subagent-capabilities.js";
 import type { ResolvedSubagentController } from "../../../agents/subagent-control.js";
 import {
@@ -42,8 +41,6 @@ import {
   resolveSubagentTargetFromRuns,
   type SubagentTargetResolution,
 } from "../subagents-utils.js";
-import { resolveTelegramConversationId } from "../telegram-context.js";
-
 export { extractAssistantText, stripToolMessages };
 export {
   isDiscordSurface,
@@ -51,8 +48,40 @@ export {
   resolveCommandSurfaceChannel,
   resolveDiscordAccountId,
   resolveChannelAccountId,
-  resolveTelegramConversationId,
 };
+
+/**
+ * Resolve a Telegram conversation id from command params.
+ * For topic-based groups, returns `chatId:topic:threadId`.
+ * For direct messages (positive chat ids), returns the chat id.
+ * For non-topic groups, returns undefined (not bindable as a single conversation).
+ */
+export function resolveTelegramConversationId(params: {
+  ctx: { OriginatingTo?: unknown; MessageThreadId?: unknown; To?: unknown };
+  command: { to?: unknown };
+}): string | undefined {
+  const chatId = (() => {
+    const candidates = [
+      typeof params.ctx.OriginatingTo === "string" ? params.ctx.OriginatingTo.trim() : "",
+      typeof params.command.to === "string" ? params.command.to.trim() : "",
+      typeof params.ctx.To === "string" ? params.ctx.To.trim() : "",
+    ];
+    return candidates.find(Boolean);
+  })();
+  if (!chatId) {
+    return undefined;
+  }
+  const threadId =
+    params.ctx.MessageThreadId != null ? String(params.ctx.MessageThreadId).trim() : "";
+  if (threadId) {
+    return `${chatId}:topic:${threadId}`;
+  }
+  // Negative chat ids are groups; without a topic they are not individually bindable.
+  if (chatId.startsWith("-")) {
+    return undefined;
+  }
+  return chatId;
+}
 
 export const COMMAND = "/subagents";
 export const COMMAND_KILL = "/kill";
@@ -334,17 +363,7 @@ export function resolveDiscordChannelIdForFocus(
     typeof params.command.to === "string" ? params.command.to.trim() : "",
     typeof params.ctx.To === "string" ? params.ctx.To.trim() : "",
   ].filter(Boolean);
-  for (const candidate of toCandidates) {
-    try {
-      const target = parseDiscordTarget(candidate, { defaultKind: "channel" });
-      if (target?.kind === "channel" && target.id) {
-        return target.id;
-      }
-    } catch {
-      // Ignore parse failures and try the next candidate.
-    }
-  }
-  return undefined;
+  return toCandidates[0];
 }
 
 export async function resolveFocusTargetSession(params: {
