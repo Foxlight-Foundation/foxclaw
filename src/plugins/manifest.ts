@@ -118,7 +118,7 @@ export function loadPluginManifest(
   };
 }
 
-// package.json "openclaw" metadata (used for onboarding/catalog)
+// package.json "foxclaw" metadata (used for onboarding/catalog)
 export type PluginPackageChannel = {
   id?: string;
   label?: string;

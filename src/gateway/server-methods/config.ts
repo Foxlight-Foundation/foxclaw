@@ -257,7 +257,7 @@ function loadSchemaWithPlugins(): ConfigSchemaResponse {
     },
   });
   // Note: We can't easily cache this, as there are no callback that can invalidate
-  // our cache. However, both loadConfig() and loadOpenClawPlugins() already cache
+  // our cache. However, both loadConfig() and loadFoxClawPlugins() already cache
   // their results, and buildConfigSchema() is just a cheap transformation.
   return buildConfigSchema({
     plugins: pluginRegistry.plugins.map((plugin) => ({

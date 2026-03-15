@@ -24,7 +24,7 @@ describe("runCronIsolatedAgentTurn auth profile propagation (#20624)", () => {
 
       // 2. Write auth-profiles.json in the agent directory
       //    resolveAgentDir returns <stateDir>/agents/main/agent
-      //    stateDir = <home>/.openclaw
+      //    stateDir = <home>/.foxclaw
       const agentDir = path.join(home, ".openclaw", "agents", "main", "agent");
       await fs.mkdir(agentDir, { recursive: true });
       await fs.writeFile(

@@ -118,7 +118,7 @@ export function resolveRuntimeServiceVersion(
   );
 }
 
-// Single source of truth for the current OpenClaw version.
+// Single source of truth for the current FoxClaw version.
 // - Embedded/bundled builds: injected define or env var.
 // - Dev/npm builds: package.json.
 export const VERSION = resolveBinaryVersion({

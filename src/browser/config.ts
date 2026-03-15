@@ -155,7 +155,7 @@ export function parseHttpUrl(raw: string, label: string) {
 }
 
 /**
- * Ensure the default "openclaw" profile exists in the profiles map.
+ * Ensure the default "foxclaw" profile exists in the profiles map.
  * Auto-creates it with the legacy CDP port (from browser.cdpUrl) or first port if missing.
  */
 function ensureDefaultProfile(

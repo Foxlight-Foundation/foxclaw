@@ -100,7 +100,7 @@ describe("restartGatewayProcessWithFreshPid", () => {
     clearSupervisorHints();
     setPlatform("darwin");
     process.env.OPENCLAW_LAUNCHD_LABEL = "ai.openclaw.gateway";
-    // Even if triggerOpenClawRestart *would* fail, launchd path must not call it.
+    // Even if triggerFoxClawRestart *would* fail, launchd path must not call it.
     triggerOpenClawRestartMock.mockReturnValue({
       ok: false,
       method: "launchctl",

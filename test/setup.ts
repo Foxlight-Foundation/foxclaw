@@ -31,7 +31,7 @@ import type { OpenClawConfig } from "../src/config/config.js";
 import type { OutboundSendDeps } from "../src/infra/outbound/deliver.js";
 import { withIsolatedTestHome } from "./test-env.js";
 
-// Set HOME/state isolation before importing any runtime OpenClaw modules.
+// Set HOME/state isolation before importing any runtime FoxClaw modules.
 const testEnv = withIsolatedTestHome();
 afterAll(() => testEnv.cleanup());
 

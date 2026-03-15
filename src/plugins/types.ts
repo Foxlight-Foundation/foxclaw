@@ -259,7 +259,7 @@ export type PluginCommandContext = {
   args?: string;
   /** The full normalized command body */
   commandBody: string;
-  /** Current OpenClaw configuration */
+  /** Current FoxClaw configuration */
   config: OpenClawConfig;
   /** Raw "From" value (channel-scoped id) */
   from?: string;

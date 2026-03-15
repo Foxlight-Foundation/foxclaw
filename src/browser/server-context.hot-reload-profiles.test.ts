@@ -57,7 +57,7 @@ describe("server-context hot-reload profiles", () => {
   });
 
   it("forProfile hot-reloads newly added profiles from config", async () => {
-    // Start with only openclaw profile
+    // Start with only foxclaw profile
     // 1. Prime the cache by calling loadConfig() first
     const cfg = loadConfig();
     const resolved = resolveBrowserConfig(cfg.browser, cfg);
@@ -80,7 +80,7 @@ describe("server-context hot-reload profiles", () => {
       }),
     ).toBeNull();
 
-    // 2. Simulate adding a new profile to config (like user editing openclaw.json)
+    // 2. Simulate adding a new profile to config (like user editing foxclaw.json)
     cfgProfiles.desktop = { cdpUrl: "http://127.0.0.1:9222", color: "#0066CC" };
 
     // 3. Verify without clearConfigCache, loadConfig() still returns stale cached value

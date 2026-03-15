@@ -46,8 +46,8 @@ describe("resolveGatewayProgramArguments", () => {
   });
 
   it("prefers symlinked path over realpath for stable service config", async () => {
-    // Simulates pnpm global install where node_modules/openclaw is a symlink
-    // to .pnpm/openclaw@X.Y.Z/node_modules/openclaw
+    // Simulates pnpm global install where node_modules/foxclaw is a symlink
+    // to .pnpm/foxclaw@X.Y.Z/node_modules/foxclaw
     const symlinkPath = path.resolve(
       "/Users/test/Library/pnpm/global/5/node_modules/openclaw/dist/entry.js",
     );

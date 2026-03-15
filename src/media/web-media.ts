@@ -94,7 +94,7 @@ const assertLocalMediaAllowed = async (
     resolved = path.resolve(mediaPath);
   }
 
-  // Hardening: the default allowlist includes the OpenClaw / FoxClaw temp dir, and tests/CI may
+  // Hardening: the default allowlist includes the FoxClaw / FoxClaw temp dir, and tests/CI may
   // override the state dir into tmp. Avoid accidentally allowing per-agent
   // `workspace-*` state roots via the temp-root prefix match; require explicit
   // localRoots for those.

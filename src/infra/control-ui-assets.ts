@@ -103,7 +103,7 @@ export async function resolveControlUiDistIndexPath(
     return path.join(packageRoot, "dist", "control-ui", "index.html");
   }
 
-  // Fallback: traverse up and find package.json with name "openclaw" + dist/control-ui/index.html
+  // Fallback: traverse up and find package.json with name "foxclaw" + dist/control-ui/index.html
   // This handles global installs where path-based resolution might fail.
   const fallbackStartDirs = new Set(
     entrypointCandidates.map((candidate) => path.dirname(candidate)),
@@ -226,12 +226,12 @@ export function resolveControlUiRootSync(opts: ControlUiRootResolveOptions = {})
     addCandidate(candidates, path.join(moduleDir, "../../dist/control-ui"));
   }
   if (argv1Dir) {
-    // openclaw.mjs or dist/<bundle>.js
+    // foxclaw.mjs or dist/<bundle>.js
     addCandidate(candidates, path.join(argv1Dir, "dist", "control-ui"));
     addCandidate(candidates, path.join(argv1Dir, "control-ui"));
   }
   if (argv1RealpathDir && argv1RealpathDir !== argv1Dir) {
-    // Symlinked wrappers (e.g. ~/.bun/bin/openclaw -> .../dist/index.js)
+    // Symlinked wrappers (e.g. ~/.bun/bin/foxclaw -> .../dist/index.js)
     addCandidate(candidates, path.join(argv1RealpathDir, "dist", "control-ui"));
     addCandidate(candidates, path.join(argv1RealpathDir, "control-ui"));
   }

@@ -1555,5 +1555,5 @@ export async function writeConfigFile(
     clearRuntimeConfigSnapshot();
   }
   // When we had no runtime snapshot, keep callers reading from disk/cache so external/manual
-  // edits to openclaw.json remain visible (no stale snapshot).
+  // edits to foxclaw.json remain visible (no stale snapshot).
 }

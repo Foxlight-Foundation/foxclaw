@@ -34,7 +34,7 @@ const pluginSdkSubpaths = [
 
 export default defineConfig({
   resolve: {
-    // Keep this ordered: the base `openclaw/plugin-sdk` alias is a prefix match.
+    // Keep this ordered: the base `foxclaw/plugin-sdk` alias is a prefix match.
     alias: [
       ...pluginSdkSubpaths.map((subpath) => ({
         find: `openclaw/plugin-sdk/${subpath}`,
