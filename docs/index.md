@@ -1,32 +1,15 @@
 ---
-summary: "FoxClaw is a multi-channel gateway for AI agents that runs on any OS."
+summary: "FoxClaw is the gateway and agent runtime for the Foxlight platform."
 read_when:
   - Introducing FoxClaw to newcomers
 title: "FoxClaw"
 ---
 
-# FoxClaw 🦞
+# FoxClaw
 
-<p align="center">
-    <img
-        src="/assets/foxclaw-logo-text-dark.png"
-        alt="FoxClaw"
-        width="500"
-        class="dark:hidden"
-    />
-    <img
-        src="/assets/foxclaw-logo-text.png"
-        alt="FoxClaw"
-        width="500"
-        class="hidden dark:block"
-    />
-</p>
-
-> _"EXFOLIATE! EXFOLIATE!"_ — A space lobster, probably
-
-<p align="center">
-  <strong>Any OS gateway for AI agents across WhatsApp, Telegram, Discord, iMessage, and more.</strong><br />
-  Send a message, get an agent response from your pocket. Plugins add Mattermost and more.
+<p>
+  <strong>Gateway and agent runtime for the Foxlight platform.</strong><br />
+  Built to support the emergence of a genuine AI mind. Not a chatbot project.
 </p>
 
 <Columns>
@@ -36,60 +19,55 @@ title: "FoxClaw"
   <Card title="Run the Wizard" href="/start/wizard" icon="sparkles">
     Guided setup with `foxclaw onboard` and pairing flows.
   </Card>
-  <Card title="Open the Control UI" href="/web/control-ui" icon="layout-dashboard">
-    Launch the browser dashboard for chat, config, and sessions.
+  <Card title="Control UI" href="/web/control-ui" icon="layout-dashboard">
+    Browser dashboard for chat, config, and sessions.
   </Card>
 </Columns>
 
 ## What is FoxClaw?
 
-FoxClaw is a **self-hosted gateway** that connects your favorite chat apps — WhatsApp, Telegram, Discord, iMessage, and more — to AI coding agents like Pi. You run a single Gateway process on your own machine (or a server), and it becomes the bridge between your messaging apps and an always-available AI assistant.
+FoxClaw is the **gateway and agent runtime** for the Foxlight platform — a customized fork of OpenClaw, stripped down to the essentials: the gateway, agentic capabilities, skills, and plugin system.
 
-**Who is it for?** Developers and power users who want a personal AI assistant they can message from anywhere — without giving up control of their data or relying on a hosted service.
+**What it does:**
 
-**What makes it different?**
-
-- **Self-hosted**: runs on your hardware, your rules
-- **Multi-channel**: one Gateway serves WhatsApp, Telegram, Discord, and more simultaneously
-- **Agent-native**: built for coding agents with tool use, sessions, memory, and multi-agent routing
-- **Open source**: MIT licensed, community-driven
-
-**What do you need?** Node 24 (recommended), or Node 22 LTS (`22.16+`) for compatibility, an API key from your chosen provider, and 5 minutes. For best quality and security, use the strongest latest-generation model available.
+- **Gateway** — local-first WebSocket control plane for sessions, tools, events, and configuration
+- **Agent runtime** — Pi agent in RPC mode with tool streaming, block streaming, and multi-agent routing
+- **Skills platform** — bundled and workspace skills with install gating
+- **Plugin system** — extensible architecture for memory, local model providers, and integrations
+- **CLI** — `foxclaw` command for gateway management, agent interaction, onboarding, and diagnostics
 
 ## How it works
 
 ```mermaid
 flowchart LR
-  A["Chat apps + plugins"] --> B["Gateway"]
+  A["Skills + Plugins"] --> B["Gateway"]
   B --> C["Pi agent"]
   B --> D["CLI"]
   B --> E["Web Control UI"]
-  B --> F["macOS app"]
-  B --> G["iOS and Android nodes"]
 ```
 
-The Gateway is the single source of truth for sessions, routing, and channel connections.
+The Gateway is the single source of truth for sessions, routing, and tool execution.
 
 ## Key capabilities
 
 <Columns>
-  <Card title="Multi-channel gateway" icon="network">
-    WhatsApp, Telegram, Discord, and iMessage with a single Gateway process.
-  </Card>
-  <Card title="Plugin channels" icon="plug">
-    Add Mattermost and more with extension packages.
+  <Card title="Agent runtime" icon="cpu">
+    Pi agent with tool use, sessions, memory, and multi-agent coordination.
   </Card>
   <Card title="Multi-agent routing" icon="route">
-    Isolated sessions per agent, workspace, or sender.
+    Isolated sessions per agent, workspace, or context.
   </Card>
-  <Card title="Media support" icon="image">
-    Send and receive images, audio, and documents.
+  <Card title="Skills platform" icon="sparkles">
+    Bundled, managed, and workspace skills with install gating.
+  </Card>
+  <Card title="Plugin system" icon="plug">
+    Extensible architecture for memory backends, model providers, and more.
   </Card>
   <Card title="Web Control UI" icon="monitor">
-    Browser dashboard for chat, config, sessions, and nodes.
+    Browser dashboard for chat, config, and sessions.
   </Card>
-  <Card title="Mobile nodes" icon="smartphone">
-    Pair iOS and Android nodes for Canvas, camera, and voice-enabled workflows.
+  <Card title="Local model support" icon="server">
+    Ollama, vLLM, SGLang, and any OpenAI-compatible endpoint.
   </Card>
 </Columns>
 
@@ -106,15 +84,14 @@ The Gateway is the single source of truth for sessions, routing, and channel con
     foxclaw onboard --install-daemon
     ```
   </Step>
-  <Step title="Pair WhatsApp and start the Gateway">
+  <Step title="Start the Gateway">
     ```bash
-    foxclaw channels login
     foxclaw gateway --port 18789
     ```
   </Step>
 </Steps>
 
-Need the full install and dev setup? See [Quick start](/start/quickstart).
+Full setup guide: [Getting started](/start/getting-started).
 
 ## Dashboard
 
@@ -123,70 +100,39 @@ Open the browser Control UI after the Gateway starts.
 - Local default: [http://127.0.0.1:18789/](http://127.0.0.1:18789/)
 - Remote access: [Web surfaces](/web) and [Tailscale](/gateway/tailscale)
 
-<p align="center">
-  <img src="/whatsapp-foxclaw.jpg" alt="FoxClaw" width="420" />
-</p>
+## Configuration
 
-## Configuration (optional)
-
-Config lives at `~/.foxclaw/foxclaw.json`.
-
-- If you **do nothing**, FoxClaw uses the bundled Pi binary in RPC mode with per-sender sessions.
-- If you want to lock it down, start with `channels.whatsapp.allowFrom` and (for groups) mention rules.
-
-Example:
+Config lives at `~/.foxclaw/foxclaw.json`:
 
 ```json5
 {
-  channels: {
-    whatsapp: {
-      allowFrom: ["+15555550123"],
-      groups: { "*": { requireMention: true } },
-    },
+  agent: {
+    model: "anthropic/claude-opus-4-6",
   },
-  messages: { groupChat: { mentionPatterns: ["@foxclaw"] } },
 }
 ```
 
-## Start here
+Full reference: [Configuration](/gateway/configuration).
+
+## Explore
 
 <Columns>
-  <Card title="Docs hubs" href="/start/hubs" icon="book-open">
-    All docs and guides, organized by use case.
-  </Card>
   <Card title="Configuration" href="/gateway/configuration" icon="settings">
-    Core Gateway settings, tokens, and provider config.
+    Core Gateway settings, models, and provider config.
   </Card>
-  <Card title="Remote access" href="/gateway/remote" icon="globe">
-    SSH and tailnet access patterns.
+  <Card title="Agent concepts" href="/concepts/agent" icon="cpu">
+    How the agent runtime works.
   </Card>
-  <Card title="Channels" href="/channels/telegram" icon="message-square">
-    Channel-specific setup for WhatsApp, Telegram, Discord, and more.
-  </Card>
-  <Card title="Nodes" href="/nodes" icon="smartphone">
-    iOS and Android nodes with pairing, Canvas, camera, and device actions.
-  </Card>
-  <Card title="Help" href="/help" icon="life-buoy">
-    Common fixes and troubleshooting entry point.
-  </Card>
-</Columns>
-
-## Learn more
-
-<Columns>
-  <Card title="Full feature list" href="/concepts/features" icon="list">
-    Complete channel, routing, and media capabilities.
-  </Card>
-  <Card title="Multi-agent routing" href="/concepts/multi-agent" icon="route">
+  <Card title="Multi-agent" href="/concepts/multi-agent" icon="route">
     Workspace isolation and per-agent sessions.
   </Card>
   <Card title="Security" href="/gateway/security" icon="shield">
     Tokens, allowlists, and safety controls.
   </Card>
-  <Card title="Troubleshooting" href="/gateway/troubleshooting" icon="wrench">
-    Gateway diagnostics and common errors.
+  <Card title="Skills" href="/tools/skills" icon="sparkles">
+    Creating and managing agent skills.
   </Card>
-  <Card title="About and credits" href="/reference/credits" icon="info">
-    Project origins, contributors, and license.
+  <Card title="Help" href="/help" icon="life-buoy">
+    Common fixes and troubleshooting.
   </Card>
 </Columns>
