@@ -1,11 +1,11 @@
 import type {
   ChannelOnboardingAdapter,
   ChannelOnboardingDmPolicy,
-  OpenClawConfig,
+  FoxClawConfig,
   DmPolicy,
   WizardPrompter,
   MSTeamsTeamConfig,
-} from "openclaw/plugin-sdk/msteams";
+} from "foxclaw/plugin-sdk/msteams";
 import {
   DEFAULT_ACCOUNT_ID,
   formatDocsLink,
@@ -15,7 +15,7 @@ import {
   setTopLevelChannelDmPolicyWithAllowFrom,
   setTopLevelChannelGroupPolicy,
   splitOnboardingEntries,
-} from "openclaw/plugin-sdk/msteams";
+} from "foxclaw/plugin-sdk/msteams";
 import {
   parseMSTeamsTeamEntry,
   resolveMSTeamsChannelAllowlist,
@@ -26,7 +26,7 @@ import { hasConfiguredMSTeamsCredentials, resolveMSTeamsCredentials } from "./to
 
 const channel = "msteams" as const;
 
-function setMSTeamsDmPolicy(cfg: OpenClawConfig, dmPolicy: DmPolicy) {
+function setMSTeamsDmPolicy(cfg: FoxClawConfig, dmPolicy: DmPolicy) {
   return setTopLevelChannelDmPolicyWithAllowFrom({
     cfg,
     channel: "msteams",
@@ -34,7 +34,7 @@ function setMSTeamsDmPolicy(cfg: OpenClawConfig, dmPolicy: DmPolicy) {
   });
 }
 
-function setMSTeamsAllowFrom(cfg: OpenClawConfig, allowFrom: string[]): OpenClawConfig {
+function setMSTeamsAllowFrom(cfg: FoxClawConfig, allowFrom: string[]): FoxClawConfig {
   return setTopLevelChannelAllowFrom({
     cfg,
     channel: "msteams",
@@ -73,9 +73,9 @@ async function promptMSTeamsCredentials(prompter: WizardPrompter): Promise<{
 }
 
 async function promptMSTeamsAllowFrom(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   prompter: WizardPrompter;
-}): Promise<OpenClawConfig> {
+}): Promise<FoxClawConfig> {
   const existing = params.cfg.channels?.msteams?.allowFrom ?? [];
   await params.prompter.note(
     [
@@ -149,9 +149,9 @@ async function noteMSTeamsCredentialHelp(prompter: WizardPrompter): Promise<void
 }
 
 function setMSTeamsGroupPolicy(
-  cfg: OpenClawConfig,
+  cfg: FoxClawConfig,
   groupPolicy: "open" | "allowlist" | "disabled",
-): OpenClawConfig {
+): FoxClawConfig {
   return setTopLevelChannelGroupPolicy({
     cfg,
     channel: "msteams",
@@ -161,9 +161,9 @@ function setMSTeamsGroupPolicy(
 }
 
 function setMSTeamsTeamsAllowlist(
-  cfg: OpenClawConfig,
+  cfg: FoxClawConfig,
   entries: Array<{ teamKey: string; channelKey?: string }>,
-): OpenClawConfig {
+): FoxClawConfig {
   const baseTeams = cfg.channels?.msteams?.teams ?? {};
   const teams: Record<string, { channels?: Record<string, unknown> }> = { ...baseTeams };
   for (const entry of entries) {

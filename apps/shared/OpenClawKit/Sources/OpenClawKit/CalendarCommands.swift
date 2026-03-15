@@ -1,13 +1,13 @@
 import Foundation
 
-public enum OpenClawCalendarCommand: String, Codable, Sendable {
+public enum FoxClawCalendarCommand: String, Codable, Sendable {
     case events = "calendar.events"
     case add = "calendar.add"
 }
 
-public typealias OpenClawCalendarEventsParams = OpenClawDateRangeLimitParams
+public typealias FoxClawCalendarEventsParams = FoxClawDateRangeLimitParams
 
-public struct OpenClawCalendarAddParams: Codable, Sendable, Equatable {
+public struct FoxClawCalendarAddParams: Codable, Sendable, Equatable {
     public var title: String
     public var startISO: String
     public var endISO: String
@@ -38,7 +38,7 @@ public struct OpenClawCalendarAddParams: Codable, Sendable, Equatable {
     }
 }
 
-public struct OpenClawCalendarEventPayload: Codable, Sendable, Equatable {
+public struct FoxClawCalendarEventPayload: Codable, Sendable, Equatable {
     public var identifier: String
     public var title: String
     public var startISO: String
@@ -66,18 +66,18 @@ public struct OpenClawCalendarEventPayload: Codable, Sendable, Equatable {
     }
 }
 
-public struct OpenClawCalendarEventsPayload: Codable, Sendable, Equatable {
-    public var events: [OpenClawCalendarEventPayload]
+public struct FoxClawCalendarEventsPayload: Codable, Sendable, Equatable {
+    public var events: [FoxClawCalendarEventPayload]
 
-    public init(events: [OpenClawCalendarEventPayload]) {
+    public init(events: [FoxClawCalendarEventPayload]) {
         self.events = events
     }
 }
 
-public struct OpenClawCalendarAddPayload: Codable, Sendable, Equatable {
-    public var event: OpenClawCalendarEventPayload
+public struct FoxClawCalendarAddPayload: Codable, Sendable, Equatable {
+    public var event: FoxClawCalendarEventPayload
 
-    public init(event: OpenClawCalendarEventPayload) {
+    public init(event: FoxClawCalendarEventPayload) {
         self.event = event
     }
 }

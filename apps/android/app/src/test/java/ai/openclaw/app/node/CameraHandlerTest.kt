@@ -1,4 +1,4 @@
-package ai.openclaw.app.node
+package ai.foxclaw.app.node
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

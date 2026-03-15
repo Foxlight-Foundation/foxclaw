@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawProtocol
+import FoxClawProtocol
 import UniformTypeIdentifiers
 
 actor MacNodeBrowserProxy {
@@ -14,8 +14,8 @@ actor MacNodeBrowserProxy {
     private struct RequestParams: Decodable {
         let method: String?
         let path: String?
-        let query: [String: OpenClawProtocol.AnyCodable]?
-        let body: OpenClawProtocol.AnyCodable?
+        let query: [String: FoxClawProtocol.AnyCodable]?
+        let body: FoxClawProtocol.AnyCodable?
         let timeoutMs: Int?
         let profile: String?
     }
@@ -143,7 +143,7 @@ actor MacNodeBrowserProxy {
         } else if let password = endpoint.password?.trimmingCharacters(in: .whitespacesAndNewlines),
                   !password.isEmpty
         {
-            request.setValue(password, forHTTPHeaderField: "x-openclaw-password")
+            request.setValue(password, forHTTPHeaderField: "x-foxclaw-password")
         }
 
         if method != "GET", let body = params.body {

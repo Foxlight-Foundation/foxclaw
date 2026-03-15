@@ -1,9 +1,9 @@
 {
-  "name": "@openclaw/discord",
+  "name": "@foxclaw/discord",
   "version": "2026.3.14",
-  "description": "OpenClaw Discord channel plugin",
+  "description": "FoxClaw Discord channel plugin",
   "type": "module",
-  "openclaw": {
+  "foxclaw": {
     "extensions": [
       "./index.ts"
     ]

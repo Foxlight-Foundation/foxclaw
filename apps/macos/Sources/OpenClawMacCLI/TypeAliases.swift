@@ -1,5 +1,5 @@
-import OpenClawKit
-import OpenClawProtocol
+import FoxClawKit
+import FoxClawProtocol
 
-typealias ProtoAnyCodable = OpenClawProtocol.AnyCodable
-typealias KitAnyCodable = OpenClawKit.AnyCodable
+typealias ProtoAnyCodable = FoxClawProtocol.AnyCodable
+typealias KitAnyCodable = FoxClawKit.AnyCodable

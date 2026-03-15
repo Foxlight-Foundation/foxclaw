@@ -1,7 +1,7 @@
 import Foundation
-import OpenClawKit
+import FoxClawKit
 import Testing
-@testable import OpenClaw
+@testable import FoxClaw
 
 struct GatewayChannelShutdownTests {
     @Test func `shutdown prevents reconnect loop from receive failure`() async throws {

@@ -1,13 +1,13 @@
-package ai.openclaw.app
+package ai.foxclaw.app
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import ai.openclaw.app.gateway.GatewayEndpoint
-import ai.openclaw.app.chat.OutgoingAttachment
-import ai.openclaw.app.node.CameraCaptureManager
-import ai.openclaw.app.node.CanvasController
-import ai.openclaw.app.node.SmsManager
-import ai.openclaw.app.voice.VoiceConversationEntry
+import ai.foxclaw.app.gateway.GatewayEndpoint
+import ai.foxclaw.app.chat.OutgoingAttachment
+import ai.foxclaw.app.node.CameraCaptureManager
+import ai.foxclaw.app.node.CanvasController
+import ai.foxclaw.app.node.SmsManager
+import ai.foxclaw.app.voice.VoiceConversationEntry
 import kotlinx.coroutines.flow.StateFlow
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {

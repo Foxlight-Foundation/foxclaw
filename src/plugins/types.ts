@@ -12,7 +12,7 @@ import type { ChannelDock } from "../channels/dock.js";
 import type { ChannelId, ChannelPlugin } from "../channels/plugins/types.js";
 import type { createVpsAwareOAuthHandlers } from "../commands/oauth-flow.js";
 import type { OnboardOptions } from "../commands/onboard-types.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import type { ModelProviderConfig } from "../config/types.js";
 import type { GatewayRequestHandler } from "../gateway/server-methods/types.js";
 import type { InternalHookHandler } from "../hooks/internal-hooks.js";
@@ -46,7 +46,7 @@ export type PluginConfigValidation =
   | { ok: true; value?: unknown }
   | { ok: false; errors: string[] };
 
-export type OpenClawPluginConfigSchema = {
+export type FoxClawPluginConfigSchema = {
   safeParse?: (value: unknown) => {
     success: boolean;
     data?: unknown;
@@ -60,8 +60,8 @@ export type OpenClawPluginConfigSchema = {
   jsonSchema?: Record<string, unknown>;
 };
 
-export type OpenClawPluginToolContext = {
-  config?: OpenClawConfig;
+export type FoxClawPluginToolContext = {
+  config?: FoxClawConfig;
   workspaceDir?: string;
   agentDir?: string;
   agentId?: string;
@@ -77,17 +77,17 @@ export type OpenClawPluginToolContext = {
   sandboxed?: boolean;
 };
 
-export type OpenClawPluginToolFactory = (
-  ctx: OpenClawPluginToolContext,
+export type FoxClawPluginToolFactory = (
+  ctx: FoxClawPluginToolContext,
 ) => AnyAgentTool | AnyAgentTool[] | null | undefined;
 
-export type OpenClawPluginToolOptions = {
+export type FoxClawPluginToolOptions = {
   name?: string;
   names?: string[];
   optional?: boolean;
 };
 
-export type OpenClawPluginHookOptions = {
+export type FoxClawPluginHookOptions = {
   entry?: HookEntry;
   name?: string;
   description?: string;
@@ -98,13 +98,13 @@ export type ProviderAuthKind = "oauth" | "api_key" | "token" | "device_code" | "
 
 export type ProviderAuthResult = {
   profiles: Array<{ profileId: string; credential: AuthProfileCredential }>;
-  configPatch?: Partial<OpenClawConfig>;
+  configPatch?: Partial<FoxClawConfig>;
   defaultModel?: string;
   notes?: string[];
 };
 
 export type ProviderAuthContext = {
-  config: OpenClawConfig;
+  config: FoxClawConfig;
   agentDir?: string;
   workspaceDir?: string;
   prompter: WizardPrompter;
@@ -141,8 +141,8 @@ export type ProviderNonInteractiveApiKeyCredentialParams = {
 
 export type ProviderAuthMethodNonInteractiveContext = {
   authChoice: string;
-  config: OpenClawConfig;
-  baseConfig: OpenClawConfig;
+  config: FoxClawConfig;
+  baseConfig: FoxClawConfig;
   opts: OnboardOptions;
   runtime: RuntimeEnv;
   agentDir?: string;
@@ -163,13 +163,13 @@ export type ProviderAuthMethod = {
   run: (ctx: ProviderAuthContext) => Promise<ProviderAuthResult>;
   runNonInteractive?: (
     ctx: ProviderAuthMethodNonInteractiveContext,
-  ) => Promise<OpenClawConfig | null>;
+  ) => Promise<FoxClawConfig | null>;
 };
 
 export type ProviderDiscoveryOrder = "simple" | "profile" | "paired" | "late";
 
 export type ProviderDiscoveryContext = {
-  config: OpenClawConfig;
+  config: FoxClawConfig;
   agentDir?: string;
   workspaceDir?: string;
   env: NodeJS.ProcessEnv;
@@ -212,7 +212,7 @@ export type ProviderPluginWizard = {
 };
 
 export type ProviderModelSelectedContext = {
-  config: OpenClawConfig;
+  config: FoxClawConfig;
   model: string;
   prompter: WizardPrompter;
   agentDir?: string;
@@ -234,7 +234,7 @@ export type ProviderPlugin = {
   onModelSelected?: (ctx: ProviderModelSelectedContext) => Promise<void>;
 };
 
-export type OpenClawPluginGatewayMethod = {
+export type FoxClawPluginGatewayMethod = {
   method: string;
   handler: GatewayRequestHandler;
 };
@@ -259,8 +259,8 @@ export type PluginCommandContext = {
   args?: string;
   /** The full normalized command body */
   commandBody: string;
-  /** Current OpenClaw configuration */
-  config: OpenClawConfig;
+  /** Current FoxClaw configuration */
+  config: FoxClawConfig;
   /** Raw "From" value (channel-scoped id) */
   from?: string;
   /** Raw "To" value (channel-scoped id) */
@@ -286,7 +286,7 @@ export type PluginCommandHandler = (
 /**
  * Definition for a plugin-registered command.
  */
-export type OpenClawPluginCommandDefinition = {
+export type FoxClawPluginCommandDefinition = {
   /** Command name without leading slash (e.g., "tts") */
   name: string;
   /**
@@ -305,95 +305,95 @@ export type OpenClawPluginCommandDefinition = {
   handler: PluginCommandHandler;
 };
 
-export type OpenClawPluginHttpRouteAuth = "gateway" | "plugin";
-export type OpenClawPluginHttpRouteMatch = "exact" | "prefix";
+export type FoxClawPluginHttpRouteAuth = "gateway" | "plugin";
+export type FoxClawPluginHttpRouteMatch = "exact" | "prefix";
 
-export type OpenClawPluginHttpRouteHandler = (
+export type FoxClawPluginHttpRouteHandler = (
   req: IncomingMessage,
   res: ServerResponse,
 ) => Promise<boolean | void> | boolean | void;
 
-export type OpenClawPluginHttpRouteParams = {
+export type FoxClawPluginHttpRouteParams = {
   path: string;
-  handler: OpenClawPluginHttpRouteHandler;
-  auth: OpenClawPluginHttpRouteAuth;
-  match?: OpenClawPluginHttpRouteMatch;
+  handler: FoxClawPluginHttpRouteHandler;
+  auth: FoxClawPluginHttpRouteAuth;
+  match?: FoxClawPluginHttpRouteMatch;
   replaceExisting?: boolean;
 };
 
-export type OpenClawPluginCliContext = {
+export type FoxClawPluginCliContext = {
   program: Command;
-  config: OpenClawConfig;
+  config: FoxClawConfig;
   workspaceDir?: string;
   logger: PluginLogger;
 };
 
-export type OpenClawPluginCliRegistrar = (ctx: OpenClawPluginCliContext) => void | Promise<void>;
+export type FoxClawPluginCliRegistrar = (ctx: FoxClawPluginCliContext) => void | Promise<void>;
 
-export type OpenClawPluginServiceContext = {
-  config: OpenClawConfig;
+export type FoxClawPluginServiceContext = {
+  config: FoxClawConfig;
   workspaceDir?: string;
   stateDir: string;
   logger: PluginLogger;
 };
 
-export type OpenClawPluginService = {
+export type FoxClawPluginService = {
   id: string;
-  start: (ctx: OpenClawPluginServiceContext) => void | Promise<void>;
-  stop?: (ctx: OpenClawPluginServiceContext) => void | Promise<void>;
+  start: (ctx: FoxClawPluginServiceContext) => void | Promise<void>;
+  stop?: (ctx: FoxClawPluginServiceContext) => void | Promise<void>;
 };
 
-export type OpenClawPluginChannelRegistration = {
+export type FoxClawPluginChannelRegistration = {
   plugin: ChannelPlugin;
   dock?: ChannelDock;
 };
 
-export type OpenClawPluginDefinition = {
+export type FoxClawPluginDefinition = {
   id?: string;
   name?: string;
   description?: string;
   version?: string;
   kind?: PluginKind;
-  configSchema?: OpenClawPluginConfigSchema;
-  register?: (api: OpenClawPluginApi) => void | Promise<void>;
-  activate?: (api: OpenClawPluginApi) => void | Promise<void>;
+  configSchema?: FoxClawPluginConfigSchema;
+  register?: (api: FoxClawPluginApi) => void | Promise<void>;
+  activate?: (api: FoxClawPluginApi) => void | Promise<void>;
 };
 
-export type OpenClawPluginModule =
-  | OpenClawPluginDefinition
-  | ((api: OpenClawPluginApi) => void | Promise<void>);
+export type FoxClawPluginModule =
+  | FoxClawPluginDefinition
+  | ((api: FoxClawPluginApi) => void | Promise<void>);
 
-export type OpenClawPluginApi = {
+export type FoxClawPluginApi = {
   id: string;
   name: string;
   version?: string;
   description?: string;
   source: string;
-  config: OpenClawConfig;
+  config: FoxClawConfig;
   pluginConfig?: Record<string, unknown>;
   runtime: PluginRuntime;
   logger: PluginLogger;
   registerTool: (
-    tool: AnyAgentTool | OpenClawPluginToolFactory,
-    opts?: OpenClawPluginToolOptions,
+    tool: AnyAgentTool | FoxClawPluginToolFactory,
+    opts?: FoxClawPluginToolOptions,
   ) => void;
   registerHook: (
     events: string | string[],
     handler: InternalHookHandler,
-    opts?: OpenClawPluginHookOptions,
+    opts?: FoxClawPluginHookOptions,
   ) => void;
-  registerHttpRoute: (params: OpenClawPluginHttpRouteParams) => void;
-  registerChannel: (registration: OpenClawPluginChannelRegistration | ChannelPlugin) => void;
+  registerHttpRoute: (params: FoxClawPluginHttpRouteParams) => void;
+  registerChannel: (registration: FoxClawPluginChannelRegistration | ChannelPlugin) => void;
   registerGatewayMethod: (method: string, handler: GatewayRequestHandler) => void;
-  registerCli: (registrar: OpenClawPluginCliRegistrar, opts?: { commands?: string[] }) => void;
-  registerService: (service: OpenClawPluginService) => void;
+  registerCli: (registrar: FoxClawPluginCliRegistrar, opts?: { commands?: string[] }) => void;
+  registerService: (service: FoxClawPluginService) => void;
   registerProvider: (provider: ProviderPlugin) => void;
   /**
    * Register a custom command that bypasses the LLM agent.
    * Plugin commands are processed before built-in commands and before agent invocation.
    * Use this for simple state-toggling or status commands that don't need AI reasoning.
    */
-  registerCommand: (command: OpenClawPluginCommandDefinition) => void;
+  registerCommand: (command: FoxClawPluginCommandDefinition) => void;
   /** Register a context engine implementation (exclusive slot — only one active at a time). */
   registerContextEngine: (
     id: string,

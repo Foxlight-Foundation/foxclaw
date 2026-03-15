@@ -1,4 +1,4 @@
-package ai.openclaw.app
+package ai.foxclaw.app
 
 import android.app.Notification
 import android.content.Intent

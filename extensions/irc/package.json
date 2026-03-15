@@ -1,12 +1,12 @@
 {
-  "name": "@openclaw/irc",
+  "name": "@foxclaw/irc",
   "version": "2026.3.14",
-  "description": "OpenClaw IRC channel plugin",
+  "description": "FoxClaw IRC channel plugin",
   "type": "module",
   "dependencies": {
     "zod": "^4.3.6"
   },
-  "openclaw": {
+  "foxclaw": {
     "extensions": [
       "./index.ts"
     ]

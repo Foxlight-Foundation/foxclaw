@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/copilot-proxy",
+  "name": "@foxclaw/copilot-proxy",
   "version": "2026.3.14",
   "private": true,
-  "description": "OpenClaw Copilot Proxy provider plugin",
+  "description": "FoxClaw Copilot Proxy provider plugin",
   "type": "module",
-  "openclaw": {
+  "foxclaw": {
     "extensions": [
       "./index.ts"
     ]

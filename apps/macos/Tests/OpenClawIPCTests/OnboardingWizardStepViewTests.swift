@@ -1,9 +1,9 @@
-import OpenClawProtocol
+import FoxClawProtocol
 import SwiftUI
 import Testing
-@testable import OpenClaw
+@testable import FoxClaw
 
-private typealias ProtoAnyCodable = OpenClawProtocol.AnyCodable
+private typealias ProtoAnyCodable = FoxClawProtocol.AnyCodable
 
 @Suite(.serialized)
 @MainActor

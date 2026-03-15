@@ -1,5 +1,5 @@
 import Foundation
-import OpenClawDiscovery
+import FoxClawDiscovery
 
 enum GatewayDiscoveryHelpers {
     static func resolvedServiceHost(

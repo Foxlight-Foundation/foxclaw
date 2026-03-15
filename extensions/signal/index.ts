@@ -1,5 +1,5 @@
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/signal";
-import { emptyPluginConfigSchema } from "openclaw/plugin-sdk/signal";
+import type { FoxClawPluginApi } from "foxclaw/plugin-sdk/signal";
+import { emptyPluginConfigSchema } from "foxclaw/plugin-sdk/signal";
 import { signalPlugin } from "./src/channel.js";
 import { setSignalRuntime } from "./src/runtime.js";
 
@@ -8,7 +8,7 @@ const plugin = {
   name: "Signal",
   description: "Signal channel plugin",
   configSchema: emptyPluginConfigSchema(),
-  register(api: OpenClawPluginApi) {
+  register(api: FoxClawPluginApi) {
     setSignalRuntime(api.runtime);
     api.registerChannel({ plugin: signalPlugin });
   },

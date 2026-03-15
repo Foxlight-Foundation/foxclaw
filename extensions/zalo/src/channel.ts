@@ -5,13 +5,13 @@ import {
   collectOpenProviderGroupPolicyWarnings,
   createAccountStatusSink,
   mapAllowFromEntries,
-} from "openclaw/plugin-sdk/compat";
+} from "foxclaw/plugin-sdk/compat";
 import type {
   ChannelAccountSnapshot,
   ChannelDock,
   ChannelPlugin,
-  OpenClawConfig,
-} from "openclaw/plugin-sdk/zalo";
+  FoxClawConfig,
+} from "foxclaw/plugin-sdk/zalo";
 import {
   applyAccountNameToChannelSection,
   applySetupAccountConfigPatch,
@@ -31,7 +31,7 @@ import {
   resolveOutboundMediaUrls,
   sendPayloadWithChunkedTextAndMedia,
   setAccountEnabledInConfigSection,
-} from "openclaw/plugin-sdk/zalo";
+} from "foxclaw/plugin-sdk/zalo";
 import {
   listZaloAccountIds,
   resolveDefaultZaloAccountId,

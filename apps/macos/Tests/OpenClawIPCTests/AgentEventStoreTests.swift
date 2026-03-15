@@ -1,7 +1,7 @@
 import Foundation
-import OpenClawProtocol
+import FoxClawProtocol
 import Testing
-@testable import OpenClaw
+@testable import FoxClaw
 
 @MainActor
 struct AgentEventStoreTests {
@@ -15,7 +15,7 @@ struct AgentEventStoreTests {
             seq: 1,
             stream: "test",
             ts: 0,
-            data: [:] as [String: OpenClawProtocol.AnyCodable],
+            data: [:] as [String: FoxClawProtocol.AnyCodable],
             summary: nil))
         #expect(store.events.count == 1)
 
@@ -32,7 +32,7 @@ struct AgentEventStoreTests {
                 seq: i,
                 stream: "test",
                 ts: Double(i),
-                data: [:] as [String: OpenClawProtocol.AnyCodable],
+                data: [:] as [String: FoxClawProtocol.AnyCodable],
                 summary: nil))
         }
 

@@ -1,4 +1,4 @@
-import OpenClawDiscovery
+import FoxClawDiscovery
 import SwiftUI
 
 struct GatewayDiscoveryInlineList: View {
@@ -112,6 +112,6 @@ struct GatewayDiscoveryMenu: View {
         } label: {
             Image(systemName: "dot.radiowaves.left.and.right")
         }
-        .help("Discover OpenClaw gateways on your LAN")
+        .help("Discover FoxClaw gateways on your LAN")
     }
 }

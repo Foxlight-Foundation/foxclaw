@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import { Static, Type } from "@sinclair/typebox";
-import type { AnyAgentTool, OpenClawPluginApi } from "openclaw/plugin-sdk/diffs";
+import type { AnyAgentTool, FoxClawPluginApi } from "foxclaw/plugin-sdk/diffs";
 import { PlaywrightDiffScreenshotter, type DiffScreenshotter } from "./browser.js";
 import { resolveDiffImageRenderOptions } from "./config.js";
 import { renderDiffDocument } from "./render.js";
@@ -131,7 +131,7 @@ type DiffsToolRawParams = DiffsToolParams & {
 };
 
 export function createDiffsTool(params: {
-  api: OpenClawPluginApi;
+  api: FoxClawPluginApi;
   store: DiffArtifactStore;
   defaults: DiffToolDefaults;
   screenshotter?: DiffScreenshotter;

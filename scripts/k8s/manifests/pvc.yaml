@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: openclaw-home-pvc
+  name: foxclaw-home-pvc
   labels:
-    app: openclaw
+    app: foxclaw
 spec:
   accessModes:
     - ReadWriteOnce

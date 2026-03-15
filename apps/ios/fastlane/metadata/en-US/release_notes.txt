@@ -1,1 +1,1 @@
-First App Store release of OpenClaw for iPhone. Pair with your OpenClaw Gateway to use chat, voice, sharing, and device actions from iOS.
+First App Store release of FoxClaw for iPhone. Pair with your FoxClaw Gateway to use chat, voice, sharing, and device actions from iOS.

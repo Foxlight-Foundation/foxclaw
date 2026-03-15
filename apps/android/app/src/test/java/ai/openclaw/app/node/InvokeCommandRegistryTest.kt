@@ -1,16 +1,16 @@
-package ai.openclaw.app.node
+package ai.foxclaw.app.node
 
-import ai.openclaw.app.protocol.OpenClawCalendarCommand
-import ai.openclaw.app.protocol.OpenClawCameraCommand
-import ai.openclaw.app.protocol.OpenClawCapability
-import ai.openclaw.app.protocol.OpenClawContactsCommand
-import ai.openclaw.app.protocol.OpenClawDeviceCommand
-import ai.openclaw.app.protocol.OpenClawLocationCommand
-import ai.openclaw.app.protocol.OpenClawMotionCommand
-import ai.openclaw.app.protocol.OpenClawNotificationsCommand
-import ai.openclaw.app.protocol.OpenClawPhotosCommand
-import ai.openclaw.app.protocol.OpenClawSmsCommand
-import ai.openclaw.app.protocol.OpenClawSystemCommand
+import ai.foxclaw.app.protocol.FoxClawCalendarCommand
+import ai.foxclaw.app.protocol.FoxClawCameraCommand
+import ai.foxclaw.app.protocol.FoxClawCapability
+import ai.foxclaw.app.protocol.FoxClawContactsCommand
+import ai.foxclaw.app.protocol.FoxClawDeviceCommand
+import ai.foxclaw.app.protocol.FoxClawLocationCommand
+import ai.foxclaw.app.protocol.FoxClawMotionCommand
+import ai.foxclaw.app.protocol.FoxClawNotificationsCommand
+import ai.foxclaw.app.protocol.FoxClawPhotosCommand
+import ai.foxclaw.app.protocol.FoxClawSmsCommand
+import ai.foxclaw.app.protocol.FoxClawSystemCommand
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -18,49 +18,49 @@ import org.junit.Test
 class InvokeCommandRegistryTest {
   private val coreCapabilities =
     setOf(
-      OpenClawCapability.Canvas.rawValue,
-      OpenClawCapability.Device.rawValue,
-      OpenClawCapability.Notifications.rawValue,
-      OpenClawCapability.System.rawValue,
-      OpenClawCapability.Photos.rawValue,
-      OpenClawCapability.Contacts.rawValue,
-      OpenClawCapability.Calendar.rawValue,
+      FoxClawCapability.Canvas.rawValue,
+      FoxClawCapability.Device.rawValue,
+      FoxClawCapability.Notifications.rawValue,
+      FoxClawCapability.System.rawValue,
+      FoxClawCapability.Photos.rawValue,
+      FoxClawCapability.Contacts.rawValue,
+      FoxClawCapability.Calendar.rawValue,
     )
 
   private val optionalCapabilities =
     setOf(
-      OpenClawCapability.Camera.rawValue,
-      OpenClawCapability.Location.rawValue,
-      OpenClawCapability.Sms.rawValue,
-      OpenClawCapability.VoiceWake.rawValue,
-      OpenClawCapability.Motion.rawValue,
+      FoxClawCapability.Camera.rawValue,
+      FoxClawCapability.Location.rawValue,
+      FoxClawCapability.Sms.rawValue,
+      FoxClawCapability.VoiceWake.rawValue,
+      FoxClawCapability.Motion.rawValue,
     )
 
   private val coreCommands =
     setOf(
-      OpenClawDeviceCommand.Status.rawValue,
-      OpenClawDeviceCommand.Info.rawValue,
-      OpenClawDeviceCommand.Permissions.rawValue,
-      OpenClawDeviceCommand.Health.rawValue,
-      OpenClawNotificationsCommand.List.rawValue,
-      OpenClawNotificationsCommand.Actions.rawValue,
-      OpenClawSystemCommand.Notify.rawValue,
-      OpenClawPhotosCommand.Latest.rawValue,
-      OpenClawContactsCommand.Search.rawValue,
-      OpenClawContactsCommand.Add.rawValue,
-      OpenClawCalendarCommand.Events.rawValue,
-      OpenClawCalendarCommand.Add.rawValue,
+      FoxClawDeviceCommand.Status.rawValue,
+      FoxClawDeviceCommand.Info.rawValue,
+      FoxClawDeviceCommand.Permissions.rawValue,
+      FoxClawDeviceCommand.Health.rawValue,
+      FoxClawNotificationsCommand.List.rawValue,
+      FoxClawNotificationsCommand.Actions.rawValue,
+      FoxClawSystemCommand.Notify.rawValue,
+      FoxClawPhotosCommand.Latest.rawValue,
+      FoxClawContactsCommand.Search.rawValue,
+      FoxClawContactsCommand.Add.rawValue,
+      FoxClawCalendarCommand.Events.rawValue,
+      FoxClawCalendarCommand.Add.rawValue,
     )
 
   private val optionalCommands =
     setOf(
-      OpenClawCameraCommand.Snap.rawValue,
-      OpenClawCameraCommand.Clip.rawValue,
-      OpenClawCameraCommand.List.rawValue,
-      OpenClawLocationCommand.Get.rawValue,
-      OpenClawMotionCommand.Activity.rawValue,
-      OpenClawMotionCommand.Pedometer.rawValue,
-      OpenClawSmsCommand.Send.rawValue,
+      FoxClawCameraCommand.Snap.rawValue,
+      FoxClawCameraCommand.Clip.rawValue,
+      FoxClawCameraCommand.List.rawValue,
+      FoxClawLocationCommand.Get.rawValue,
+      FoxClawMotionCommand.Activity.rawValue,
+      FoxClawMotionCommand.Pedometer.rawValue,
+      FoxClawSmsCommand.Send.rawValue,
     )
 
   private val debugCommands = setOf("debug.logs", "debug.ed25519")
@@ -130,8 +130,8 @@ class InvokeCommandRegistryTest {
         ),
       )
 
-    assertTrue(commands.contains(OpenClawMotionCommand.Activity.rawValue))
-    assertFalse(commands.contains(OpenClawMotionCommand.Pedometer.rawValue))
+    assertTrue(commands.contains(FoxClawMotionCommand.Activity.rawValue))
+    assertFalse(commands.contains(FoxClawMotionCommand.Pedometer.rawValue))
   }
 
   private fun defaultFlags(

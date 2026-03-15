@@ -33,13 +33,13 @@ vi.mock("node:fs", async (importOriginal) => {
   return { ...wrapped, default: wrapped };
 });
 
-let ensureOpenClawCliOnPath: typeof import("./path-env.js").ensureOpenClawCliOnPath;
+let ensureFoxClawCliOnPath: typeof import("./path-env.js").ensureFoxClawCliOnPath;
 
-describe("ensureOpenClawCliOnPath", () => {
+describe("ensureFoxClawCliOnPath", () => {
   const envKeys = [
     "PATH",
-    "OPENCLAW_PATH_BOOTSTRAPPED",
-    "OPENCLAW_ALLOW_PROJECT_LOCAL_BIN",
+    "FOXCLAW_PATH_BOOTSTRAPPED",
+    "FOXCLAW_ALLOW_PROJECT_LOCAL_BIN",
     "MISE_DATA_DIR",
     "HOMEBREW_PREFIX",
     "HOMEBREW_BREW_FILE",
@@ -48,7 +48,7 @@ describe("ensureOpenClawCliOnPath", () => {
   let envSnapshot: Record<(typeof envKeys)[number], string | undefined>;
 
   beforeAll(async () => {
-    ({ ensureOpenClawCliOnPath } = await import("./path-env.js"));
+    ({ ensureFoxClawCliOnPath } = await import("./path-env.js"));
   });
 
   beforeEach(() => {
@@ -73,9 +73,9 @@ describe("ensureOpenClawCliOnPath", () => {
   });
 
   function setupAppCliRoot(name: string) {
-    const tmp = abs(`/tmp/openclaw-path/${name}`);
+    const tmp = abs(`/tmp/foxclaw-path/${name}`);
     const appBinDir = path.join(tmp, "AppBin");
-    const appCli = path.join(appBinDir, "openclaw");
+    const appCli = path.join(appBinDir, "foxclaw");
     setDir(tmp);
     setDir(appBinDir);
     setExe(appCli);
@@ -89,14 +89,14 @@ describe("ensureOpenClawCliOnPath", () => {
     platform: NodeJS.Platform;
     allowProjectLocalBin?: boolean;
   }) {
-    ensureOpenClawCliOnPath(params);
+    ensureFoxClawCliOnPath(params);
     return (process.env.PATH ?? "").split(path.delimiter);
   }
 
-  it("prepends the bundled app bin dir when a sibling openclaw exists", () => {
+  it("prepends the bundled app bin dir when a sibling foxclaw exists", () => {
     const { tmp, appBinDir, appCli } = setupAppCliRoot("case-bundled");
     process.env.PATH = "/usr/bin";
-    delete process.env.OPENCLAW_PATH_BOOTSTRAPPED;
+    delete process.env.FOXCLAW_PATH_BOOTSTRAPPED;
 
     const updated = bootstrapPath({
       execPath: appCli,
@@ -109,8 +109,8 @@ describe("ensureOpenClawCliOnPath", () => {
 
   it("is idempotent", () => {
     process.env.PATH = "/bin";
-    process.env.OPENCLAW_PATH_BOOTSTRAPPED = "1";
-    ensureOpenClawCliOnPath({
+    process.env.FOXCLAW_PATH_BOOTSTRAPPED = "1";
+    ensureFoxClawCliOnPath({
       execPath: "/tmp/does-not-matter",
       cwd: "/tmp",
       homeDir: "/tmp",
@@ -128,7 +128,7 @@ describe("ensureOpenClawCliOnPath", () => {
 
     process.env.MISE_DATA_DIR = miseDataDir;
     process.env.PATH = "/usr/bin";
-    delete process.env.OPENCLAW_PATH_BOOTSTRAPPED;
+    delete process.env.FOXCLAW_PATH_BOOTSTRAPPED;
 
     const updated = bootstrapPath({
       execPath: appCli,
@@ -158,14 +158,14 @@ describe("ensureOpenClawCliOnPath", () => {
     ({ envValue, allowProjectLocalBin }) => {
       const { tmp, appCli } = setupAppCliRoot("case-project-local");
       const localBinDir = path.join(tmp, "node_modules", ".bin");
-      const localCli = path.join(localBinDir, "openclaw");
+      const localCli = path.join(localBinDir, "foxclaw");
       setDir(path.join(tmp, "node_modules"));
       setDir(localBinDir);
       setExe(localCli);
 
       process.env.PATH = "/usr/bin";
-      delete process.env.OPENCLAW_PATH_BOOTSTRAPPED;
-      delete process.env.OPENCLAW_ALLOW_PROJECT_LOCAL_BIN;
+      delete process.env.FOXCLAW_PATH_BOOTSTRAPPED;
+      delete process.env.FOXCLAW_ALLOW_PROJECT_LOCAL_BIN;
 
       const withoutOptIn = bootstrapPath({
         execPath: appCli,
@@ -176,11 +176,11 @@ describe("ensureOpenClawCliOnPath", () => {
       expect(withoutOptIn.includes(localBinDir)).toBe(false);
 
       process.env.PATH = "/usr/bin";
-      delete process.env.OPENCLAW_PATH_BOOTSTRAPPED;
+      delete process.env.FOXCLAW_PATH_BOOTSTRAPPED;
       if (envValue === undefined) {
-        delete process.env.OPENCLAW_ALLOW_PROJECT_LOCAL_BIN;
+        delete process.env.FOXCLAW_ALLOW_PROJECT_LOCAL_BIN;
       } else {
-        process.env.OPENCLAW_ALLOW_PROJECT_LOCAL_BIN = envValue;
+        process.env.FOXCLAW_ALLOW_PROJECT_LOCAL_BIN = envValue;
       }
 
       const withOptIn = bootstrapPath({
@@ -207,7 +207,7 @@ describe("ensureOpenClawCliOnPath", () => {
 
     process.env.PATH = "/usr/bin";
     process.env.XDG_BIN_HOME = xdgBinHome;
-    delete process.env.OPENCLAW_PATH_BOOTSTRAPPED;
+    delete process.env.FOXCLAW_PATH_BOOTSTRAPPED;
 
     const updated = bootstrapPath({
       execPath: appCli,
@@ -219,7 +219,7 @@ describe("ensureOpenClawCliOnPath", () => {
   });
 
   it("prepends Linuxbrew dirs when present", () => {
-    const tmp = abs("/tmp/openclaw-path/case-linuxbrew");
+    const tmp = abs("/tmp/foxclaw-path/case-linuxbrew");
     const execDir = path.join(tmp, "exec");
     setDir(tmp);
     setDir(execDir);
@@ -232,7 +232,7 @@ describe("ensureOpenClawCliOnPath", () => {
     setDir(linuxbrewSbin);
 
     process.env.PATH = "/usr/bin";
-    delete process.env.OPENCLAW_PATH_BOOTSTRAPPED;
+    delete process.env.FOXCLAW_PATH_BOOTSTRAPPED;
     delete process.env.HOMEBREW_PREFIX;
     delete process.env.HOMEBREW_BREW_FILE;
     delete process.env.XDG_BIN_HOME;

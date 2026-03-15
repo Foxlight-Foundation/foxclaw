@@ -1,26 +1,26 @@
 ---
-summary: "CLI reference for `openclaw daemon` (legacy alias for gateway service management)"
+summary: "CLI reference for `foxclaw daemon` (legacy alias for gateway service management)"
 read_when:
-  - You still use `openclaw daemon ...` in scripts
+  - You still use `foxclaw daemon ...` in scripts
   - You need service lifecycle commands (install/start/stop/restart/status)
 title: "daemon"
 ---
 
-# `openclaw daemon`
+# `foxclaw daemon`
 
 Legacy alias for Gateway service management commands.
 
-`openclaw daemon ...` maps to the same service control surface as `openclaw gateway ...` service commands.
+`foxclaw daemon ...` maps to the same service control surface as `foxclaw gateway ...` service commands.
 
 ## Usage
 
 ```bash
-openclaw daemon status
-openclaw daemon install
-openclaw daemon start
-openclaw daemon stop
-openclaw daemon restart
-openclaw daemon uninstall
+foxclaw daemon status
+foxclaw daemon install
+foxclaw daemon start
+foxclaw daemon stop
+foxclaw daemon restart
+foxclaw daemon uninstall
 ```
 
 ## Subcommands
@@ -48,4 +48,4 @@ Notes:
 
 ## Prefer
 
-Use [`openclaw gateway`](/cli/gateway) for current docs and examples.
+Use [`foxclaw gateway`](/cli/gateway) for current docs and examples.

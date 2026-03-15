@@ -21,7 +21,7 @@ import {
   resolveStorePath,
 } from "../../../src/config/sessions.js";
 import type {
-  OpenClawConfig,
+  FoxClawConfig,
   ReplyToMode,
   TelegramAccountConfig,
 } from "../../../src/config/types.js";
@@ -56,7 +56,7 @@ const EMPTY_RESPONSE_FALLBACK = "No response generated. Please try again.";
 /** Minimum chars before sending first streaming message (improves push notification UX) */
 const DRAFT_MIN_INITIAL_CHARS = 30;
 
-async function resolveStickerVisionSupport(cfg: OpenClawConfig, agentId: string) {
+async function resolveStickerVisionSupport(cfg: FoxClawConfig, agentId: string) {
   try {
     const catalog = await loadModelCatalog({ config: cfg });
     const defaultModel = resolveDefaultModelForAgent({ cfg, agentId });
@@ -104,7 +104,7 @@ export function pruneStickerMediaFromContext(
 type DispatchTelegramMessageParams = {
   context: TelegramMessageContext;
   bot: Bot;
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   runtime: RuntimeEnv;
   replyToMode: ReplyToMode;
   streamMode: TelegramStreamMode;
@@ -116,7 +116,7 @@ type DispatchTelegramMessageParams = {
 type TelegramReasoningLevel = "off" | "on" | "stream";
 
 function resolveTelegramReasoningLevel(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   sessionKey?: string;
   agentId: string;
 }): TelegramReasoningLevel {

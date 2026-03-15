@@ -35,7 +35,7 @@ export type {
 export type { ChannelPlugin } from "../channels/plugins/types.plugin.js";
 export { createReplyPrefixContext } from "../channels/reply-prefix.js";
 export { createTypingCallbacks } from "../channels/typing.js";
-export type { OpenClawConfig as ClawdbotConfig, OpenClawConfig } from "../config/config.js";
+export type { FoxClawConfig as ClawdbotConfig, FoxClawConfig } from "../config/config.js";
 export {
   resolveAllowlistProviderRuntimeGroupPolicy,
   resolveDefaultGroupPolicy,
@@ -55,7 +55,7 @@ export { installRequestBodyLimitGuard, readJsonBodyWithLimit } from "../infra/ht
 export { fetchWithSsrFGuard } from "../infra/net/fetch-guard.js";
 export { emptyPluginConfigSchema } from "../plugins/config-schema.js";
 export type { PluginRuntime } from "../plugins/runtime/types.js";
-export type { AnyAgentTool, OpenClawPluginApi } from "../plugins/types.js";
+export type { AnyAgentTool, FoxClawPluginApi } from "../plugins/types.js";
 export { DEFAULT_ACCOUNT_ID, normalizeAgentId } from "../routing/session-key.js";
 export type { RuntimeEnv } from "../runtime.js";
 export { formatDocsLink } from "../terminal/links.js";

@@ -85,7 +85,7 @@ describe("maybeInstallDaemon", () => {
       warnings: [],
     });
     buildGatewayInstallPlan.mockResolvedValue({
-      programArguments: ["openclaw", "gateway", "run"],
+      programArguments: ["foxclaw", "gateway", "run"],
       workingDirectory: "/tmp",
       environment: {},
     });

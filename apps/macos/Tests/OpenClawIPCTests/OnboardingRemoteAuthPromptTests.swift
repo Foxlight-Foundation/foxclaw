@@ -1,6 +1,6 @@
-import OpenClawKit
+import FoxClawKit
 import Testing
-@testable import OpenClaw
+@testable import FoxClaw
 
 @MainActor
 struct OnboardingRemoteAuthPromptTests {
@@ -111,7 +111,7 @@ struct OnboardingRemoteAuthPromptTests {
         #expect(issue.title == "This device needs pairing approval")
         #expect(issue.body.contains("`/pair approve`"))
         #expect(issue.statusMessage.contains("/pair approve"))
-        #expect(issue.footnote?.contains("`openclaw devices approve`") == true)
+        #expect(issue.footnote?.contains("`foxclaw devices approve`") == true)
     }
 
     @Test func `paired device success copy explains auth source`() {

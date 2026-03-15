@@ -1,11 +1,11 @@
-import { createScopedChannelConfigBase } from "openclaw/plugin-sdk/compat";
+import { createScopedChannelConfigBase } from "foxclaw/plugin-sdk/compat";
 import {
   collectAllowlistProviderGroupPolicyWarnings,
   collectOpenGroupPolicyRouteAllowlistWarnings,
   createScopedAccountConfigAccessors,
   createScopedDmSecurityResolver,
   formatAllowFromLowercase,
-} from "openclaw/plugin-sdk/compat";
+} from "foxclaw/plugin-sdk/compat";
 import {
   applyAccountNameToChannelSection,
   buildChannelConfigSchema,
@@ -36,10 +36,10 @@ import {
   TelegramConfigSchema,
   type ChannelMessageActionAdapter,
   type ChannelPlugin,
-  type OpenClawConfig,
+  type FoxClawConfig,
   type ResolvedTelegramAccount,
   type TelegramProbe,
-} from "openclaw/plugin-sdk/telegram";
+} from "foxclaw/plugin-sdk/telegram";
 import {
   type OutboundSendDeps,
   resolveOutboundSendDep,
@@ -53,7 +53,7 @@ type TelegramSendFn = ReturnType<
 const meta = getChatChannelMeta("telegram");
 
 function findTelegramTokenOwnerAccountId(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   accountId: string;
 }): string | null {
   const normalizedAccountId = normalizeAccountId(params.accountId);
@@ -89,7 +89,7 @@ function formatDuplicateTelegramTokenReason(params: {
 type TelegramSendOptions = NonNullable<Parameters<TelegramSendFn>[2]>;
 
 function buildTelegramSendOptions(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   mediaUrl?: string | null;
   mediaLocalRoots?: readonly string[] | null;
   accountId?: string | null;
@@ -110,7 +110,7 @@ function buildTelegramSendOptions(params: {
 }
 
 async function sendTelegramOutbound(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   to: string;
   text: string;
   mediaUrl?: string | null;
@@ -590,7 +590,7 @@ export const telegramPlugin: ChannelPlugin<ResolvedTelegramAccount, TelegramProb
     },
     logoutAccount: async ({ accountId, cfg }) => {
       const envToken = process.env.TELEGRAM_BOT_TOKEN?.trim() ?? "";
-      const nextCfg = { ...cfg } as OpenClawConfig;
+      const nextCfg = { ...cfg } as FoxClawConfig;
       const nextTelegram = cfg.channels?.telegram ? { ...cfg.channels.telegram } : undefined;
       let cleared = false;
       let changed = false;

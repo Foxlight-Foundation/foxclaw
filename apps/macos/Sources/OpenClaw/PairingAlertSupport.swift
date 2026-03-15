@@ -1,5 +1,5 @@
 import AppKit
-import OpenClawKit
+import FoxClawKit
 import OSLog
 
 final class PairingAlertHostWindow: NSWindow {

@@ -1,6 +1,6 @@
 import SwiftUI
 import Foundation
-import OpenClawKit
+import FoxClawKit
 import os
 import UIKit
 import BackgroundTasks
@@ -14,10 +14,10 @@ private struct PendingWatchPromptAction {
 }
 
 @MainActor
-final class OpenClawAppDelegate: NSObject, UIApplicationDelegate, @preconcurrency UNUserNotificationCenterDelegate {
-    private let logger = Logger(subsystem: "ai.openclaw.ios", category: "Push")
-    private let backgroundWakeLogger = Logger(subsystem: "ai.openclaw.ios", category: "BackgroundWake")
-    private static let wakeRefreshTaskIdentifier = "ai.openclaw.ios.bgrefresh"
+final class FoxClawAppDelegate: NSObject, UIApplicationDelegate, @preconcurrency UNUserNotificationCenterDelegate {
+    private let logger = Logger(subsystem: "ai.foxclaw.ios", category: "Push")
+    private let backgroundWakeLogger = Logger(subsystem: "ai.foxclaw.ios", category: "BackgroundWake")
+    private static let wakeRefreshTaskIdentifier = "ai.foxclaw.ios.bgrefresh"
     private var backgroundWakeTask: Task<Bool, Never>?
     private var pendingAPNsDeviceToken: Data?
     private var pendingWatchPromptActions: [PendingWatchPromptAction] = []
@@ -263,25 +263,25 @@ final class OpenClawAppDelegate: NSObject, UIApplicationDelegate, @preconcurrenc
 }
 
 enum WatchPromptNotificationBridge {
-    static let typeKey = "openclaw.type"
+    static let typeKey = "foxclaw.type"
     static let typeValue = "watch.prompt"
-    static let promptIDKey = "openclaw.watch.promptId"
-    static let sessionKeyKey = "openclaw.watch.sessionKey"
-    static let actionPrimaryIDKey = "openclaw.watch.action.primary.id"
-    static let actionPrimaryLabelKey = "openclaw.watch.action.primary.label"
-    static let actionSecondaryIDKey = "openclaw.watch.action.secondary.id"
-    static let actionSecondaryLabelKey = "openclaw.watch.action.secondary.label"
-    static let actionPrimaryIdentifier = "openclaw.watch.action.primary"
-    static let actionSecondaryIdentifier = "openclaw.watch.action.secondary"
-    static let actionIdentifierPrefix = "openclaw.watch.action."
-    static let actionIDKeyPrefix = "openclaw.watch.action.id."
-    static let actionLabelKeyPrefix = "openclaw.watch.action.label."
-    static let categoryPrefix = "openclaw.watch.prompt.category."
+    static let promptIDKey = "foxclaw.watch.promptId"
+    static let sessionKeyKey = "foxclaw.watch.sessionKey"
+    static let actionPrimaryIDKey = "foxclaw.watch.action.primary.id"
+    static let actionPrimaryLabelKey = "foxclaw.watch.action.primary.label"
+    static let actionSecondaryIDKey = "foxclaw.watch.action.secondary.id"
+    static let actionSecondaryLabelKey = "foxclaw.watch.action.secondary.label"
+    static let actionPrimaryIdentifier = "foxclaw.watch.action.primary"
+    static let actionSecondaryIdentifier = "foxclaw.watch.action.secondary"
+    static let actionIdentifierPrefix = "foxclaw.watch.action."
+    static let actionIDKeyPrefix = "foxclaw.watch.action.id."
+    static let actionLabelKeyPrefix = "foxclaw.watch.action.label."
+    static let categoryPrefix = "foxclaw.watch.prompt.category."
 
     @MainActor
     static func scheduleMirroredWatchPromptNotificationIfNeeded(
         invokeID: String,
-        params: OpenClawWatchNotifyParams,
+        params: FoxClawWatchNotifyParams,
         sendResult: WatchNotificationSendResult) async
     {
         guard sendResult.queuedForDelivery || !sendResult.deliveredImmediately else { return }
@@ -291,11 +291,11 @@ enum WatchPromptNotificationBridge {
         guard !title.isEmpty || !body.isEmpty else { return }
         guard await self.requestNotificationAuthorizationIfNeeded() else { return }
 
-        let normalizedActions = (params.actions ?? []).compactMap { action -> OpenClawWatchAction? in
+        let normalizedActions = (params.actions ?? []).compactMap { action -> FoxClawWatchAction? in
             let id = action.id.trimmingCharacters(in: .whitespacesAndNewlines)
             let label = action.label.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !id.isEmpty, !label.isEmpty else { return nil }
-            return OpenClawWatchAction(id: id, label: label, style: action.style)
+            return FoxClawWatchAction(id: id, label: label, style: action.style)
         }
         let displayedActions = Array(normalizedActions.prefix(4))
 
@@ -334,7 +334,7 @@ enum WatchPromptNotificationBridge {
         }
 
         let content = UNMutableNotificationContent()
-        content.title = title.isEmpty ? "OpenClaw" : title
+        content.title = title.isEmpty ? "FoxClaw" : title
         content.body = body
         content.sound = .default
         content.userInfo = userInfo
@@ -367,7 +367,7 @@ enum WatchPromptNotificationBridge {
         "\(self.actionLabelKeyPrefix)\(index)"
     }
 
-    private static func categoryActions(_ actions: [OpenClawWatchAction]) -> [UNNotificationAction] {
+    private static func categoryActions(_ actions: [FoxClawWatchAction]) -> [UNNotificationAction] {
         actions.enumerated().map { index, action in
             let identifier: String
             switch index {
@@ -497,10 +497,10 @@ extension NodeAppModel {
 }
 
 @main
-struct OpenClawApp: App {
+struct FoxClawApp: App {
     @State private var appModel: NodeAppModel
     @State private var gatewayController: GatewayConnectionController
-    @UIApplicationDelegateAdaptor(OpenClawAppDelegate.self) private var appDelegate
+    @UIApplicationDelegateAdaptor(FoxClawAppDelegate.self) private var appDelegate
     @Environment(\.scenePhase) private var scenePhase
 
     init() {
@@ -532,9 +532,9 @@ struct OpenClawApp: App {
     }
 }
 
-extension OpenClawApp {
+extension FoxClawApp {
     private static func installUncaughtExceptionLogger() {
-        NSLog("OpenClaw: installing uncaught exception handler")
+        NSLog("FoxClaw: installing uncaught exception handler")
         NSSetUncaughtExceptionHandler { exception in
             // Useful when the app hits NSExceptions from SwiftUI/WebKit internals; these do not
             // produce a normal Swift error backtrace.

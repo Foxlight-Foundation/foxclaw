@@ -1,5 +1,5 @@
 import Testing
-@testable import OpenClaw
+@testable import FoxClaw
 
 struct VoiceWakeHelpersTests {
     @Test func `sanitize triggers trims and drops empty`() {

@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: openclaw
+  name: foxclaw
   labels:
-    app: openclaw
+    app: foxclaw
 spec:
   type: ClusterIP
   selector:
-    app: openclaw
+    app: foxclaw
   ports:
     - name: gateway
       port: 18789

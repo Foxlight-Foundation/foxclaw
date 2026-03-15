@@ -1,8 +1,8 @@
 import Foundation
-import OpenClawKit
+import FoxClawKit
 import os
 import Testing
-@testable import OpenClaw
+@testable import FoxClaw
 
 struct GatewayConnectionTests {
     private func makeConnection(

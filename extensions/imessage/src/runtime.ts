@@ -1,5 +1,5 @@
-import { createPluginRuntimeStore } from "openclaw/plugin-sdk/compat";
-import type { PluginRuntime } from "openclaw/plugin-sdk/imessage";
+import { createPluginRuntimeStore } from "foxclaw/plugin-sdk/compat";
+import type { PluginRuntime } from "foxclaw/plugin-sdk/imessage";
 
 const { setRuntime: setIMessageRuntime, getRuntime: getIMessageRuntime } =
   createPluginRuntimeStore<PluginRuntime>("iMessage runtime not initialized");

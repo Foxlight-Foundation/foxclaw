@@ -4,17 +4,17 @@
 
 #include "Config/Version.xcconfig"
 
-OPENCLAW_CODE_SIGN_STYLE = Manual
-OPENCLAW_DEVELOPMENT_TEAM = Y5PE65HELJ
+FOXCLAW_CODE_SIGN_STYLE = Manual
+FOXCLAW_DEVELOPMENT_TEAM = Y5PE65HELJ
 
-OPENCLAW_APP_BUNDLE_ID = ai.openclaw.client
-OPENCLAW_SHARE_BUNDLE_ID = ai.openclaw.client.share
-OPENCLAW_WATCH_APP_BUNDLE_ID = ai.openclaw.client.watchkitapp
-OPENCLAW_WATCH_EXTENSION_BUNDLE_ID = ai.openclaw.client.watchkitapp.extension
-OPENCLAW_ACTIVITY_WIDGET_BUNDLE_ID = ai.openclaw.client.activitywidget
+FOXCLAW_APP_BUNDLE_ID = ai.foxclaw.client
+FOXCLAW_SHARE_BUNDLE_ID = ai.foxclaw.client.share
+FOXCLAW_WATCH_APP_BUNDLE_ID = ai.foxclaw.client.watchkitapp
+FOXCLAW_WATCH_EXTENSION_BUNDLE_ID = ai.foxclaw.client.watchkitapp.extension
+FOXCLAW_ACTIVITY_WIDGET_BUNDLE_ID = ai.foxclaw.client.activitywidget
 
-OPENCLAW_APP_PROFILE = ai.openclaw.client Development
-OPENCLAW_SHARE_PROFILE = ai.openclaw.client.share Development
+FOXCLAW_APP_PROFILE = ai.foxclaw.client Development
+FOXCLAW_SHARE_PROFILE = ai.foxclaw.client.share Development
 
 // Keep local includes after defaults: xcconfig is evaluated top-to-bottom,
 // so later assignments in local files override the defaults above.

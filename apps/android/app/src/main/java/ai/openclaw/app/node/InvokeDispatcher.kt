@@ -1,17 +1,17 @@
-package ai.openclaw.app.node
+package ai.foxclaw.app.node
 
-import ai.openclaw.app.gateway.GatewaySession
-import ai.openclaw.app.protocol.OpenClawCalendarCommand
-import ai.openclaw.app.protocol.OpenClawCanvasA2UICommand
-import ai.openclaw.app.protocol.OpenClawCanvasCommand
-import ai.openclaw.app.protocol.OpenClawCameraCommand
-import ai.openclaw.app.protocol.OpenClawContactsCommand
-import ai.openclaw.app.protocol.OpenClawDeviceCommand
-import ai.openclaw.app.protocol.OpenClawLocationCommand
-import ai.openclaw.app.protocol.OpenClawMotionCommand
-import ai.openclaw.app.protocol.OpenClawNotificationsCommand
-import ai.openclaw.app.protocol.OpenClawSmsCommand
-import ai.openclaw.app.protocol.OpenClawSystemCommand
+import ai.foxclaw.app.gateway.GatewaySession
+import ai.foxclaw.app.protocol.FoxClawCalendarCommand
+import ai.foxclaw.app.protocol.FoxClawCanvasA2UICommand
+import ai.foxclaw.app.protocol.FoxClawCanvasCommand
+import ai.foxclaw.app.protocol.FoxClawCameraCommand
+import ai.foxclaw.app.protocol.FoxClawContactsCommand
+import ai.foxclaw.app.protocol.FoxClawDeviceCommand
+import ai.foxclaw.app.protocol.FoxClawLocationCommand
+import ai.foxclaw.app.protocol.FoxClawMotionCommand
+import ai.foxclaw.app.protocol.FoxClawNotificationsCommand
+import ai.foxclaw.app.protocol.FoxClawSmsCommand
+import ai.foxclaw.app.protocol.FoxClawSystemCommand
 
 class InvokeDispatcher(
   private val canvas: CanvasController,
@@ -55,18 +55,18 @@ class InvokeDispatcher(
 
     return when (command) {
       // Canvas commands
-      OpenClawCanvasCommand.Present.rawValue -> {
+      FoxClawCanvasCommand.Present.rawValue -> {
         val url = CanvasController.parseNavigateUrl(paramsJson)
         canvas.navigate(url)
         GatewaySession.InvokeResult.ok(null)
       }
-      OpenClawCanvasCommand.Hide.rawValue -> GatewaySession.InvokeResult.ok(null)
-      OpenClawCanvasCommand.Navigate.rawValue -> {
+      FoxClawCanvasCommand.Hide.rawValue -> GatewaySession.InvokeResult.ok(null)
+      FoxClawCanvasCommand.Navigate.rawValue -> {
         val url = CanvasController.parseNavigateUrl(paramsJson)
         canvas.navigate(url)
         GatewaySession.InvokeResult.ok(null)
       }
-      OpenClawCanvasCommand.Eval.rawValue -> {
+      FoxClawCanvasCommand.Eval.rawValue -> {
         val js =
           CanvasController.parseEvalJs(paramsJson)
             ?: return GatewaySession.InvokeResult.error(
@@ -78,7 +78,7 @@ class InvokeDispatcher(
           GatewaySession.InvokeResult.ok("""{"result":${result.toJsonString()}}""")
         }
       }
-      OpenClawCanvasCommand.Snapshot.rawValue -> {
+      FoxClawCanvasCommand.Snapshot.rawValue -> {
         val snapshotParams = CanvasController.parseSnapshotParams(paramsJson)
         withCanvasAvailable {
           val base64 =
@@ -92,7 +92,7 @@ class InvokeDispatcher(
       }
 
       // A2UI commands
-      OpenClawCanvasA2UICommand.Reset.rawValue ->
+      FoxClawCanvasA2UICommand.Reset.rawValue ->
         withReadyA2ui {
           withCanvasAvailable {
             val res = canvas.eval(A2UIHandler.a2uiResetJS)
@@ -100,7 +100,7 @@ class InvokeDispatcher(
             GatewaySession.InvokeResult.ok(res)
           }
         }
-      OpenClawCanvasA2UICommand.Push.rawValue, OpenClawCanvasA2UICommand.PushJSONL.rawValue -> {
+      FoxClawCanvasA2UICommand.Push.rawValue, FoxClawCanvasA2UICommand.PushJSONL.rawValue -> {
         val messages =
           try {
             a2uiHandler.decodeA2uiMessages(command, paramsJson)
@@ -121,45 +121,45 @@ class InvokeDispatcher(
       }
 
       // Camera commands
-      OpenClawCameraCommand.List.rawValue -> cameraHandler.handleList(paramsJson)
-      OpenClawCameraCommand.Snap.rawValue -> cameraHandler.handleSnap(paramsJson)
-      OpenClawCameraCommand.Clip.rawValue -> cameraHandler.handleClip(paramsJson)
+      FoxClawCameraCommand.List.rawValue -> cameraHandler.handleList(paramsJson)
+      FoxClawCameraCommand.Snap.rawValue -> cameraHandler.handleSnap(paramsJson)
+      FoxClawCameraCommand.Clip.rawValue -> cameraHandler.handleClip(paramsJson)
 
       // Location command
-      OpenClawLocationCommand.Get.rawValue -> locationHandler.handleLocationGet(paramsJson)
+      FoxClawLocationCommand.Get.rawValue -> locationHandler.handleLocationGet(paramsJson)
 
       // Device commands
-      OpenClawDeviceCommand.Status.rawValue -> deviceHandler.handleDeviceStatus(paramsJson)
-      OpenClawDeviceCommand.Info.rawValue -> deviceHandler.handleDeviceInfo(paramsJson)
-      OpenClawDeviceCommand.Permissions.rawValue -> deviceHandler.handleDevicePermissions(paramsJson)
-      OpenClawDeviceCommand.Health.rawValue -> deviceHandler.handleDeviceHealth(paramsJson)
+      FoxClawDeviceCommand.Status.rawValue -> deviceHandler.handleDeviceStatus(paramsJson)
+      FoxClawDeviceCommand.Info.rawValue -> deviceHandler.handleDeviceInfo(paramsJson)
+      FoxClawDeviceCommand.Permissions.rawValue -> deviceHandler.handleDevicePermissions(paramsJson)
+      FoxClawDeviceCommand.Health.rawValue -> deviceHandler.handleDeviceHealth(paramsJson)
 
       // Notifications command
-      OpenClawNotificationsCommand.List.rawValue -> notificationsHandler.handleNotificationsList(paramsJson)
-      OpenClawNotificationsCommand.Actions.rawValue -> notificationsHandler.handleNotificationsActions(paramsJson)
+      FoxClawNotificationsCommand.List.rawValue -> notificationsHandler.handleNotificationsList(paramsJson)
+      FoxClawNotificationsCommand.Actions.rawValue -> notificationsHandler.handleNotificationsActions(paramsJson)
 
       // System command
-      OpenClawSystemCommand.Notify.rawValue -> systemHandler.handleSystemNotify(paramsJson)
+      FoxClawSystemCommand.Notify.rawValue -> systemHandler.handleSystemNotify(paramsJson)
 
       // Photos command
-      ai.openclaw.app.protocol.OpenClawPhotosCommand.Latest.rawValue -> photosHandler.handlePhotosLatest(
+      ai.foxclaw.app.protocol.FoxClawPhotosCommand.Latest.rawValue -> photosHandler.handlePhotosLatest(
         paramsJson,
       )
 
       // Contacts command
-      OpenClawContactsCommand.Search.rawValue -> contactsHandler.handleContactsSearch(paramsJson)
-      OpenClawContactsCommand.Add.rawValue -> contactsHandler.handleContactsAdd(paramsJson)
+      FoxClawContactsCommand.Search.rawValue -> contactsHandler.handleContactsSearch(paramsJson)
+      FoxClawContactsCommand.Add.rawValue -> contactsHandler.handleContactsAdd(paramsJson)
 
       // Calendar command
-      OpenClawCalendarCommand.Events.rawValue -> calendarHandler.handleCalendarEvents(paramsJson)
-      OpenClawCalendarCommand.Add.rawValue -> calendarHandler.handleCalendarAdd(paramsJson)
+      FoxClawCalendarCommand.Events.rawValue -> calendarHandler.handleCalendarEvents(paramsJson)
+      FoxClawCalendarCommand.Add.rawValue -> calendarHandler.handleCalendarAdd(paramsJson)
 
       // Motion command
-      OpenClawMotionCommand.Activity.rawValue -> motionHandler.handleMotionActivity(paramsJson)
-      OpenClawMotionCommand.Pedometer.rawValue -> motionHandler.handleMotionPedometer(paramsJson)
+      FoxClawMotionCommand.Activity.rawValue -> motionHandler.handleMotionActivity(paramsJson)
+      FoxClawMotionCommand.Pedometer.rawValue -> motionHandler.handleMotionPedometer(paramsJson)
 
       // SMS command
-      OpenClawSmsCommand.Send.rawValue -> smsHandler.handleSmsSend(paramsJson)
+      FoxClawSmsCommand.Send.rawValue -> smsHandler.handleSmsSend(paramsJson)
 
       // Debug commands
       "debug.ed25519" -> debugHandler.handleEd25519()

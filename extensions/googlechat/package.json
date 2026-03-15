@@ -1,21 +1,21 @@
 {
-  "name": "@openclaw/googlechat",
+  "name": "@foxclaw/googlechat",
   "version": "2026.3.14",
   "private": true,
-  "description": "OpenClaw Google Chat channel plugin",
+  "description": "FoxClaw Google Chat channel plugin",
   "type": "module",
   "dependencies": {
     "google-auth-library": "^10.6.1"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.3.11"
+    "foxclaw": ">=2026.3.11"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "foxclaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "foxclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -34,7 +34,7 @@
       "order": 55
     },
     "install": {
-      "npmSpec": "@openclaw/googlechat",
+      "npmSpec": "@foxclaw/googlechat",
       "localPath": "extensions/googlechat",
       "defaultChoice": "npm"
     },

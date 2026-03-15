@@ -1,4 +1,4 @@
-import type { ClawdbotConfig } from "openclaw/plugin-sdk/feishu";
+import type { ClawdbotConfig } from "foxclaw/plugin-sdk/feishu";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getMessageFeishu, listFeishuThreadMessages } from "./send.js";
 

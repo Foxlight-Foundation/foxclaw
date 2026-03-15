@@ -1,58 +1,58 @@
 import Foundation
 
-public enum OpenClawDeviceCommand: String, Codable, Sendable {
+public enum FoxClawDeviceCommand: String, Codable, Sendable {
     case status = "device.status"
     case info = "device.info"
 }
 
-public enum OpenClawBatteryState: String, Codable, Sendable {
+public enum FoxClawBatteryState: String, Codable, Sendable {
     case unknown
     case unplugged
     case charging
     case full
 }
 
-public enum OpenClawThermalState: String, Codable, Sendable {
+public enum FoxClawThermalState: String, Codable, Sendable {
     case nominal
     case fair
     case serious
     case critical
 }
 
-public enum OpenClawNetworkPathStatus: String, Codable, Sendable {
+public enum FoxClawNetworkPathStatus: String, Codable, Sendable {
     case satisfied
     case unsatisfied
     case requiresConnection
 }
 
-public enum OpenClawNetworkInterfaceType: String, Codable, Sendable {
+public enum FoxClawNetworkInterfaceType: String, Codable, Sendable {
     case wifi
     case cellular
     case wired
     case other
 }
 
-public struct OpenClawBatteryStatusPayload: Codable, Sendable, Equatable {
+public struct FoxClawBatteryStatusPayload: Codable, Sendable, Equatable {
     public var level: Double?
-    public var state: OpenClawBatteryState
+    public var state: FoxClawBatteryState
     public var lowPowerModeEnabled: Bool
 
-    public init(level: Double?, state: OpenClawBatteryState, lowPowerModeEnabled: Bool) {
+    public init(level: Double?, state: FoxClawBatteryState, lowPowerModeEnabled: Bool) {
         self.level = level
         self.state = state
         self.lowPowerModeEnabled = lowPowerModeEnabled
     }
 }
 
-public struct OpenClawThermalStatusPayload: Codable, Sendable, Equatable {
-    public var state: OpenClawThermalState
+public struct FoxClawThermalStatusPayload: Codable, Sendable, Equatable {
+    public var state: FoxClawThermalState
 
-    public init(state: OpenClawThermalState) {
+    public init(state: FoxClawThermalState) {
         self.state = state
     }
 }
 
-public struct OpenClawStorageStatusPayload: Codable, Sendable, Equatable {
+public struct FoxClawStorageStatusPayload: Codable, Sendable, Equatable {
     public var totalBytes: Int64
     public var freeBytes: Int64
     public var usedBytes: Int64
@@ -64,17 +64,17 @@ public struct OpenClawStorageStatusPayload: Codable, Sendable, Equatable {
     }
 }
 
-public struct OpenClawNetworkStatusPayload: Codable, Sendable, Equatable {
-    public var status: OpenClawNetworkPathStatus
+public struct FoxClawNetworkStatusPayload: Codable, Sendable, Equatable {
+    public var status: FoxClawNetworkPathStatus
     public var isExpensive: Bool
     public var isConstrained: Bool
-    public var interfaces: [OpenClawNetworkInterfaceType]
+    public var interfaces: [FoxClawNetworkInterfaceType]
 
     public init(
-        status: OpenClawNetworkPathStatus,
+        status: FoxClawNetworkPathStatus,
         isExpensive: Bool,
         isConstrained: Bool,
-        interfaces: [OpenClawNetworkInterfaceType])
+        interfaces: [FoxClawNetworkInterfaceType])
     {
         self.status = status
         self.isExpensive = isExpensive
@@ -83,18 +83,18 @@ public struct OpenClawNetworkStatusPayload: Codable, Sendable, Equatable {
     }
 }
 
-public struct OpenClawDeviceStatusPayload: Codable, Sendable, Equatable {
-    public var battery: OpenClawBatteryStatusPayload
-    public var thermal: OpenClawThermalStatusPayload
-    public var storage: OpenClawStorageStatusPayload
-    public var network: OpenClawNetworkStatusPayload
+public struct FoxClawDeviceStatusPayload: Codable, Sendable, Equatable {
+    public var battery: FoxClawBatteryStatusPayload
+    public var thermal: FoxClawThermalStatusPayload
+    public var storage: FoxClawStorageStatusPayload
+    public var network: FoxClawNetworkStatusPayload
     public var uptimeSeconds: Double
 
     public init(
-        battery: OpenClawBatteryStatusPayload,
-        thermal: OpenClawThermalStatusPayload,
-        storage: OpenClawStorageStatusPayload,
-        network: OpenClawNetworkStatusPayload,
+        battery: FoxClawBatteryStatusPayload,
+        thermal: FoxClawThermalStatusPayload,
+        storage: FoxClawStorageStatusPayload,
+        network: FoxClawNetworkStatusPayload,
         uptimeSeconds: Double)
     {
         self.battery = battery
@@ -105,7 +105,7 @@ public struct OpenClawDeviceStatusPayload: Codable, Sendable, Equatable {
     }
 }
 
-public struct OpenClawDeviceInfoPayload: Codable, Sendable, Equatable {
+public struct FoxClawDeviceInfoPayload: Codable, Sendable, Equatable {
     public var deviceName: String
     public var modelIdentifier: String
     public var systemName: String

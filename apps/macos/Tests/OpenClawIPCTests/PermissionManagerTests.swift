@@ -1,7 +1,7 @@
 import CoreLocation
-import OpenClawIPC
+import FoxClawIPC
 import Testing
-@testable import OpenClaw
+@testable import FoxClaw
 
 @Suite(.serialized)
 @MainActor

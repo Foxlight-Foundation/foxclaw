@@ -292,7 +292,7 @@ final class AppState {
             UserDefaults.standard.set(IconOverrideSelection.system.rawValue, forKey: iconOverrideKey)
         }
 
-        let configRoot = OpenClawConfigFile.loadDict()
+        let configRoot = FoxClawConfigFile.loadDict()
         let configRemoteUrl = GatewayRemoteConfig.resolveUrlString(root: configRoot)
         let configRemoteToken = GatewayRemoteConfig.resolveTokenValue(root: configRoot)
         let configRemoteTransport = GatewayRemoteConfig.resolveTransport(root: configRoot)
@@ -458,7 +458,7 @@ final class AppState {
     }
 
     private func startConfigWatcher() {
-        let configUrl = OpenClawConfigFile.url()
+        let configUrl = FoxClawConfigFile.url()
         self.configWatcher = ConfigFileWatcher(url: configUrl) { [weak self] in
             Task { @MainActor in
                 self?.applyConfigFromDisk()
@@ -468,7 +468,7 @@ final class AppState {
     }
 
     private func applyConfigFromDisk() {
-        let root = OpenClawConfigFile.loadDict()
+        let root = FoxClawConfigFile.loadDict()
         self.applyConfigOverrides(root)
     }
 
@@ -611,7 +611,7 @@ final class AppState {
 
         // Keep app-only connection settings local to avoid overwriting remote gateway config.
         let synced = Self.syncedGatewayRoot(
-            currentRoot: OpenClawConfigFile.loadDict(),
+            currentRoot: FoxClawConfigFile.loadDict(),
             connectionMode: self.connectionMode,
             remoteTransport: self.remoteTransport,
             remoteTarget: self.remoteTarget,
@@ -620,7 +620,7 @@ final class AppState {
             remoteToken: self.remoteToken,
             remoteTokenDirty: self.remoteTokenDirty)
         guard synced.changed else { return }
-        OpenClawConfigFile.saveDict(synced.root)
+        FoxClawConfigFile.saveDict(synced.root)
     }
 
     func triggerVoiceEars(ttl: TimeInterval? = 5) {
@@ -764,7 +764,7 @@ extension AppState {
         state.remoteUrl = "wss://gateway.example.ts.net"
         state.remoteToken = "example-token"
         state.remoteIdentity = "~/.ssh/id_ed25519"
-        state.remoteProjectRoot = "~/Projects/openclaw"
+        state.remoteProjectRoot = "~/Projects/foxclaw"
         state.remoteCliPath = ""
         return state
     }

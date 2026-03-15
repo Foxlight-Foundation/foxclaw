@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import OpenClaw
+@testable import FoxClaw
 
 struct CronModelsTests {
     private func makeCronJob(

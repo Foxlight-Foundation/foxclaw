@@ -1,4 +1,4 @@
-import OpenClawProtocol
+import FoxClawProtocol
 
-public typealias AnyCodable = OpenClawProtocol.AnyCodable
+public typealias AnyCodable = FoxClawProtocol.AnyCodable
 

@@ -1,6 +1,6 @@
 import Foundation
-import OpenClawKit
+import FoxClawKit
 
-// Prefer the OpenClawKit wrapper to keep gateway request payloads consistent.
-typealias AnyCodable = OpenClawKit.AnyCodable
-typealias InstanceIdentity = OpenClawKit.InstanceIdentity
+// Prefer the FoxClawKit wrapper to keep gateway request payloads consistent.
+typealias AnyCodable = FoxClawKit.AnyCodable
+typealias InstanceIdentity = FoxClawKit.InstanceIdentity

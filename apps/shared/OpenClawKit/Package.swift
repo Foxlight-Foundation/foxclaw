@@ -3,15 +3,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "OpenClawKit",
+    name: "FoxClawKit",
     platforms: [
         .iOS(.v18),
         .macOS(.v15),
     ],
     products: [
-        .library(name: "OpenClawProtocol", targets: ["OpenClawProtocol"]),
-        .library(name: "OpenClawKit", targets: ["OpenClawKit"]),
-        .library(name: "OpenClawChatUI", targets: ["OpenClawChatUI"]),
+        .library(name: "FoxClawProtocol", targets: ["FoxClawProtocol"]),
+        .library(name: "FoxClawKit", targets: ["FoxClawKit"]),
+        .library(name: "FoxClawChatUI", targets: ["FoxClawChatUI"]),
     ],
     dependencies: [
         .package(url: "https://github.com/steipete/ElevenLabsKit", exact: "0.1.0"),
@@ -19,18 +19,18 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "OpenClawProtocol",
-            path: "Sources/OpenClawProtocol",
+            name: "FoxClawProtocol",
+            path: "Sources/FoxClawProtocol",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .target(
-            name: "OpenClawKit",
+            name: "FoxClawKit",
             dependencies: [
-                "OpenClawProtocol",
+                "FoxClawProtocol",
                 .product(name: "ElevenLabsKit", package: "ElevenLabsKit"),
             ],
-            path: "Sources/OpenClawKit",
+            path: "Sources/FoxClawKit",
             resources: [
                 .process("Resources"),
             ],
@@ -38,22 +38,22 @@ let package = Package(
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .target(
-            name: "OpenClawChatUI",
+            name: "FoxClawChatUI",
             dependencies: [
-                "OpenClawKit",
+                "FoxClawKit",
                 .product(
                     name: "Textual",
                     package: "textual",
                     condition: .when(platforms: [.macOS, .iOS])),
             ],
-            path: "Sources/OpenClawChatUI",
+            path: "Sources/FoxClawChatUI",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .testTarget(
-            name: "OpenClawKitTests",
-            dependencies: ["OpenClawKit", "OpenClawChatUI"],
-            path: "Tests/OpenClawKitTests",
+            name: "FoxClawKitTests",
+            dependencies: ["FoxClawKit", "FoxClawChatUI"],
+            path: "Tests/FoxClawKitTests",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
                 .enableExperimentalFeature("SwiftTesting"),

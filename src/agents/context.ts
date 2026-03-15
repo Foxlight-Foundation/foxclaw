@@ -2,12 +2,12 @@
 // the agent reports a model id. This includes custom models.json entries.
 
 import { loadConfig } from "../config/config.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import { computeBackoff, type BackoffPolicy } from "../infra/backoff.js";
 import { consumeRootOptionToken, FLAG_TERMINATOR } from "../infra/cli-root-options.js";
-import { resolveOpenClawAgentDir } from "./agent-paths.js";
+import { resolveFoxClawAgentDir } from "./agent-paths.js";
 import { normalizeProviderId } from "./model-selection.js";
-import { ensureOpenClawModelsJson } from "./models-config.js";
+import { ensureFoxClawModelsJson } from "./models-config.js";
 
 type ModelEntry = { id: string; contextWindow?: number };
 type ModelRegistryLike = {
@@ -80,7 +80,7 @@ export function applyConfiguredContextWindows(params: {
 
 const MODEL_CACHE = new Map<string, number>();
 let loadPromise: Promise<void> | null = null;
-let configuredConfig: OpenClawConfig | undefined;
+let configuredConfig: FoxClawConfig | undefined;
 let configLoadFailures = 0;
 let nextConfigLoadAttemptAtMs = 0;
 
@@ -113,7 +113,7 @@ function shouldSkipEagerContextWindowWarmup(argv: string[] = process.argv): bool
   return primary === "config" && secondary === "validate";
 }
 
-function primeConfiguredContextWindows(): OpenClawConfig | undefined {
+function primeConfiguredContextWindows(): FoxClawConfig | undefined {
   if (configuredConfig) {
     return configuredConfig;
   }
@@ -151,7 +151,7 @@ function ensureContextWindowCacheLoaded(): Promise<void> {
 
   loadPromise = (async () => {
     try {
-      await ensureOpenClawModelsJson(cfg);
+      await ensureFoxClawModelsJson(cfg);
     } catch {
       // Continue with best-effort discovery/overrides.
     }
@@ -159,7 +159,7 @@ function ensureContextWindowCacheLoaded(): Promise<void> {
     try {
       const { discoverAuthStorage, discoverModels } =
         await import("./pi-model-discovery-runtime.js");
-      const agentDir = resolveOpenClawAgentDir();
+      const agentDir = resolveFoxClawAgentDir();
       const authStorage = discoverAuthStorage(agentDir);
       const modelRegistry = discoverModels(authStorage, agentDir) as unknown as ModelRegistryLike;
       const models =
@@ -200,7 +200,7 @@ if (!shouldSkipEagerContextWindowWarmup()) {
 }
 
 function resolveConfiguredModelParams(
-  cfg: OpenClawConfig | undefined,
+  cfg: FoxClawConfig | undefined,
   provider: string,
   model: string,
 ): Record<string, unknown> | undefined {
@@ -250,7 +250,7 @@ function resolveProviderModelRef(params: {
 // keys overlap with raw slash-containing model IDs (e.g. OpenRouter's
 // "google/gemini-2.5-pro" stored as a raw catalog entry).
 function resolveConfiguredProviderContextWindow(
-  cfg: OpenClawConfig | undefined,
+  cfg: FoxClawConfig | undefined,
   provider: string,
   model: string,
 ): number | undefined {
@@ -308,7 +308,7 @@ function isAnthropic1MModel(provider: string, model: string): boolean {
 }
 
 export function resolveContextTokensForModel(params: {
-  cfg?: OpenClawConfig;
+  cfg?: FoxClawConfig;
   provider?: string;
   model?: string;
   contextTokensOverride?: number;

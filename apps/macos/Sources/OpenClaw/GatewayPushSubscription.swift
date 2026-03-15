@@ -1,4 +1,4 @@
-import OpenClawKit
+import FoxClawKit
 
 enum GatewayPushSubscription {
     @MainActor

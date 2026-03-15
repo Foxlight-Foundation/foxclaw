@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../../src/config/config.js";
+import type { FoxClawConfig } from "../../../src/config/config.js";
 import {
   resolveReactionLevel,
   type ReactionLevel,
@@ -19,7 +19,7 @@ export type ResolvedSignalReactionLevel = ResolvedReactionLevel;
  * - "extensive": Agent can react liberally
  */
 export function resolveSignalReactionLevel(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   accountId?: string;
 }): ResolvedSignalReactionLevel {
   const account = resolveSignalAccount({

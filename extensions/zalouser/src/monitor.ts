@@ -7,13 +7,13 @@ import {
   clearHistoryEntriesIfEnabled,
   recordPendingHistoryEntryIfEnabled,
   resolveDmGroupAccessWithLists,
-} from "openclaw/plugin-sdk/compat";
+} from "foxclaw/plugin-sdk/compat";
 import type {
   MarkdownTableMode,
-  OpenClawConfig,
+  FoxClawConfig,
   OutboundReplyPayload,
   RuntimeEnv,
-} from "openclaw/plugin-sdk/zalouser";
+} from "foxclaw/plugin-sdk/zalouser";
 import {
   createTypingCallbacks,
   createScopedPairingAccess,
@@ -30,7 +30,7 @@ import {
   sendMediaWithLeadingCaption,
   summarizeMapping,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "openclaw/plugin-sdk/zalouser";
+} from "foxclaw/plugin-sdk/zalouser";
 import { createDeferred } from "../../shared/deferred.js";
 import {
   buildZalouserGroupCandidates,
@@ -55,7 +55,7 @@ import {
 
 export type ZalouserMonitorOptions = {
   account: ResolvedZalouserAccount;
-  config: OpenClawConfig;
+  config: FoxClawConfig;
   runtime: RuntimeEnv;
   abortSignal: AbortSignal;
   statusSink?: (patch: { lastInboundAt?: number; lastOutboundAt?: number }) => void;
@@ -130,14 +130,14 @@ function resolveInboundQueueKey(message: ZaloInboundMessage): string {
   return `direct:${senderId || threadId}`;
 }
 
-function resolveZalouserDmSessionScope(config: OpenClawConfig) {
+function resolveZalouserDmSessionScope(config: FoxClawConfig) {
   const configured = config.session?.dmScope;
   return configured === "main" || !configured ? "per-channel-peer" : configured;
 }
 
 function resolveZalouserInboundSessionKey(params: {
   core: ZalouserCoreRuntime;
-  config: OpenClawConfig;
+  config: FoxClawConfig;
   route: { agentId: string; accountId: string; sessionKey: string };
   storePath: string;
   isGroup: boolean;
@@ -243,7 +243,7 @@ async function sendZalouserDeliveryAcks(params: {
 async function processMessage(
   message: ZaloInboundMessage,
   account: ResolvedZalouserAccount,
-  config: OpenClawConfig,
+  config: FoxClawConfig,
   core: ZalouserCoreRuntime,
   runtime: RuntimeEnv,
   historyState: ZalouserGroupHistoryState,
@@ -691,7 +691,7 @@ async function deliverZalouserReply(params: {
   isGroup: boolean;
   runtime: RuntimeEnv;
   core: ZalouserCoreRuntime;
-  config: OpenClawConfig;
+  config: FoxClawConfig;
   accountId?: string;
   statusSink?: (patch: { lastInboundAt?: number; lastOutboundAt?: number }) => void;
   tableMode?: MarkdownTableMode;
@@ -955,7 +955,7 @@ export const __testing = {
   processMessage: async (params: {
     message: ZaloInboundMessage;
     account: ResolvedZalouserAccount;
-    config: OpenClawConfig;
+    config: FoxClawConfig;
     runtime: RuntimeEnv;
     historyState?: {
       historyLimit?: number;

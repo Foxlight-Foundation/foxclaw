@@ -2,7 +2,7 @@ import {
   buildAccountScopedDmSecurityPolicy,
   collectAllowlistProviderGroupPolicyWarnings,
   collectOpenGroupPolicyRouteAllowlistWarnings,
-} from "openclaw/plugin-sdk/compat";
+} from "foxclaw/plugin-sdk/compat";
 import {
   applyAccountNameToChannelSection,
   buildChannelConfigSchema,
@@ -28,7 +28,7 @@ import {
   WhatsAppConfigSchema,
   type ChannelMessageActionName,
   type ChannelPlugin,
-} from "openclaw/plugin-sdk/whatsapp";
+} from "foxclaw/plugin-sdk/whatsapp";
 // WhatsApp-specific imports from local extension code (moved from src/web/ and src/channels/plugins/)
 import {
   listWhatsAppAccountIds,

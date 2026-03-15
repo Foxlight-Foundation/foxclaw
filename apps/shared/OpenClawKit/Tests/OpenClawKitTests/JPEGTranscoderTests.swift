@@ -1,4 +1,4 @@
-import OpenClawKit
+import FoxClawKit
 import CoreGraphics
 import ImageIO
 import Testing

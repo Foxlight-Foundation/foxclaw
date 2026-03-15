@@ -70,10 +70,10 @@ import { suppressDeprecations } from "./suppress-deprecations.js";
 const CLI_NAME = resolveCliName();
 const SERVICE_REFRESH_TIMEOUT_MS = 60_000;
 const SERVICE_REFRESH_PATH_ENV_KEYS = [
-  "OPENCLAW_HOME",
-  "OPENCLAW_STATE_DIR",
+  "FOXCLAW_HOME",
+  "FOXCLAW_STATE_DIR",
   "CLAWDBOT_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
+  "FOXCLAW_CONFIG_PATH",
   "CLAWDBOT_CONFIG_PATH",
 ] as const;
 
@@ -282,7 +282,7 @@ async function tryInstallShellCompletion(opts: {
       if (!opts.skipPrompt) {
         defaultRuntime.log(
           theme.muted(
-            `Skipped. Run \`${replaceCliName(formatCliCommand("openclaw completion --install"), CLI_NAME)}\` later to enable.`,
+            `Skipped. Run \`${replaceCliName(formatCliCommand("foxclaw completion --install"), CLI_NAME)}\` later to enable.`,
           ),
         );
       }
@@ -598,7 +598,7 @@ async function maybeRestartService(params: {
       if (!params.opts.json && restarted) {
         defaultRuntime.log(theme.success("Daemon restarted successfully."));
         defaultRuntime.log("");
-        process.env.OPENCLAW_UPDATE_IN_PROGRESS = "1";
+        process.env.FOXCLAW_UPDATE_IN_PROGRESS = "1";
         try {
           const interactiveDoctor =
             Boolean(process.stdin.isTTY) && !params.opts.json && params.opts.yes !== true;
@@ -608,7 +608,7 @@ async function maybeRestartService(params: {
         } catch (err) {
           defaultRuntime.log(theme.warn(`Doctor failed: ${String(err)}`));
         } finally {
-          delete process.env.OPENCLAW_UPDATE_IN_PROGRESS;
+          delete process.env.FOXCLAW_UPDATE_IN_PROGRESS;
         }
       }
 
@@ -643,7 +643,7 @@ async function maybeRestartService(params: {
           }
           defaultRuntime.log(
             theme.muted(
-              `Run \`${replaceCliName(formatCliCommand("openclaw gateway status --deep"), CLI_NAME)}\` for details.`,
+              `Run \`${replaceCliName(formatCliCommand("foxclaw gateway status --deep"), CLI_NAME)}\` for details.`,
             ),
           );
         }
@@ -654,7 +654,7 @@ async function maybeRestartService(params: {
         defaultRuntime.log(theme.warn(`Daemon restart failed: ${String(err)}`));
         defaultRuntime.log(
           theme.muted(
-            `You may need to restart the service manually: ${replaceCliName(formatCliCommand("openclaw gateway restart"), CLI_NAME)}`,
+            `You may need to restart the service manually: ${replaceCliName(formatCliCommand("foxclaw gateway restart"), CLI_NAME)}`,
           ),
         );
       }
@@ -667,13 +667,13 @@ async function maybeRestartService(params: {
     if (params.result.mode === "npm" || params.result.mode === "pnpm") {
       defaultRuntime.log(
         theme.muted(
-          `Tip: Run \`${replaceCliName(formatCliCommand("openclaw doctor"), CLI_NAME)}\`, then \`${replaceCliName(formatCliCommand("openclaw gateway restart"), CLI_NAME)}\` to apply updates to a running gateway.`,
+          `Tip: Run \`${replaceCliName(formatCliCommand("foxclaw doctor"), CLI_NAME)}\`, then \`${replaceCliName(formatCliCommand("foxclaw gateway restart"), CLI_NAME)}\` to apply updates to a running gateway.`,
         ),
       );
     } else {
       defaultRuntime.log(
         theme.muted(
-          `Tip: Run \`${replaceCliName(formatCliCommand("openclaw gateway restart"), CLI_NAME)}\` to apply updates to a running gateway.`,
+          `Tip: Run \`${replaceCliName(formatCliCommand("foxclaw gateway restart"), CLI_NAME)}\` to apply updates to a running gateway.`,
         ),
       );
     }
@@ -772,7 +772,7 @@ export async function updateCommand(opts: UpdateCommandOptions): Promise<void> {
     } else if (updateInstallKind === "git") {
       actions.push(`Run git update flow on channel ${channel} (fetch/rebase/build/doctor)`);
     } else {
-      actions.push(`Run global package manager update with spec openclaw@${tag}`);
+      actions.push(`Run global package manager update with spec foxclaw@${tag}`);
     }
     actions.push("Run plugin update sync after core update");
     actions.push("Refresh shell completion cache (if needed)");
@@ -864,7 +864,7 @@ export async function updateCommand(opts: UpdateCommandOptions): Promise<void> {
 
   const showProgress = !opts.json && process.stdout.isTTY;
   if (!opts.json) {
-    defaultRuntime.log(theme.heading("Updating OpenClaw..."));
+    defaultRuntime.log(theme.heading("Updating FoxClaw..."));
     defaultRuntime.log("");
   }
 
@@ -932,12 +932,12 @@ export async function updateCommand(opts: UpdateCommandOptions): Promise<void> {
     if (result.reason === "not-git-install") {
       defaultRuntime.log(
         theme.warn(
-          `Skipped: this OpenClaw install isn't a git checkout, and the package manager couldn't be detected. Update via your package manager, then run \`${replaceCliName(formatCliCommand("openclaw doctor"), CLI_NAME)}\` and \`${replaceCliName(formatCliCommand("openclaw gateway restart"), CLI_NAME)}\`.`,
+          `Skipped: this FoxClaw install isn't a git checkout, and the package manager couldn't be detected. Update via your package manager, then run \`${replaceCliName(formatCliCommand("foxclaw doctor"), CLI_NAME)}\` and \`${replaceCliName(formatCliCommand("foxclaw gateway restart"), CLI_NAME)}\`.`,
         ),
       );
       defaultRuntime.log(
         theme.muted(
-          `Examples: \`${replaceCliName("npm i -g openclaw@latest", CLI_NAME)}\` or \`${replaceCliName("pnpm add -g openclaw@latest", CLI_NAME)}\``,
+          `Examples: \`${replaceCliName("npm i -g foxclaw@latest", CLI_NAME)}\` or \`${replaceCliName("pnpm add -g foxclaw@latest", CLI_NAME)}\``,
         ),
       );
     }

@@ -1,6 +1,6 @@
-import OpenClawKit
+import FoxClawKit
 import Testing
-@testable import OpenClaw
+@testable import FoxClaw
 
 struct DeepLinkAgentPolicyTests {
     @Test func `validate message for handle rejects too long when unkeyed`() {

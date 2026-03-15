@@ -220,7 +220,7 @@ struct ExecApprovalsResolvedDefaults {
 }
 
 enum ExecApprovalsStore {
-    private static let logger = Logger(subsystem: "ai.openclaw", category: "exec-approvals")
+    private static let logger = Logger(subsystem: "ai.foxclaw", category: "exec-approvals")
     private static let defaultAgentId = "main"
     private static let defaultSecurity: ExecSecurity = .deny
     private static let defaultAsk: ExecAsk = .onMiss
@@ -229,11 +229,11 @@ enum ExecApprovalsStore {
     private static let secureStateDirPermissions = 0o700
 
     static func fileURL() -> URL {
-        OpenClawPaths.stateDirURL.appendingPathComponent("exec-approvals.json")
+        FoxClawPaths.stateDirURL.appendingPathComponent("exec-approvals.json")
     }
 
     static func socketPath() -> String {
-        OpenClawPaths.stateDirURL.appendingPathComponent("exec-approvals.sock").path
+        FoxClawPaths.stateDirURL.appendingPathComponent("exec-approvals.sock").path
     }
 
     static func normalizeIncoming(_ file: ExecApprovalsFile) -> ExecApprovalsFile {
@@ -539,7 +539,7 @@ enum ExecApprovalsStore {
     }
 
     private static func ensureSecureStateDirectory() {
-        let url = OpenClawPaths.stateDirURL
+        let url = FoxClawPaths.stateDirURL
         do {
             try FileManager().createDirectory(at: url, withIntermediateDirectories: true)
             try FileManager().setAttributes(

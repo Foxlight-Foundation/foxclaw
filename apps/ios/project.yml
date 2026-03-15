@@ -1,6 +1,6 @@
-name: OpenClaw
+name: FoxClaw
 options:
-  bundleIdPrefix: ai.openclaw
+  bundleIdPrefix: ai.foxclaw
   deploymentTarget:
     iOS: "18.0"
   xcodeVersion: "16.0"
@@ -11,32 +11,32 @@ settings:
     ENABLE_APP_INTENTS_METADATA_GENERATION: NO
 
 packages:
-  OpenClawKit:
-    path: ../shared/OpenClawKit
+  FoxClawKit:
+    path: ../shared/FoxClawKit
   Swabble:
     path: ../../Swabble
 
 schemes:
-  OpenClaw:
+  FoxClaw:
     shared: true
     build:
       targets:
-        OpenClaw: all
+        FoxClaw: all
     test:
       targets:
-        - OpenClawTests
-        - OpenClawLogicTests
-  OpenClawLogicTests:
+        - FoxClawTests
+        - FoxClawLogicTests
+  FoxClawLogicTests:
     shared: true
     build:
       targets:
-        OpenClawLogicTests: all
+        FoxClawLogicTests: all
     test:
       targets:
-        - OpenClawLogicTests
+        - FoxClawLogicTests
 
 targets:
-  OpenClaw:
+  FoxClaw:
     type: application
     platform: iOS
     configFiles:
@@ -45,16 +45,16 @@ targets:
     sources:
       - path: Sources
     dependencies:
-      - target: OpenClawShareExtension
+      - target: FoxClawShareExtension
         embed: true
-      - target: OpenClawActivityWidget
+      - target: FoxClawActivityWidget
         embed: true
-      - target: OpenClawWatchApp
-      - package: OpenClawKit
-      - package: OpenClawKit
-        product: OpenClawChatUI
-      - package: OpenClawKit
-        product: OpenClawProtocol
+      - target: FoxClawWatchApp
+      - package: FoxClawKit
+      - package: FoxClawKit
+        product: FoxClawChatUI
+      - package: FoxClawKit
+        product: FoxClawProtocol
       - package: Swabble
         product: SwabbleKit
       - sdk: AppIntents.framework
@@ -87,11 +87,11 @@ targets:
     settings:
       base:
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_ENTITLEMENTS: Sources/OpenClaw.entitlements
-        CODE_SIGN_STYLE: "$(OPENCLAW_CODE_SIGN_STYLE)"
-        DEVELOPMENT_TEAM: "$(OPENCLAW_DEVELOPMENT_TEAM)"
-        PRODUCT_BUNDLE_IDENTIFIER: "$(OPENCLAW_APP_BUNDLE_ID)"
-        PROVISIONING_PROFILE_SPECIFIER: "$(OPENCLAW_APP_PROFILE)"
+        CODE_SIGN_ENTITLEMENTS: Sources/FoxClaw.entitlements
+        CODE_SIGN_STYLE: "$(FOXCLAW_CODE_SIGN_STYLE)"
+        DEVELOPMENT_TEAM: "$(FOXCLAW_DEVELOPMENT_TEAM)"
+        PRODUCT_BUNDLE_IDENTIFIER: "$(FOXCLAW_APP_BUNDLE_ID)"
+        PROVISIONING_PROFILE_SPECIFIER: "$(FOXCLAW_APP_PROFILE)"
         TARGETED_DEVICE_FAMILY: "1"
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
@@ -100,26 +100,26 @@ targets:
         ENABLE_APP_INTENTS_METADATA_GENERATION: NO
       configs:
         Debug:
-          OPENCLAW_PUSH_TRANSPORT: direct
-          OPENCLAW_PUSH_DISTRIBUTION: local
-          OPENCLAW_PUSH_RELAY_BASE_URL: ""
-          OPENCLAW_PUSH_APNS_ENVIRONMENT: sandbox
+          FOXCLAW_PUSH_TRANSPORT: direct
+          FOXCLAW_PUSH_DISTRIBUTION: local
+          FOXCLAW_PUSH_RELAY_BASE_URL: ""
+          FOXCLAW_PUSH_APNS_ENVIRONMENT: sandbox
         Release:
-          OPENCLAW_PUSH_TRANSPORT: direct
-          OPENCLAW_PUSH_DISTRIBUTION: local
-          OPENCLAW_PUSH_RELAY_BASE_URL: ""
-          OPENCLAW_PUSH_APNS_ENVIRONMENT: production
+          FOXCLAW_PUSH_TRANSPORT: direct
+          FOXCLAW_PUSH_DISTRIBUTION: local
+          FOXCLAW_PUSH_RELAY_BASE_URL: ""
+          FOXCLAW_PUSH_APNS_ENVIRONMENT: production
     info:
       path: Sources/Info.plist
       properties:
-        CFBundleDisplayName: OpenClaw
+        CFBundleDisplayName: FoxClaw
         CFBundleIconName: AppIcon
         CFBundleURLTypes:
-          - CFBundleURLName: ai.openclaw.ios
+          - CFBundleURLName: ai.foxclaw.ios
             CFBundleURLSchemes:
-              - openclaw
-        CFBundleShortVersionString: "$(OPENCLAW_MARKETING_VERSION)"
-        CFBundleVersion: "$(OPENCLAW_BUILD_VERSION)"
+              - foxclaw
+        CFBundleShortVersionString: "$(FOXCLAW_MARKETING_VERSION)"
+        CFBundleVersion: "$(FOXCLAW_BUILD_VERSION)"
         UILaunchScreen: {}
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
@@ -127,25 +127,25 @@ targets:
           - audio
           - remote-notification
         BGTaskSchedulerPermittedIdentifiers:
-          - ai.openclaw.ios.bgrefresh
-        NSLocalNetworkUsageDescription: OpenClaw discovers and connects to your OpenClaw gateway on the local network.
+          - ai.foxclaw.ios.bgrefresh
+        NSLocalNetworkUsageDescription: FoxClaw discovers and connects to your FoxClaw gateway on the local network.
         NSAppTransportSecurity:
           NSAllowsArbitraryLoadsInWebContent: true
         NSBonjourServices:
-          - _openclaw-gw._tcp
-        NSCameraUsageDescription: OpenClaw can capture photos or short video clips when requested via the gateway.
-        NSLocationWhenInUseUsageDescription: OpenClaw uses your location when you allow location sharing.
-        NSLocationAlwaysAndWhenInUseUsageDescription: OpenClaw can share your location in the background when you enable Always.
-        NSMicrophoneUsageDescription: OpenClaw needs microphone access for voice wake.
-        NSMotionUsageDescription: OpenClaw may use motion data to support device-aware interactions and automations.
-        NSPhotoLibraryUsageDescription: OpenClaw needs photo library access when you choose existing photos to share with your assistant.
-        NSSpeechRecognitionUsageDescription: OpenClaw uses on-device speech recognition for voice wake.
+          - _foxclaw-gw._tcp
+        NSCameraUsageDescription: FoxClaw can capture photos or short video clips when requested via the gateway.
+        NSLocationWhenInUseUsageDescription: FoxClaw uses your location when you allow location sharing.
+        NSLocationAlwaysAndWhenInUseUsageDescription: FoxClaw can share your location in the background when you enable Always.
+        NSMicrophoneUsageDescription: FoxClaw needs microphone access for voice wake.
+        NSMotionUsageDescription: FoxClaw may use motion data to support device-aware interactions and automations.
+        NSPhotoLibraryUsageDescription: FoxClaw needs photo library access when you choose existing photos to share with your assistant.
+        NSSpeechRecognitionUsageDescription: FoxClaw uses on-device speech recognition for voice wake.
         NSSupportsLiveActivities: true
         ITSAppUsesNonExemptEncryption: false
-        OpenClawPushTransport: "$(OPENCLAW_PUSH_TRANSPORT)"
-        OpenClawPushDistribution: "$(OPENCLAW_PUSH_DISTRIBUTION)"
-        OpenClawPushRelayBaseURL: "$(OPENCLAW_PUSH_RELAY_BASE_URL)"
-        OpenClawPushAPNsEnvironment: "$(OPENCLAW_PUSH_APNS_ENVIRONMENT)"
+        FoxClawPushTransport: "$(FOXCLAW_PUSH_TRANSPORT)"
+        FoxClawPushDistribution: "$(FOXCLAW_PUSH_DISTRIBUTION)"
+        FoxClawPushRelayBaseURL: "$(FOXCLAW_PUSH_RELAY_BASE_URL)"
+        FoxClawPushAPNsEnvironment: "$(FOXCLAW_PUSH_APNS_ENVIRONMENT)"
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
           - UIInterfaceOrientationPortraitUpsideDown
@@ -157,7 +157,7 @@ targets:
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
 
-  OpenClawShareExtension:
+  FoxClawShareExtension:
     type: app-extension
     platform: iOS
     configFiles:
@@ -166,25 +166,25 @@ targets:
     sources:
       - path: ShareExtension
     dependencies:
-      - package: OpenClawKit
+      - package: FoxClawKit
       - sdk: AppIntents.framework
     settings:
       base:
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_STYLE: "$(OPENCLAW_CODE_SIGN_STYLE)"
-        DEVELOPMENT_TEAM: "$(OPENCLAW_DEVELOPMENT_TEAM)"
+        CODE_SIGN_STYLE: "$(FOXCLAW_CODE_SIGN_STYLE)"
+        DEVELOPMENT_TEAM: "$(FOXCLAW_DEVELOPMENT_TEAM)"
         ENABLE_APPINTENTS_METADATA: NO
         ENABLE_APP_INTENTS_METADATA_GENERATION: NO
-        PRODUCT_BUNDLE_IDENTIFIER: "$(OPENCLAW_SHARE_BUNDLE_ID)"
-        PROVISIONING_PROFILE_SPECIFIER: "$(OPENCLAW_SHARE_PROFILE)"
+        PRODUCT_BUNDLE_IDENTIFIER: "$(FOXCLAW_SHARE_BUNDLE_ID)"
+        PROVISIONING_PROFILE_SPECIFIER: "$(FOXCLAW_SHARE_PROFILE)"
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
     info:
       path: ShareExtension/Info.plist
       properties:
-        CFBundleDisplayName: OpenClaw Share
-        CFBundleShortVersionString: "$(OPENCLAW_MARKETING_VERSION)"
-        CFBundleVersion: "$(OPENCLAW_BUILD_VERSION)"
+        CFBundleDisplayName: FoxClaw Share
+        CFBundleShortVersionString: "$(FOXCLAW_MARKETING_VERSION)"
+        CFBundleVersion: "$(FOXCLAW_BUILD_VERSION)"
         NSExtension:
           NSExtensionPointIdentifier: com.apple.share-services
           NSExtensionPrincipalClass: "$(PRODUCT_MODULE_NAME).ShareViewController"
@@ -195,7 +195,7 @@ targets:
               NSExtensionActivationSupportsImageWithMaxCount: 10
               NSExtensionActivationSupportsMovieWithMaxCount: 1
 
-  OpenClawActivityWidget:
+  FoxClawActivityWidget:
     type: app-extension
     platform: iOS
     configFiles:
@@ -203,37 +203,37 @@ targets:
       Release: Signing.xcconfig
     sources:
       - path: ActivityWidget
-      - path: Sources/LiveActivity/OpenClawActivityAttributes.swift
+      - path: Sources/LiveActivity/FoxClawActivityAttributes.swift
     dependencies:
       - sdk: WidgetKit.framework
       - sdk: ActivityKit.framework
     settings:
       base:
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_STYLE: "$(OPENCLAW_CODE_SIGN_STYLE)"
-        DEVELOPMENT_TEAM: "$(OPENCLAW_DEVELOPMENT_TEAM)"
-        PRODUCT_BUNDLE_IDENTIFIER: "$(OPENCLAW_ACTIVITY_WIDGET_BUNDLE_ID)"
+        CODE_SIGN_STYLE: "$(FOXCLAW_CODE_SIGN_STYLE)"
+        DEVELOPMENT_TEAM: "$(FOXCLAW_DEVELOPMENT_TEAM)"
+        PRODUCT_BUNDLE_IDENTIFIER: "$(FOXCLAW_ACTIVITY_WIDGET_BUNDLE_ID)"
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
         SUPPORTS_LIVE_ACTIVITIES: YES
     info:
       path: ActivityWidget/Info.plist
       properties:
-        CFBundleDisplayName: OpenClaw Activity
-        CFBundleShortVersionString: "$(OPENCLAW_MARKETING_VERSION)"
-        CFBundleVersion: "$(OPENCLAW_BUILD_VERSION)"
+        CFBundleDisplayName: FoxClaw Activity
+        CFBundleShortVersionString: "$(FOXCLAW_MARKETING_VERSION)"
+        CFBundleVersion: "$(FOXCLAW_BUILD_VERSION)"
         NSSupportsLiveActivities: true
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
 
-  OpenClawWatchApp:
+  FoxClawWatchApp:
     type: application.watchapp2
     platform: watchOS
     deploymentTarget: "11.0"
     sources:
       - path: WatchApp
     dependencies:
-      - target: OpenClawWatchExtension
+      - target: FoxClawWatchExtension
     configFiles:
       Debug: Config/Signing.xcconfig
       Release: Config/Signing.xcconfig
@@ -242,17 +242,17 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ENABLE_APPINTENTS_METADATA: NO
         ENABLE_APP_INTENTS_METADATA_GENERATION: NO
-        PRODUCT_BUNDLE_IDENTIFIER: "$(OPENCLAW_WATCH_APP_BUNDLE_ID)"
+        PRODUCT_BUNDLE_IDENTIFIER: "$(FOXCLAW_WATCH_APP_BUNDLE_ID)"
     info:
       path: WatchApp/Info.plist
       properties:
-        CFBundleDisplayName: OpenClaw
-        CFBundleShortVersionString: "$(OPENCLAW_MARKETING_VERSION)"
-        CFBundleVersion: "$(OPENCLAW_BUILD_VERSION)"
-        WKCompanionAppBundleIdentifier: "$(OPENCLAW_APP_BUNDLE_ID)"
+        CFBundleDisplayName: FoxClaw
+        CFBundleShortVersionString: "$(FOXCLAW_MARKETING_VERSION)"
+        CFBundleVersion: "$(FOXCLAW_BUILD_VERSION)"
+        WKCompanionAppBundleIdentifier: "$(FOXCLAW_APP_BUNDLE_ID)"
         WKWatchKitApp: true
 
-  OpenClawWatchExtension:
+  FoxClawWatchExtension:
     type: watchkit2-extension
     platform: watchOS
     deploymentTarget: "11.0"
@@ -267,19 +267,19 @@ targets:
       Release: Config/Signing.xcconfig
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: "$(OPENCLAW_WATCH_EXTENSION_BUNDLE_ID)"
+        PRODUCT_BUNDLE_IDENTIFIER: "$(FOXCLAW_WATCH_EXTENSION_BUNDLE_ID)"
     info:
       path: WatchExtension/Info.plist
       properties:
-        CFBundleDisplayName: OpenClaw
-        CFBundleShortVersionString: "$(OPENCLAW_MARKETING_VERSION)"
-        CFBundleVersion: "$(OPENCLAW_BUILD_VERSION)"
+        CFBundleDisplayName: FoxClaw
+        CFBundleShortVersionString: "$(FOXCLAW_MARKETING_VERSION)"
+        CFBundleVersion: "$(FOXCLAW_BUILD_VERSION)"
         NSExtension:
           NSExtensionAttributes:
-            WKAppBundleIdentifier: "$(OPENCLAW_WATCH_APP_BUNDLE_ID)"
+            WKAppBundleIdentifier: "$(FOXCLAW_WATCH_APP_BUNDLE_ID)"
           NSExtensionPointIdentifier: com.apple.watchkit
 
-  OpenClawTests:
+  FoxClawTests:
     type: bundle.unit-test
     platform: iOS
     configFiles:
@@ -290,29 +290,29 @@ targets:
         excludes:
           - Logic
     dependencies:
-      - target: OpenClaw
+      - target: FoxClaw
       - package: Swabble
         product: SwabbleKit
       - sdk: AppIntents.framework
     settings:
       base:
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_STYLE: "$(OPENCLAW_CODE_SIGN_STYLE)"
-        DEVELOPMENT_TEAM: "$(OPENCLAW_DEVELOPMENT_TEAM)"
-        PRODUCT_BUNDLE_IDENTIFIER: ai.openclaw.ios.tests
+        CODE_SIGN_STYLE: "$(FOXCLAW_CODE_SIGN_STYLE)"
+        DEVELOPMENT_TEAM: "$(FOXCLAW_DEVELOPMENT_TEAM)"
+        PRODUCT_BUNDLE_IDENTIFIER: ai.foxclaw.ios.tests
         ENABLE_APP_INTENTS_METADATA_GENERATION: NO
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
-        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/OpenClaw.app/OpenClaw"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/FoxClaw.app/FoxClaw"
         BUNDLE_LOADER: "$(TEST_HOST)"
     info:
       path: Tests/Info.plist
       properties:
-        CFBundleDisplayName: OpenClawTests
-        CFBundleShortVersionString: "$(OPENCLAW_MARKETING_VERSION)"
-        CFBundleVersion: "$(OPENCLAW_BUILD_VERSION)"
+        CFBundleDisplayName: FoxClawTests
+        CFBundleShortVersionString: "$(FOXCLAW_MARKETING_VERSION)"
+        CFBundleVersion: "$(FOXCLAW_BUILD_VERSION)"
 
-  OpenClawLogicTests:
+  FoxClawLogicTests:
     type: bundle.unit-test
     platform: iOS
     configFiles:
@@ -321,19 +321,19 @@ targets:
     sources:
       - path: Tests/Logic
     dependencies:
-      - package: OpenClawKit
+      - package: FoxClawKit
     settings:
       base:
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_STYLE: "$(OPENCLAW_CODE_SIGN_STYLE)"
-        DEVELOPMENT_TEAM: "$(OPENCLAW_DEVELOPMENT_TEAM)"
-        PRODUCT_BUNDLE_IDENTIFIER: ai.openclaw.ios.logic-tests
+        CODE_SIGN_STYLE: "$(FOXCLAW_CODE_SIGN_STYLE)"
+        DEVELOPMENT_TEAM: "$(FOXCLAW_DEVELOPMENT_TEAM)"
+        PRODUCT_BUNDLE_IDENTIFIER: ai.foxclaw.ios.logic-tests
         ENABLE_APP_INTENTS_METADATA_GENERATION: NO
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
     info:
       path: Tests/Info.plist
       properties:
-        CFBundleDisplayName: OpenClawLogicTests
-        CFBundleShortVersionString: "$(OPENCLAW_MARKETING_VERSION)"
-        CFBundleVersion: "$(OPENCLAW_BUILD_VERSION)"
+        CFBundleDisplayName: FoxClawLogicTests
+        CFBundleShortVersionString: "$(FOXCLAW_MARKETING_VERSION)"
+        CFBundleVersion: "$(FOXCLAW_BUILD_VERSION)"

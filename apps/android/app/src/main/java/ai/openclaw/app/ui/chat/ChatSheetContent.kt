@@ -1,4 +1,4 @@
-package ai.openclaw.app.ui.chat
+package ai.foxclaw.app.ui.chat
 
 import android.content.ContentResolver
 import android.net.Uri
@@ -32,18 +32,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ai.openclaw.app.MainViewModel
-import ai.openclaw.app.chat.ChatSessionEntry
-import ai.openclaw.app.chat.OutgoingAttachment
-import ai.openclaw.app.ui.mobileAccent
-import ai.openclaw.app.ui.mobileBorder
-import ai.openclaw.app.ui.mobileBorderStrong
-import ai.openclaw.app.ui.mobileCallout
-import ai.openclaw.app.ui.mobileCaption1
-import ai.openclaw.app.ui.mobileCaption2
-import ai.openclaw.app.ui.mobileDanger
-import ai.openclaw.app.ui.mobileText
-import ai.openclaw.app.ui.mobileTextSecondary
+import ai.foxclaw.app.MainViewModel
+import ai.foxclaw.app.chat.ChatSessionEntry
+import ai.foxclaw.app.chat.OutgoingAttachment
+import ai.foxclaw.app.ui.mobileAccent
+import ai.foxclaw.app.ui.mobileBorder
+import ai.foxclaw.app.ui.mobileBorderStrong
+import ai.foxclaw.app.ui.mobileCallout
+import ai.foxclaw.app.ui.mobileCaption1
+import ai.foxclaw.app.ui.mobileCaption2
+import ai.foxclaw.app.ui.mobileDanger
+import ai.foxclaw.app.ui.mobileText
+import ai.foxclaw.app.ui.mobileTextSecondary
 import java.io.ByteArrayOutputStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

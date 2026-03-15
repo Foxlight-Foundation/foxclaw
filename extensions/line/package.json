@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/line",
+  "name": "@foxclaw/line",
   "version": "2026.3.14",
   "private": true,
-  "description": "OpenClaw LINE channel plugin",
+  "description": "FoxClaw LINE channel plugin",
   "type": "module",
-  "openclaw": {
+  "foxclaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -19,7 +19,7 @@
       "quickstartAllowFrom": true
     },
     "install": {
-      "npmSpec": "@openclaw/line",
+      "npmSpec": "@foxclaw/line",
       "localPath": "extensions/line",
       "defaultChoice": "npm"
     }

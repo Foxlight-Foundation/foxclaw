@@ -1,6 +1,6 @@
 import Foundation
 
-public struct OpenClawChatModelChoice: Identifiable, Codable, Sendable, Hashable {
+public struct FoxClawChatModelChoice: Identifiable, Codable, Sendable, Hashable {
     public var id: String { self.selectionID }
 
     public let modelID: String
@@ -31,7 +31,7 @@ public struct OpenClawChatModelChoice: Identifiable, Codable, Sendable, Hashable
     }
 }
 
-public struct OpenClawChatSessionsDefaults: Codable, Sendable {
+public struct FoxClawChatSessionsDefaults: Codable, Sendable {
     public let model: String?
     public let contextTokens: Int?
     public let mainSessionKey: String?
@@ -43,7 +43,7 @@ public struct OpenClawChatSessionsDefaults: Codable, Sendable {
     }
 }
 
-public struct OpenClawChatSessionEntry: Codable, Identifiable, Sendable, Hashable {
+public struct FoxClawChatSessionEntry: Codable, Identifiable, Sendable, Hashable {
     public var id: String { self.key }
 
     public let key: String
@@ -70,19 +70,19 @@ public struct OpenClawChatSessionEntry: Codable, Identifiable, Sendable, Hashabl
     public let contextTokens: Int?
 }
 
-public struct OpenClawChatSessionsListResponse: Codable, Sendable {
+public struct FoxClawChatSessionsListResponse: Codable, Sendable {
     public let ts: Double?
     public let path: String?
     public let count: Int?
-    public let defaults: OpenClawChatSessionsDefaults?
-    public let sessions: [OpenClawChatSessionEntry]
+    public let defaults: FoxClawChatSessionsDefaults?
+    public let sessions: [FoxClawChatSessionEntry]
 
     public init(
         ts: Double?,
         path: String?,
         count: Int?,
-        defaults: OpenClawChatSessionsDefaults?,
-        sessions: [OpenClawChatSessionEntry])
+        defaults: FoxClawChatSessionsDefaults?,
+        sessions: [FoxClawChatSessionEntry])
     {
         self.ts = ts
         self.path = path

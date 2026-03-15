@@ -1,13 +1,13 @@
-import OpenClawChatUI
-import OpenClawProtocol
+import FoxClawChatUI
+import FoxClawProtocol
 import Testing
-@testable import OpenClaw
+@testable import FoxClaw
 
 struct MacGatewayChatTransportMappingTests {
     @Test func `snapshot maps to health`() {
         let snapshot = Snapshot(
             presence: [],
-            health: OpenClawProtocol.AnyCodable(["ok": OpenClawProtocol.AnyCodable(false)]),
+            health: FoxClawProtocol.AnyCodable(["ok": FoxClawProtocol.AnyCodable(false)]),
             stateversion: StateVersion(presence: 1, health: 1),
             uptimems: 123,
             configpath: nil,
@@ -39,7 +39,7 @@ struct MacGatewayChatTransportMappingTests {
         let frame = EventFrame(
             type: "event",
             event: "health",
-            payload: OpenClawProtocol.AnyCodable(["ok": OpenClawProtocol.AnyCodable(true)]),
+            payload: FoxClawProtocol.AnyCodable(["ok": FoxClawProtocol.AnyCodable(true)]),
             seq: 1,
             stateversion: nil)
 
@@ -62,10 +62,10 @@ struct MacGatewayChatTransportMappingTests {
     }
 
     @Test func `chat event maps to chat`() {
-        let payload = OpenClawProtocol.AnyCodable([
-            "runId": OpenClawProtocol.AnyCodable("run-1"),
-            "sessionKey": OpenClawProtocol.AnyCodable("main"),
-            "state": OpenClawProtocol.AnyCodable("final"),
+        let payload = FoxClawProtocol.AnyCodable([
+            "runId": FoxClawProtocol.AnyCodable("run-1"),
+            "sessionKey": FoxClawProtocol.AnyCodable("main"),
+            "state": FoxClawProtocol.AnyCodable("final"),
         ])
         let frame = EventFrame(type: "event", event: "chat", payload: payload, seq: 1, stateversion: nil)
         let mapped = MacGatewayChatTransport.mapPushToTransportEvent(.event(frame))
@@ -84,7 +84,7 @@ struct MacGatewayChatTransportMappingTests {
         let frame = EventFrame(
             type: "event",
             event: "unknown",
-            payload: OpenClawProtocol.AnyCodable(["a": OpenClawProtocol.AnyCodable(1)]),
+            payload: FoxClawProtocol.AnyCodable(["a": FoxClawProtocol.AnyCodable(1)]),
             seq: 1,
             stateversion: nil)
         let mapped = MacGatewayChatTransport.mapPushToTransportEvent(.event(frame))

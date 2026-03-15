@@ -1,11 +1,11 @@
 import Foundation
 
-public enum OpenClawContactsCommand: String, Codable, Sendable {
+public enum FoxClawContactsCommand: String, Codable, Sendable {
     case search = "contacts.search"
     case add = "contacts.add"
 }
 
-public struct OpenClawContactsSearchParams: Codable, Sendable, Equatable {
+public struct FoxClawContactsSearchParams: Codable, Sendable, Equatable {
     public var query: String?
     public var limit: Int?
 
@@ -15,7 +15,7 @@ public struct OpenClawContactsSearchParams: Codable, Sendable, Equatable {
     }
 }
 
-public struct OpenClawContactsAddParams: Codable, Sendable, Equatable {
+public struct FoxClawContactsAddParams: Codable, Sendable, Equatable {
     public var givenName: String?
     public var familyName: String?
     public var organizationName: String?
@@ -40,7 +40,7 @@ public struct OpenClawContactsAddParams: Codable, Sendable, Equatable {
     }
 }
 
-public struct OpenClawContactPayload: Codable, Sendable, Equatable {
+public struct FoxClawContactPayload: Codable, Sendable, Equatable {
     public var identifier: String
     public var displayName: String
     public var givenName: String
@@ -68,18 +68,18 @@ public struct OpenClawContactPayload: Codable, Sendable, Equatable {
     }
 }
 
-public struct OpenClawContactsSearchPayload: Codable, Sendable, Equatable {
-    public var contacts: [OpenClawContactPayload]
+public struct FoxClawContactsSearchPayload: Codable, Sendable, Equatable {
+    public var contacts: [FoxClawContactPayload]
 
-    public init(contacts: [OpenClawContactPayload]) {
+    public init(contacts: [FoxClawContactPayload]) {
         self.contacts = contacts
     }
 }
 
-public struct OpenClawContactsAddPayload: Codable, Sendable, Equatable {
-    public var contact: OpenClawContactPayload
+public struct FoxClawContactsAddPayload: Codable, Sendable, Equatable {
+    public var contact: FoxClawContactPayload
 
-    public init(contact: OpenClawContactPayload) {
+    public init(contact: FoxClawContactPayload) {
         self.contact = contact
     }
 }

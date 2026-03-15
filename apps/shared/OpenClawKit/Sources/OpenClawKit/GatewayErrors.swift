@@ -1,4 +1,4 @@
-import OpenClawProtocol
+import FoxClawProtocol
 import Foundation
 
 public enum GatewayConnectAuthDetailCode: String, Sendable {

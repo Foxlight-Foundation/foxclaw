@@ -1,9 +1,9 @@
 import type {
   ChannelOnboardingAdapter,
   ChannelOnboardingDmPolicy,
-  OpenClawConfig,
+  FoxClawConfig,
   WizardPrompter,
-} from "openclaw/plugin-sdk/zalouser";
+} from "foxclaw/plugin-sdk/zalouser";
 import {
   DEFAULT_ACCOUNT_ID,
   formatResolvedUnresolvedNote,
@@ -13,7 +13,7 @@ import {
   promptChannelAccessConfig,
   resolveAccountIdForConfigure,
   setTopLevelChannelDmPolicyWithAllowFrom,
-} from "openclaw/plugin-sdk/zalouser";
+} from "foxclaw/plugin-sdk/zalouser";
 import {
   listZalouserAccountIds,
   resolveDefaultZalouserAccountId,
@@ -32,29 +32,29 @@ import {
 const channel = "zalouser" as const;
 
 function setZalouserAccountScopedConfig(
-  cfg: OpenClawConfig,
+  cfg: FoxClawConfig,
   accountId: string,
   defaultPatch: Record<string, unknown>,
   accountPatch: Record<string, unknown> = defaultPatch,
-): OpenClawConfig {
+): FoxClawConfig {
   return patchScopedAccountConfig({
     cfg,
     channelKey: channel,
     accountId,
     patch: defaultPatch,
     accountPatch,
-  }) as OpenClawConfig;
+  }) as FoxClawConfig;
 }
 
 function setZalouserDmPolicy(
-  cfg: OpenClawConfig,
+  cfg: FoxClawConfig,
   dmPolicy: "pairing" | "allowlist" | "open" | "disabled",
-): OpenClawConfig {
+): FoxClawConfig {
   return setTopLevelChannelDmPolicyWithAllowFrom({
     cfg,
     channel: "zalouser",
     dmPolicy,
-  }) as OpenClawConfig;
+  }) as FoxClawConfig;
 }
 
 async function noteZalouserHelp(prompter: WizardPrompter): Promise<void> {
@@ -64,17 +64,17 @@ async function noteZalouserHelp(prompter: WizardPrompter): Promise<void> {
       "",
       "This plugin uses zca-js directly (no external CLI dependency).",
       "",
-      "Docs: https://docs.openclaw.ai/channels/zalouser",
+      "Docs: https://docs.foxclaw.ai/channels/zalouser",
     ].join("\n"),
     "Zalo Personal Setup",
   );
 }
 
 async function promptZalouserAllowFrom(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   prompter: WizardPrompter;
   accountId: string;
-}): Promise<OpenClawConfig> {
+}): Promise<FoxClawConfig> {
   const { cfg, prompter, accountId } = params;
   const resolved = resolveZalouserAccountSync({ cfg, accountId });
   const existingAllowFrom = resolved.config.allowFrom ?? [];
@@ -126,20 +126,20 @@ async function promptZalouserAllowFrom(params: {
 }
 
 function setZalouserGroupPolicy(
-  cfg: OpenClawConfig,
+  cfg: FoxClawConfig,
   accountId: string,
   groupPolicy: "open" | "allowlist" | "disabled",
-): OpenClawConfig {
+): FoxClawConfig {
   return setZalouserAccountScopedConfig(cfg, accountId, {
     groupPolicy,
   });
 }
 
 function setZalouserGroupAllowlist(
-  cfg: OpenClawConfig,
+  cfg: FoxClawConfig,
   accountId: string,
   groupKeys: string[],
-): OpenClawConfig {
+): FoxClawConfig {
   const groups = Object.fromEntries(groupKeys.map((key) => [key, { allow: true }]));
   return setZalouserAccountScopedConfig(cfg, accountId, {
     groups,

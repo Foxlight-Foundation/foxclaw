@@ -1,6 +1,6 @@
 import SwiftUI
 import Testing
-@testable import OpenClaw
+@testable import FoxClaw
 
 @Suite(.serialized)
 @MainActor

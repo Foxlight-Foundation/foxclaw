@@ -1,4 +1,4 @@
-import OpenClawProtocol
+import FoxClawProtocol
 import SwiftUI
 
 extension ChannelsSettings {

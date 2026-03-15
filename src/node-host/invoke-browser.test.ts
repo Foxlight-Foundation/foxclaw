@@ -22,7 +22,7 @@ const configMocks = vi.hoisted(() => ({
 const browserConfigMocks = vi.hoisted(() => ({
   resolveBrowserConfig: vi.fn(() => ({
     enabled: true,
-    defaultProfile: "openclaw",
+    defaultProfile: "foxclaw",
   })),
 }));
 
@@ -45,7 +45,7 @@ describe("runBrowserProxyCommand", () => {
     });
     browserConfigMocks.resolveBrowserConfig.mockReturnValue({
       enabled: true,
-      defaultProfile: "openclaw",
+      defaultProfile: "foxclaw",
     });
     controlServiceMocks.startBrowserControlServiceFromConfig.mockResolvedValue(true);
   });

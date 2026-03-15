@@ -1,4 +1,4 @@
-import OpenClawProtocol
+import FoxClawProtocol
 
 /// Server-push messages from the gateway websocket.
 ///

@@ -1,18 +1,18 @@
-package ai.openclaw.app.node
+package ai.foxclaw.app.node
 
-import ai.openclaw.app.protocol.OpenClawCalendarCommand
-import ai.openclaw.app.protocol.OpenClawCanvasA2UICommand
-import ai.openclaw.app.protocol.OpenClawCanvasCommand
-import ai.openclaw.app.protocol.OpenClawCameraCommand
-import ai.openclaw.app.protocol.OpenClawCapability
-import ai.openclaw.app.protocol.OpenClawContactsCommand
-import ai.openclaw.app.protocol.OpenClawDeviceCommand
-import ai.openclaw.app.protocol.OpenClawLocationCommand
-import ai.openclaw.app.protocol.OpenClawMotionCommand
-import ai.openclaw.app.protocol.OpenClawNotificationsCommand
-import ai.openclaw.app.protocol.OpenClawPhotosCommand
-import ai.openclaw.app.protocol.OpenClawSmsCommand
-import ai.openclaw.app.protocol.OpenClawSystemCommand
+import ai.foxclaw.app.protocol.FoxClawCalendarCommand
+import ai.foxclaw.app.protocol.FoxClawCanvasA2UICommand
+import ai.foxclaw.app.protocol.FoxClawCanvasCommand
+import ai.foxclaw.app.protocol.FoxClawCameraCommand
+import ai.foxclaw.app.protocol.FoxClawCapability
+import ai.foxclaw.app.protocol.FoxClawContactsCommand
+import ai.foxclaw.app.protocol.FoxClawDeviceCommand
+import ai.foxclaw.app.protocol.FoxClawLocationCommand
+import ai.foxclaw.app.protocol.FoxClawMotionCommand
+import ai.foxclaw.app.protocol.FoxClawNotificationsCommand
+import ai.foxclaw.app.protocol.FoxClawPhotosCommand
+import ai.foxclaw.app.protocol.FoxClawSmsCommand
+import ai.foxclaw.app.protocol.FoxClawSystemCommand
 
 data class NodeRuntimeFlags(
   val cameraEnabled: Boolean,
@@ -57,31 +57,31 @@ data class InvokeCommandSpec(
 object InvokeCommandRegistry {
   val capabilityManifest: List<NodeCapabilitySpec> =
     listOf(
-      NodeCapabilitySpec(name = OpenClawCapability.Canvas.rawValue),
-      NodeCapabilitySpec(name = OpenClawCapability.Device.rawValue),
-      NodeCapabilitySpec(name = OpenClawCapability.Notifications.rawValue),
-      NodeCapabilitySpec(name = OpenClawCapability.System.rawValue),
+      NodeCapabilitySpec(name = FoxClawCapability.Canvas.rawValue),
+      NodeCapabilitySpec(name = FoxClawCapability.Device.rawValue),
+      NodeCapabilitySpec(name = FoxClawCapability.Notifications.rawValue),
+      NodeCapabilitySpec(name = FoxClawCapability.System.rawValue),
       NodeCapabilitySpec(
-        name = OpenClawCapability.Camera.rawValue,
+        name = FoxClawCapability.Camera.rawValue,
         availability = NodeCapabilityAvailability.CameraEnabled,
       ),
       NodeCapabilitySpec(
-        name = OpenClawCapability.Sms.rawValue,
+        name = FoxClawCapability.Sms.rawValue,
         availability = NodeCapabilityAvailability.SmsAvailable,
       ),
       NodeCapabilitySpec(
-        name = OpenClawCapability.VoiceWake.rawValue,
+        name = FoxClawCapability.VoiceWake.rawValue,
         availability = NodeCapabilityAvailability.VoiceWakeEnabled,
       ),
       NodeCapabilitySpec(
-        name = OpenClawCapability.Location.rawValue,
+        name = FoxClawCapability.Location.rawValue,
         availability = NodeCapabilityAvailability.LocationEnabled,
       ),
-      NodeCapabilitySpec(name = OpenClawCapability.Photos.rawValue),
-      NodeCapabilitySpec(name = OpenClawCapability.Contacts.rawValue),
-      NodeCapabilitySpec(name = OpenClawCapability.Calendar.rawValue),
+      NodeCapabilitySpec(name = FoxClawCapability.Photos.rawValue),
+      NodeCapabilitySpec(name = FoxClawCapability.Contacts.rawValue),
+      NodeCapabilitySpec(name = FoxClawCapability.Calendar.rawValue),
       NodeCapabilitySpec(
-        name = OpenClawCapability.Motion.rawValue,
+        name = FoxClawCapability.Motion.rawValue,
         availability = NodeCapabilityAvailability.MotionAvailable,
       ),
     )
@@ -89,102 +89,102 @@ object InvokeCommandRegistry {
   val all: List<InvokeCommandSpec> =
     listOf(
       InvokeCommandSpec(
-        name = OpenClawCanvasCommand.Present.rawValue,
+        name = FoxClawCanvasCommand.Present.rawValue,
         requiresForeground = true,
       ),
       InvokeCommandSpec(
-        name = OpenClawCanvasCommand.Hide.rawValue,
+        name = FoxClawCanvasCommand.Hide.rawValue,
         requiresForeground = true,
       ),
       InvokeCommandSpec(
-        name = OpenClawCanvasCommand.Navigate.rawValue,
+        name = FoxClawCanvasCommand.Navigate.rawValue,
         requiresForeground = true,
       ),
       InvokeCommandSpec(
-        name = OpenClawCanvasCommand.Eval.rawValue,
+        name = FoxClawCanvasCommand.Eval.rawValue,
         requiresForeground = true,
       ),
       InvokeCommandSpec(
-        name = OpenClawCanvasCommand.Snapshot.rawValue,
+        name = FoxClawCanvasCommand.Snapshot.rawValue,
         requiresForeground = true,
       ),
       InvokeCommandSpec(
-        name = OpenClawCanvasA2UICommand.Push.rawValue,
+        name = FoxClawCanvasA2UICommand.Push.rawValue,
         requiresForeground = true,
       ),
       InvokeCommandSpec(
-        name = OpenClawCanvasA2UICommand.PushJSONL.rawValue,
+        name = FoxClawCanvasA2UICommand.PushJSONL.rawValue,
         requiresForeground = true,
       ),
       InvokeCommandSpec(
-        name = OpenClawCanvasA2UICommand.Reset.rawValue,
+        name = FoxClawCanvasA2UICommand.Reset.rawValue,
         requiresForeground = true,
       ),
       InvokeCommandSpec(
-        name = OpenClawSystemCommand.Notify.rawValue,
+        name = FoxClawSystemCommand.Notify.rawValue,
       ),
       InvokeCommandSpec(
-        name = OpenClawCameraCommand.List.rawValue,
-        requiresForeground = true,
-        availability = InvokeCommandAvailability.CameraEnabled,
-      ),
-      InvokeCommandSpec(
-        name = OpenClawCameraCommand.Snap.rawValue,
+        name = FoxClawCameraCommand.List.rawValue,
         requiresForeground = true,
         availability = InvokeCommandAvailability.CameraEnabled,
       ),
       InvokeCommandSpec(
-        name = OpenClawCameraCommand.Clip.rawValue,
+        name = FoxClawCameraCommand.Snap.rawValue,
         requiresForeground = true,
         availability = InvokeCommandAvailability.CameraEnabled,
       ),
       InvokeCommandSpec(
-        name = OpenClawLocationCommand.Get.rawValue,
+        name = FoxClawCameraCommand.Clip.rawValue,
+        requiresForeground = true,
+        availability = InvokeCommandAvailability.CameraEnabled,
+      ),
+      InvokeCommandSpec(
+        name = FoxClawLocationCommand.Get.rawValue,
         availability = InvokeCommandAvailability.LocationEnabled,
       ),
       InvokeCommandSpec(
-        name = OpenClawDeviceCommand.Status.rawValue,
+        name = FoxClawDeviceCommand.Status.rawValue,
       ),
       InvokeCommandSpec(
-        name = OpenClawDeviceCommand.Info.rawValue,
+        name = FoxClawDeviceCommand.Info.rawValue,
       ),
       InvokeCommandSpec(
-        name = OpenClawDeviceCommand.Permissions.rawValue,
+        name = FoxClawDeviceCommand.Permissions.rawValue,
       ),
       InvokeCommandSpec(
-        name = OpenClawDeviceCommand.Health.rawValue,
+        name = FoxClawDeviceCommand.Health.rawValue,
       ),
       InvokeCommandSpec(
-        name = OpenClawNotificationsCommand.List.rawValue,
+        name = FoxClawNotificationsCommand.List.rawValue,
       ),
       InvokeCommandSpec(
-        name = OpenClawNotificationsCommand.Actions.rawValue,
+        name = FoxClawNotificationsCommand.Actions.rawValue,
       ),
       InvokeCommandSpec(
-        name = OpenClawPhotosCommand.Latest.rawValue,
+        name = FoxClawPhotosCommand.Latest.rawValue,
       ),
       InvokeCommandSpec(
-        name = OpenClawContactsCommand.Search.rawValue,
+        name = FoxClawContactsCommand.Search.rawValue,
       ),
       InvokeCommandSpec(
-        name = OpenClawContactsCommand.Add.rawValue,
+        name = FoxClawContactsCommand.Add.rawValue,
       ),
       InvokeCommandSpec(
-        name = OpenClawCalendarCommand.Events.rawValue,
+        name = FoxClawCalendarCommand.Events.rawValue,
       ),
       InvokeCommandSpec(
-        name = OpenClawCalendarCommand.Add.rawValue,
+        name = FoxClawCalendarCommand.Add.rawValue,
       ),
       InvokeCommandSpec(
-        name = OpenClawMotionCommand.Activity.rawValue,
+        name = FoxClawMotionCommand.Activity.rawValue,
         availability = InvokeCommandAvailability.MotionActivityAvailable,
       ),
       InvokeCommandSpec(
-        name = OpenClawMotionCommand.Pedometer.rawValue,
+        name = FoxClawMotionCommand.Pedometer.rawValue,
         availability = InvokeCommandAvailability.MotionPedometerAvailable,
       ),
       InvokeCommandSpec(
-        name = OpenClawSmsCommand.Send.rawValue,
+        name = FoxClawSmsCommand.Send.rawValue,
         availability = InvokeCommandAvailability.SmsAvailable,
       ),
       InvokeCommandSpec(

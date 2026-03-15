@@ -28,7 +28,7 @@ import {
   VENICE_DEFAULT_MODEL_REF,
   VENICE_MODEL_CATALOG,
 } from "../agents/venice-models.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { FoxClawConfig } from "../config/config.js";
 import type { ModelApi } from "../config/types.models.js";
 import { KILOCODE_BASE_URL } from "../providers/kilocode-shared.js";
 import {
@@ -109,9 +109,9 @@ function getNormalizedProviderApiKey(existingProvider: Record<string, unknown> |
 }
 
 export function applyZaiProviderConfig(
-  cfg: OpenClawConfig,
+  cfg: FoxClawConfig,
   params?: { endpoint?: string; modelId?: string },
-): OpenClawConfig {
+): FoxClawConfig {
   const modelId = params?.modelId?.trim() || ZAI_DEFAULT_MODEL_ID;
   const modelRef = `zai/${modelId}`;
 
@@ -156,16 +156,16 @@ export function applyZaiProviderConfig(
 }
 
 export function applyZaiConfig(
-  cfg: OpenClawConfig,
+  cfg: FoxClawConfig,
   params?: { endpoint?: string; modelId?: string },
-): OpenClawConfig {
+): FoxClawConfig {
   const modelId = params?.modelId?.trim() || ZAI_DEFAULT_MODEL_ID;
   const modelRef = modelId === ZAI_DEFAULT_MODEL_ID ? ZAI_DEFAULT_MODEL_REF : `zai/${modelId}`;
   const next = applyZaiProviderConfig(cfg, params);
   return applyAgentDefaultModelPrimary(next, modelRef);
 }
 
-export function applyOpenrouterProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyOpenrouterProviderConfig(cfg: FoxClawConfig): FoxClawConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[OPENROUTER_DEFAULT_MODEL_REF] = {
     ...models[OPENROUTER_DEFAULT_MODEL_REF],
@@ -184,23 +184,23 @@ export function applyOpenrouterProviderConfig(cfg: OpenClawConfig): OpenClawConf
   };
 }
 
-export function applyOpenrouterConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyOpenrouterConfig(cfg: FoxClawConfig): FoxClawConfig {
   const next = applyOpenrouterProviderConfig(cfg);
   return applyAgentDefaultModelPrimary(next, OPENROUTER_DEFAULT_MODEL_REF);
 }
 
-export function applyMoonshotProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyMoonshotProviderConfig(cfg: FoxClawConfig): FoxClawConfig {
   return applyMoonshotProviderConfigWithBaseUrl(cfg, MOONSHOT_BASE_URL);
 }
 
-export function applyMoonshotProviderConfigCn(cfg: OpenClawConfig): OpenClawConfig {
+export function applyMoonshotProviderConfigCn(cfg: FoxClawConfig): FoxClawConfig {
   return applyMoonshotProviderConfigWithBaseUrl(cfg, MOONSHOT_CN_BASE_URL);
 }
 
 function applyMoonshotProviderConfigWithBaseUrl(
-  cfg: OpenClawConfig,
+  cfg: FoxClawConfig,
   baseUrl: string,
-): OpenClawConfig {
+): FoxClawConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[MOONSHOT_DEFAULT_MODEL_REF] = {
     ...models[MOONSHOT_DEFAULT_MODEL_REF],
@@ -219,17 +219,17 @@ function applyMoonshotProviderConfigWithBaseUrl(
   });
 }
 
-export function applyMoonshotConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyMoonshotConfig(cfg: FoxClawConfig): FoxClawConfig {
   const next = applyMoonshotProviderConfig(cfg);
   return applyAgentDefaultModelPrimary(next, MOONSHOT_DEFAULT_MODEL_REF);
 }
 
-export function applyMoonshotConfigCn(cfg: OpenClawConfig): OpenClawConfig {
+export function applyMoonshotConfigCn(cfg: FoxClawConfig): FoxClawConfig {
   const next = applyMoonshotProviderConfigCn(cfg);
   return applyAgentDefaultModelPrimary(next, MOONSHOT_DEFAULT_MODEL_REF);
 }
 
-export function applyKimiCodeProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyKimiCodeProviderConfig(cfg: FoxClawConfig): FoxClawConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[KIMI_CODING_MODEL_REF] = {
     ...models[KIMI_CODING_MODEL_REF],
@@ -248,12 +248,12 @@ export function applyKimiCodeProviderConfig(cfg: OpenClawConfig): OpenClawConfig
   });
 }
 
-export function applyKimiCodeConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyKimiCodeConfig(cfg: FoxClawConfig): FoxClawConfig {
   const next = applyKimiCodeProviderConfig(cfg);
   return applyAgentDefaultModelPrimary(next, KIMI_CODING_MODEL_REF);
 }
 
-export function applySyntheticProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applySyntheticProviderConfig(cfg: FoxClawConfig): FoxClawConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[SYNTHETIC_DEFAULT_MODEL_REF] = {
     ...models[SYNTHETIC_DEFAULT_MODEL_REF],
@@ -286,12 +286,12 @@ export function applySyntheticProviderConfig(cfg: OpenClawConfig): OpenClawConfi
   return applyOnboardAuthAgentModelsAndProviders(cfg, { agentModels: models, providers });
 }
 
-export function applySyntheticConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applySyntheticConfig(cfg: FoxClawConfig): FoxClawConfig {
   const next = applySyntheticProviderConfig(cfg);
   return applyAgentDefaultModelPrimary(next, SYNTHETIC_DEFAULT_MODEL_REF);
 }
 
-export function applyXiaomiProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyXiaomiProviderConfig(cfg: FoxClawConfig): FoxClawConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[XIAOMI_DEFAULT_MODEL_REF] = {
     ...models[XIAOMI_DEFAULT_MODEL_REF],
@@ -309,7 +309,7 @@ export function applyXiaomiProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
   });
 }
 
-export function applyXiaomiConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyXiaomiConfig(cfg: FoxClawConfig): FoxClawConfig {
   const next = applyXiaomiProviderConfig(cfg);
   return applyAgentDefaultModelPrimary(next, XIAOMI_DEFAULT_MODEL_REF);
 }
@@ -318,7 +318,7 @@ export function applyXiaomiConfig(cfg: OpenClawConfig): OpenClawConfig {
  * Apply Venice provider configuration without changing the default model.
  * Registers Venice models and sets up the provider, but preserves existing model selection.
  */
-export function applyVeniceProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyVeniceProviderConfig(cfg: FoxClawConfig): FoxClawConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[VENICE_DEFAULT_MODEL_REF] = {
     ...models[VENICE_DEFAULT_MODEL_REF],
@@ -339,7 +339,7 @@ export function applyVeniceProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
  * Apply Venice provider configuration AND set Venice as the default model.
  * Use this when Venice is the primary provider choice during onboarding.
  */
-export function applyVeniceConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyVeniceConfig(cfg: FoxClawConfig): FoxClawConfig {
   const next = applyVeniceProviderConfig(cfg);
   return applyAgentDefaultModelPrimary(next, VENICE_DEFAULT_MODEL_REF);
 }
@@ -348,7 +348,7 @@ export function applyVeniceConfig(cfg: OpenClawConfig): OpenClawConfig {
  * Apply Together provider configuration without changing the default model.
  * Registers Together models and sets up the provider, but preserves existing model selection.
  */
-export function applyTogetherProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyTogetherProviderConfig(cfg: FoxClawConfig): FoxClawConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[TOGETHER_DEFAULT_MODEL_REF] = {
     ...models[TOGETHER_DEFAULT_MODEL_REF],
@@ -369,7 +369,7 @@ export function applyTogetherProviderConfig(cfg: OpenClawConfig): OpenClawConfig
  * Apply Together provider configuration AND set Together as the default model.
  * Use this when Together is the primary provider choice during onboarding.
  */
-export function applyTogetherConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyTogetherConfig(cfg: FoxClawConfig): FoxClawConfig {
   const next = applyTogetherProviderConfig(cfg);
   return applyAgentDefaultModelPrimary(next, TOGETHER_DEFAULT_MODEL_REF);
 }
@@ -377,7 +377,7 @@ export function applyTogetherConfig(cfg: OpenClawConfig): OpenClawConfig {
 /**
  * Apply Hugging Face (Inference Providers) provider configuration without changing the default model.
  */
-export function applyHuggingfaceProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyHuggingfaceProviderConfig(cfg: FoxClawConfig): FoxClawConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[HUGGINGFACE_DEFAULT_MODEL_REF] = {
     ...models[HUGGINGFACE_DEFAULT_MODEL_REF],
@@ -397,12 +397,12 @@ export function applyHuggingfaceProviderConfig(cfg: OpenClawConfig): OpenClawCon
 /**
  * Apply Hugging Face provider configuration AND set Hugging Face as the default model.
  */
-export function applyHuggingfaceConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyHuggingfaceConfig(cfg: FoxClawConfig): FoxClawConfig {
   const next = applyHuggingfaceProviderConfig(cfg);
   return applyAgentDefaultModelPrimary(next, HUGGINGFACE_DEFAULT_MODEL_REF);
 }
 
-export function applyXaiProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyXaiProviderConfig(cfg: FoxClawConfig): FoxClawConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[XAI_DEFAULT_MODEL_REF] = {
     ...models[XAI_DEFAULT_MODEL_REF],
@@ -421,12 +421,12 @@ export function applyXaiProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
   });
 }
 
-export function applyXaiConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyXaiConfig(cfg: FoxClawConfig): FoxClawConfig {
   const next = applyXaiProviderConfig(cfg);
   return applyAgentDefaultModelPrimary(next, XAI_DEFAULT_MODEL_REF);
 }
 
-export function applyMistralProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyMistralProviderConfig(cfg: FoxClawConfig): FoxClawConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[MISTRAL_DEFAULT_MODEL_REF] = {
     ...models[MISTRAL_DEFAULT_MODEL_REF],
@@ -445,7 +445,7 @@ export function applyMistralProviderConfig(cfg: OpenClawConfig): OpenClawConfig 
   });
 }
 
-export function applyMistralConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyMistralConfig(cfg: FoxClawConfig): FoxClawConfig {
   const next = applyMistralProviderConfig(cfg);
   return applyAgentDefaultModelPrimary(next, MISTRAL_DEFAULT_MODEL_REF);
 }
@@ -456,7 +456,7 @@ export { KILOCODE_BASE_URL };
  * Apply Kilo Gateway provider configuration without changing the default model.
  * Registers Kilo Gateway and sets up the provider, but preserves existing model selection.
  */
-export function applyKilocodeProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyKilocodeProviderConfig(cfg: FoxClawConfig): FoxClawConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[KILOCODE_DEFAULT_MODEL_REF] = {
     ...models[KILOCODE_DEFAULT_MODEL_REF],
@@ -478,13 +478,13 @@ export function applyKilocodeProviderConfig(cfg: OpenClawConfig): OpenClawConfig
  * Apply Kilo Gateway provider configuration AND set Kilo Gateway as the default model.
  * Use this when Kilo Gateway is the primary provider choice during onboarding.
  */
-export function applyKilocodeConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyKilocodeConfig(cfg: FoxClawConfig): FoxClawConfig {
   const next = applyKilocodeProviderConfig(cfg);
   return applyAgentDefaultModelPrimary(next, KILOCODE_DEFAULT_MODEL_REF);
 }
 
 export function applyAuthProfileConfig(
-  cfg: OpenClawConfig,
+  cfg: FoxClawConfig,
   params: {
     profileId: string;
     provider: string;
@@ -492,7 +492,7 @@ export function applyAuthProfileConfig(
     email?: string;
     preferProfileFirst?: boolean;
   },
-): OpenClawConfig {
+): FoxClawConfig {
   const normalizedProvider = params.provider.toLowerCase();
   const profiles = {
     ...cfg.auth?.profiles,
@@ -555,7 +555,7 @@ export function applyAuthProfileConfig(
   };
 }
 
-export function applyQianfanProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyQianfanProviderConfig(cfg: FoxClawConfig): FoxClawConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[QIANFAN_DEFAULT_MODEL_REF] = {
     ...models[QIANFAN_DEFAULT_MODEL_REF],
@@ -586,7 +586,7 @@ export function applyQianfanProviderConfig(cfg: OpenClawConfig): OpenClawConfig 
   });
 }
 
-export function applyQianfanConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyQianfanConfig(cfg: FoxClawConfig): FoxClawConfig {
   const next = applyQianfanProviderConfig(cfg);
   return applyAgentDefaultModelPrimary(next, QIANFAN_DEFAULT_MODEL_REF);
 }
@@ -594,9 +594,9 @@ export function applyQianfanConfig(cfg: OpenClawConfig): OpenClawConfig {
 // Alibaba Cloud Model Studio Coding Plan
 
 function applyModelStudioProviderConfigWithBaseUrl(
-  cfg: OpenClawConfig,
+  cfg: FoxClawConfig,
   baseUrl: string,
-): OpenClawConfig {
+): FoxClawConfig {
   const models = { ...cfg.agents?.defaults?.models };
 
   const modelStudioModelIds = [
@@ -653,20 +653,20 @@ function applyModelStudioProviderConfigWithBaseUrl(
   return applyOnboardAuthAgentModelsAndProviders(cfg, { agentModels: models, providers });
 }
 
-export function applyModelStudioProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyModelStudioProviderConfig(cfg: FoxClawConfig): FoxClawConfig {
   return applyModelStudioProviderConfigWithBaseUrl(cfg, MODELSTUDIO_GLOBAL_BASE_URL);
 }
 
-export function applyModelStudioProviderConfigCn(cfg: OpenClawConfig): OpenClawConfig {
+export function applyModelStudioProviderConfigCn(cfg: FoxClawConfig): FoxClawConfig {
   return applyModelStudioProviderConfigWithBaseUrl(cfg, MODELSTUDIO_CN_BASE_URL);
 }
 
-export function applyModelStudioConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyModelStudioConfig(cfg: FoxClawConfig): FoxClawConfig {
   const next = applyModelStudioProviderConfig(cfg);
   return applyAgentDefaultModelPrimary(next, MODELSTUDIO_DEFAULT_MODEL_REF);
 }
 
-export function applyModelStudioConfigCn(cfg: OpenClawConfig): OpenClawConfig {
+export function applyModelStudioConfigCn(cfg: FoxClawConfig): FoxClawConfig {
   const next = applyModelStudioProviderConfigCn(cfg);
   return applyAgentDefaultModelPrimary(next, MODELSTUDIO_DEFAULT_MODEL_REF);
 }

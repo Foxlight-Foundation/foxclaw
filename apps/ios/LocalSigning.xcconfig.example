@@ -1,15 +1,15 @@
 // Copy to LocalSigning.xcconfig for personal local signing overrides.
 // This file is only an example and should stay committed.
 
-OPENCLAW_CODE_SIGN_STYLE = Automatic
-OPENCLAW_DEVELOPMENT_TEAM = YOUR_TEAM_ID
+FOXCLAW_CODE_SIGN_STYLE = Automatic
+FOXCLAW_DEVELOPMENT_TEAM = YOUR_TEAM_ID
 
-OPENCLAW_APP_BUNDLE_ID = ai.openclaw.client
-OPENCLAW_SHARE_BUNDLE_ID = ai.openclaw.client.share
-OPENCLAW_ACTIVITY_WIDGET_BUNDLE_ID = ai.openclaw.client.activitywidget
-OPENCLAW_WATCH_APP_BUNDLE_ID = ai.openclaw.client.watchkitapp
-OPENCLAW_WATCH_EXTENSION_BUNDLE_ID = ai.openclaw.client.watchkitapp.extension
+FOXCLAW_APP_BUNDLE_ID = ai.foxclaw.client
+FOXCLAW_SHARE_BUNDLE_ID = ai.foxclaw.client.share
+FOXCLAW_ACTIVITY_WIDGET_BUNDLE_ID = ai.foxclaw.client.activitywidget
+FOXCLAW_WATCH_APP_BUNDLE_ID = ai.foxclaw.client.watchkitapp
+FOXCLAW_WATCH_EXTENSION_BUNDLE_ID = ai.foxclaw.client.watchkitapp.extension
 
 // Leave empty with automatic signing.
-OPENCLAW_APP_PROFILE =
-OPENCLAW_SHARE_PROFILE =
+FOXCLAW_APP_PROFILE =
+FOXCLAW_SHARE_PROFILE =

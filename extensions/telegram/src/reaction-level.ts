@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../../src/config/config.js";
+import type { FoxClawConfig } from "../../../src/config/config.js";
 import {
   resolveReactionLevel,
   type ReactionLevel,
@@ -13,7 +13,7 @@ export type ResolvedReactionLevel = BaseResolvedReactionLevel;
  * Resolve the effective reaction level and its implications.
  */
 export function resolveTelegramReactionLevel(params: {
-  cfg: OpenClawConfig;
+  cfg: FoxClawConfig;
   accountId?: string;
 }): ResolvedReactionLevel {
   const account = resolveTelegramAccount({

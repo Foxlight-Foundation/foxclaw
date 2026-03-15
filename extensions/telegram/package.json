@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/telegram",
+  "name": "@foxclaw/telegram",
   "version": "2026.3.14",
   "private": true,
-  "description": "OpenClaw Telegram channel plugin",
+  "description": "FoxClaw Telegram channel plugin",
   "type": "module",
-  "openclaw": {
+  "foxclaw": {
     "extensions": [
       "./index.ts"
     ]

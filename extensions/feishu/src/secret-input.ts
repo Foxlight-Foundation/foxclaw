@@ -3,7 +3,7 @@ import {
   hasConfiguredSecretInput,
   normalizeResolvedSecretInputString,
   normalizeSecretInputString,
-} from "openclaw/plugin-sdk/feishu";
+} from "foxclaw/plugin-sdk/feishu";
 
 export {
   buildSecretInputSchema,

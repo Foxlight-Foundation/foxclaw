@@ -1,4 +1,4 @@
-import OpenClawDiscovery
+import FoxClawDiscovery
 
 @MainActor
 enum GatewayDiscoverySelectionSupport {
@@ -17,11 +17,11 @@ enum GatewayDiscoverySelectionSupport {
         state.remoteTarget = GatewayDiscoveryHelpers.sshTarget(for: gateway) ?? ""
 
         if let endpoint = GatewayDiscoveryHelpers.serviceEndpoint(for: gateway) {
-            OpenClawConfigFile.setRemoteGatewayUrl(
+            FoxClawConfigFile.setRemoteGatewayUrl(
                 host: endpoint.host,
                 port: endpoint.port)
         } else {
-            OpenClawConfigFile.clearRemoteGatewayUrl()
+            FoxClawConfigFile.clearRemoteGatewayUrl()
         }
     }
 

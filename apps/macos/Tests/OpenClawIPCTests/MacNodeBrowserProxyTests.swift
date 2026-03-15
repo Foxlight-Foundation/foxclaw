@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import OpenClaw
+@testable import FoxClaw
 
 struct MacNodeBrowserProxyTests {
     @Test func `request uses browser control endpoint and wraps result`() async throws {

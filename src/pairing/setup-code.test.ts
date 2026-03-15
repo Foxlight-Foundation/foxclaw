@@ -68,9 +68,9 @@ describe("pairing setup code", () => {
   }
 
   beforeEach(() => {
-    vi.stubEnv("OPENCLAW_GATEWAY_TOKEN", "");
+    vi.stubEnv("FOXCLAW_GATEWAY_TOKEN", "");
     vi.stubEnv("CLAWDBOT_GATEWAY_TOKEN", "");
-    vi.stubEnv("OPENCLAW_GATEWAY_PASSWORD", "");
+    vi.stubEnv("FOXCLAW_GATEWAY_PASSWORD", "");
     vi.stubEnv("CLAWDBOT_GATEWAY_PASSWORD", "");
   });
 
@@ -133,7 +133,7 @@ describe("pairing setup code", () => {
     expectResolvedSetupOk(resolved, { authLabel: "password" });
   });
 
-  it("uses OPENCLAW_GATEWAY_PASSWORD without resolving configured password SecretRef", async () => {
+  it("uses FOXCLAW_GATEWAY_PASSWORD without resolving configured password SecretRef", async () => {
     const resolved = await resolvePairingSetupFromConfig(
       {
         gateway: {
@@ -148,7 +148,7 @@ describe("pairing setup code", () => {
       },
       {
         env: {
-          OPENCLAW_GATEWAY_PASSWORD: "password-from-env", // pragma: allowlist secret
+          FOXCLAW_GATEWAY_PASSWORD: "password-from-env", // pragma: allowlist secret
         },
       },
     );
@@ -234,7 +234,7 @@ describe("pairing setup code", () => {
       },
       {
         env: {
-          OPENCLAW_GATEWAY_PASSWORD: "password-from-env", // pragma: allowlist secret
+          FOXCLAW_GATEWAY_PASSWORD: "password-from-env", // pragma: allowlist secret
         },
       },
     );
@@ -314,7 +314,7 @@ describe("pairing setup code", () => {
       },
       {
         env: {
-          OPENCLAW_GATEWAY_TOKEN: "new-token",
+          FOXCLAW_GATEWAY_TOKEN: "new-token",
         },
       },
     );

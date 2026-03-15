@@ -1,6 +1,6 @@
 import type { App } from "@slack/bolt";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../../../src/config/config.js";
+import type { FoxClawConfig } from "../../../../src/config/config.js";
 import type { RuntimeEnv } from "../../../../src/runtime.js";
 import type { SlackMessageEvent } from "../types.js";
 import { resolveSlackChannelConfig } from "./channel-config.js";
@@ -110,7 +110,7 @@ describe("resolveSlackChannelConfig", () => {
 });
 
 const baseParams = () => ({
-  cfg: {} as OpenClawConfig,
+  cfg: {} as FoxClawConfig,
   accountId: "default",
   botToken: "token",
   app: { client: {} } as App,
@@ -135,7 +135,7 @@ const baseParams = () => ({
   replyToMode: "off" as const,
   slashCommand: {
     enabled: false,
-    name: "openclaw",
+    name: "foxclaw",
     sessionPrefix: "slack:slash",
     ephemeral: true,
   },

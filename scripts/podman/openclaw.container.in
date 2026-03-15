@@ -1,18 +1,18 @@
-# OpenClaw gateway — Podman Quadlet (rootless)
-# Installed by setup-podman.sh into openclaw's ~/.config/containers/systemd/
-# {{OPENCLAW_HOME}} is replaced at install time.
+# FoxClaw gateway — Podman Quadlet (rootless)
+# Installed by setup-podman.sh into foxclaw's ~/.config/containers/systemd/
+# {{FOXCLAW_HOME}} is replaced at install time.
 
 [Unit]
-Description=OpenClaw gateway (rootless Podman)
+Description=FoxClaw gateway (rootless Podman)
 
 [Container]
-Image=openclaw:local
-ContainerName=openclaw
+Image=foxclaw:local
+ContainerName=foxclaw
 UserNS=keep-id
 # Keep container UID/GID aligned with the invoking user so mounted config is readable.
 User=%U:%G
-Volume={{OPENCLAW_HOME}}/.openclaw:/home/node/.openclaw:Z
-EnvironmentFile={{OPENCLAW_HOME}}/.openclaw/.env
+Volume={{FOXCLAW_HOME}}/.foxclaw:/home/node/.foxclaw:Z
+EnvironmentFile={{FOXCLAW_HOME}}/.foxclaw/.env
 Environment=HOME=/home/node
 Environment=TERM=xterm-256color
 PublishPort=18789:18789

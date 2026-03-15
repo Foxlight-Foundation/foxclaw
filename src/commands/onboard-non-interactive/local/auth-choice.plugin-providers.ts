@@ -1,7 +1,7 @@
 import { resolveDefaultAgentId, resolveAgentWorkspaceDir } from "../../../agents/agent-scope.js";
 import type { ApiKeyCredential } from "../../../agents/auth-profiles/types.js";
 import { resolveDefaultAgentWorkspaceDir } from "../../../agents/workspace.js";
-import type { OpenClawConfig } from "../../../config/config.js";
+import type { FoxClawConfig } from "../../../config/config.js";
 import { enablePluginInConfig } from "../../../plugins/enable.js";
 import {
   PROVIDER_PLUGIN_CHOICE_PREFIX,
@@ -17,9 +17,9 @@ import { resolvePreferredProviderForAuthChoice } from "../../auth-choice.preferr
 import type { OnboardOptions } from "../../onboard-types.js";
 
 function buildIsolatedProviderResolutionConfig(
-  cfg: OpenClawConfig,
+  cfg: FoxClawConfig,
   providerId: string | undefined,
-): OpenClawConfig {
+): FoxClawConfig {
   if (!providerId) {
     return cfg;
   }
@@ -42,11 +42,11 @@ function buildIsolatedProviderResolutionConfig(
 }
 
 export async function applyNonInteractivePluginProviderChoice(params: {
-  nextConfig: OpenClawConfig;
+  nextConfig: FoxClawConfig;
   authChoice: string;
   opts: OnboardOptions;
   runtime: RuntimeEnv;
-  baseConfig: OpenClawConfig;
+  baseConfig: FoxClawConfig;
   resolveApiKey: (input: ProviderResolveNonInteractiveApiKeyParams) => Promise<{
     key: string;
     source: "profile" | "env" | "flag";
@@ -55,7 +55,7 @@ export async function applyNonInteractivePluginProviderChoice(params: {
   toApiKeyCredential: (
     input: ProviderNonInteractiveApiKeyCredentialParams,
   ) => ApiKeyCredential | null;
-}): Promise<OpenClawConfig | null | undefined> {
+}): Promise<FoxClawConfig | null | undefined> {
   const agentId = resolveDefaultAgentId(params.nextConfig);
   const workspaceDir =
     resolveAgentWorkspaceDir(params.nextConfig, agentId) ?? resolveDefaultAgentWorkspaceDir();

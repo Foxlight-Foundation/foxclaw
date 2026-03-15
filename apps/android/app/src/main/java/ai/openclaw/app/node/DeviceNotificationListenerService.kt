@@ -1,4 +1,4 @@
-package ai.openclaw.app.node
+package ai.foxclaw.app.node
 
 import android.app.Notification
 import android.app.NotificationManager

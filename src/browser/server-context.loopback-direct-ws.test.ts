@@ -33,15 +33,15 @@ describe("browser server-context loopback direct WebSocket profiles", () => {
     });
 
     global.fetch = withFetchPreconnect(fetchMock);
-    const state = makeState("openclaw");
-    state.resolved.profiles.openclaw = {
+    const state = makeState("foxclaw");
+    state.resolved.profiles.foxclaw = {
       cdpUrl: "ws://127.0.0.1:18800/devtools/browser/SESSION?token=abc",
       color: "#FF4500",
     };
     const ctx = createBrowserRouteContext({ getState: () => state });
-    const openclaw = ctx.forProfile("openclaw");
+    const foxclaw = ctx.forProfile("foxclaw");
 
-    const opened = await openclaw.openTab("http://127.0.0.1:8080");
+    const opened = await foxclaw.openTab("http://127.0.0.1:8080");
     expect(opened.targetId).toBe("CREATED");
     expect(createTargetViaCdp).toHaveBeenCalledWith({
       cdpUrl: "ws://127.0.0.1:18800/devtools/browser/SESSION?token=abc",
@@ -77,16 +77,16 @@ describe("browser server-context loopback direct WebSocket profiles", () => {
     });
 
     global.fetch = withFetchPreconnect(fetchMock);
-    const state = makeState("openclaw");
-    state.resolved.profiles.openclaw = {
+    const state = makeState("foxclaw");
+    state.resolved.profiles.foxclaw = {
       cdpUrl: "ws://127.0.0.1:18800/devtools/browser/SESSION?token=abc",
       color: "#FF4500",
     };
     const ctx = createBrowserRouteContext({ getState: () => state });
-    const openclaw = ctx.forProfile("openclaw");
+    const foxclaw = ctx.forProfile("foxclaw");
 
-    await openclaw.focusTab("T1");
-    await openclaw.closeTab("T1");
+    await foxclaw.focusTab("T1");
+    await foxclaw.closeTab("T1");
 
     expect(fetchMock).toHaveBeenCalledWith(
       "http://127.0.0.1:18800/json/activate/T1?token=abc",
@@ -125,18 +125,18 @@ describe("browser server-context loopback direct WebSocket profiles", () => {
     });
 
     global.fetch = withFetchPreconnect(fetchMock);
-    const state = makeState("openclaw");
-    state.resolved.profiles.openclaw = {
+    const state = makeState("foxclaw");
+    state.resolved.profiles.foxclaw = {
       cdpUrl: "wss://127.0.0.1:18800/cdp?token=abc",
       color: "#FF4500",
     };
     const ctx = createBrowserRouteContext({ getState: () => state });
-    const openclaw = ctx.forProfile("openclaw");
+    const foxclaw = ctx.forProfile("foxclaw");
 
-    const tabs = await openclaw.listTabs();
+    const tabs = await foxclaw.listTabs();
     expect(tabs.map((tab) => tab.targetId)).toEqual(["T2"]);
 
-    await openclaw.focusTab("T2");
-    await openclaw.closeTab("T2");
+    await foxclaw.focusTab("T2");
+    await foxclaw.closeTab("T2");
   });
 });

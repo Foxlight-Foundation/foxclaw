@@ -1,7 +1,7 @@
 import Foundation
-import OpenClawProtocol
+import FoxClawProtocol
 import Testing
-@testable import OpenClaw
+@testable import FoxClaw
 
 @MainActor
 struct WorkActivityStoreTests {
@@ -67,7 +67,7 @@ struct WorkActivityStoreTests {
             meta: nil,
             args: [
                 "command": AnyCodable("echo hi\necho bye"),
-                "path": AnyCodable("\(home)/Projects/openclaw"),
+                "path": AnyCodable("\(home)/Projects/foxclaw"),
             ])
 
         #expect(store.current?.label == "bash: echo hi")

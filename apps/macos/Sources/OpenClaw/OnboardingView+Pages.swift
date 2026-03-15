@@ -1,8 +1,8 @@
 import AppKit
-import OpenClawChatUI
-import OpenClawDiscovery
-import OpenClawIPC
-import OpenClawKit
+import FoxClawChatUI
+import FoxClawDiscovery
+import FoxClawIPC
+import FoxClawKit
 import SwiftUI
 
 extension OnboardingView {
@@ -31,9 +31,9 @@ extension OnboardingView {
     func welcomePage() -> some View {
         self.onboardingPage {
             VStack(spacing: 22) {
-                Text("Welcome to OpenClaw")
+                Text("Welcome to FoxClaw")
                     .font(.largeTitle.weight(.semibold))
-                Text("OpenClaw is a powerful personal AI assistant that can connect to WhatsApp or Telegram.")
+                Text("FoxClaw is a powerful personal AI assistant that can connect to WhatsApp or Telegram.")
                     .font(.body)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -56,7 +56,7 @@ extension OnboardingView {
                                 "The connected AI agent (e.g. Claude) can trigger powerful actions on your Mac, " +
                                     "including running commands, reading/writing files, and capturing screenshots — " +
                                     "depending on the permissions you grant.\n\n" +
-                                    "Only enable OpenClaw if you understand the risks and trust the prompts and " +
+                                    "Only enable FoxClaw if you understand the risks and trust the prompts and " +
                                     "integrations you use.")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
@@ -75,7 +75,7 @@ extension OnboardingView {
             Text("Choose your Gateway")
                 .font(.largeTitle.weight(.semibold))
             Text(
-                "OpenClaw uses a single Gateway that stays running. Pick this Mac, " +
+                "FoxClaw uses a single Gateway that stays running. Pick this Mac, " +
                     "connect to a discovered gateway nearby, or configure later.")
                 .font(.body)
                 .foregroundStyle(.secondary)
@@ -264,7 +264,7 @@ extension OnboardingView {
                             Text("Project root")
                                 .font(.callout.weight(.semibold))
                                 .frame(width: labelWidth, alignment: .leading)
-                            TextField("/home/you/Projects/openclaw", text: self.$state.remoteProjectRoot)
+                            TextField("/home/you/Projects/foxclaw", text: self.$state.remoteProjectRoot)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(width: fieldWidth)
                         }
@@ -273,7 +273,7 @@ extension OnboardingView {
                                 .font(.callout.weight(.semibold))
                                 .frame(width: labelWidth, alignment: .leading)
                             TextField(
-                                "/Applications/OpenClaw.app/.../openclaw",
+                                "/Applications/FoxClaw.app/.../foxclaw",
                                 text: self.$state.remoteCliPath)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(width: fieldWidth)
@@ -399,7 +399,7 @@ extension OnboardingView {
                 .foregroundStyle(.secondary)
             if self.state.remoteTokenUnsupported {
                 Text(
-                    "The current gateway.remote.token value is not plain text. OpenClaw for macOS cannot use it directly; enter a plaintext token here to replace it.")
+                    "The current gateway.remote.token value is not plain text. FoxClaw for macOS cannot use it directly; enter a plaintext token here to replace it.")
                     .font(.caption)
                     .foregroundStyle(.orange)
                     .fixedSize(horizontal: false, vertical: true)
@@ -592,7 +592,7 @@ extension OnboardingView {
         self.onboardingPage {
             Text("Grant permissions")
                 .font(.largeTitle.weight(.semibold))
-            Text("These macOS permissions let OpenClaw automate apps and capture context on this Mac.")
+            Text("These macOS permissions let FoxClaw automate apps and capture context on this Mac.")
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -633,7 +633,7 @@ extension OnboardingView {
         self.onboardingPage {
             Text("Install the CLI")
                 .font(.largeTitle.weight(.semibold))
-            Text("Required for local mode: installs `openclaw` so launchd can run the gateway.")
+            Text("Required for local mode: installs `foxclaw` so launchd can run the gateway.")
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -693,7 +693,7 @@ extension OnboardingView {
             Text("Agent workspace")
                 .font(.largeTitle.weight(.semibold))
             Text(
-                "OpenClaw runs the agent from a dedicated workspace so it can load `AGENTS.md` " +
+                "FoxClaw runs the agent from a dedicated workspace so it can load `AGENTS.md` " +
                     "and write files there without mixing into your other projects.")
                 .font(.body)
                 .foregroundStyle(.secondary)
@@ -720,7 +720,7 @@ extension OnboardingView {
                         Text("Workspace folder")
                             .font(.headline)
                         TextField(
-                            AgentWorkspace.displayPath(for: OpenClawConfigFile.defaultWorkspaceURL()),
+                            AgentWorkspace.displayPath(for: FoxClawConfigFile.defaultWorkspaceURL()),
                             text: self.$workspacePath)
                             .textFieldStyle(.roundedBorder)
 
@@ -750,7 +750,7 @@ extension OnboardingView {
                                     let saved = await self.saveAgentWorkspace(AgentWorkspace.displayPath(for: url))
                                     if saved {
                                         self.workspaceStatus =
-                                            "Saved to ~/.openclaw/openclaw.json (agents.defaults.workspace)"
+                                            "Saved to ~/.foxclaw/foxclaw.json (agents.defaults.workspace)"
                                     }
                                 }
                             }
@@ -792,7 +792,7 @@ extension OnboardingView {
                 .fixedSize(horizontal: false, vertical: true)
 
             self.onboardingGlassCard(padding: 8) {
-                OpenClawChatView(viewModel: self.onboardingChatModel, style: .onboarding)
+                FoxClawChatView(viewModel: self.onboardingChatModel, style: .onboarding)
                     .frame(maxHeight: .infinity)
             }
             .frame(maxHeight: .infinity)
@@ -818,8 +818,8 @@ extension OnboardingView {
                     self.featureRow(
                         title: "Remote gateway checklist",
                         subtitle: """
-                        On your gateway host: install/update the `openclaw` package and make sure credentials exist
-                        (typically `~/.openclaw/credentials/oauth.json`). Then connect again if needed.
+                        On your gateway host: install/update the `foxclaw` package and make sure credentials exist
+                        (typically `~/.foxclaw/credentials/oauth.json`). Then connect again if needed.
                         """,
                         systemImage: "network")
                     Divider()
@@ -827,7 +827,7 @@ extension OnboardingView {
                 }
                 self.featureRow(
                     title: "Open the menu bar panel",
-                    subtitle: "Click the OpenClaw menu bar icon for quick chat and status.",
+                    subtitle: "Click the FoxClaw menu bar icon for quick chat and status.",
                     systemImage: "bubble.left.and.bubble.right")
                 self.featureActionRow(
                     title: "Connect WhatsApp or Telegram",

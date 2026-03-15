@@ -1,4 +1,4 @@
-import OpenClawKit
+import FoxClawKit
 import Testing
 
 @Suite struct GatewayErrorsTests {

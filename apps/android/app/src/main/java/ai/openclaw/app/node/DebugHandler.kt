@@ -1,9 +1,9 @@
-package ai.openclaw.app.node
+package ai.foxclaw.app.node
 
 import android.content.Context
-import ai.openclaw.app.BuildConfig
-import ai.openclaw.app.gateway.DeviceIdentityStore
-import ai.openclaw.app.gateway.GatewaySession
+import ai.foxclaw.app.BuildConfig
+import ai.foxclaw.app.gateway.DeviceIdentityStore
+import ai.foxclaw.app.gateway.GatewaySession
 import kotlinx.serialization.json.JsonPrimitive
 
 class DebugHandler(

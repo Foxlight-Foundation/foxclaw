@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/whatsapp",
+  "name": "@foxclaw/whatsapp",
   "version": "2026.3.14",
   "private": true,
-  "description": "OpenClaw WhatsApp channel plugin",
+  "description": "FoxClaw WhatsApp channel plugin",
   "type": "module",
-  "openclaw": {
+  "foxclaw": {
     "extensions": [
       "./index.ts"
     ]
