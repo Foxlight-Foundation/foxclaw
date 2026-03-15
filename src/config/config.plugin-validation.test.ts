@@ -48,8 +48,7 @@ describe("config plugin validation", () => {
   let suiteHome = "";
   let badPluginDir = "";
   let enumPluginDir = "";
-  let bluebubblesPluginDir = "";
-  let voiceCallSchemaPluginDir = "";
+  let testChannelPluginDir = "";
   const suiteEnv = () =>
     ({
       ...process.env,
@@ -70,7 +69,7 @@ describe("config plugin validation", () => {
     await mkdirSafe(suiteHome);
     badPluginDir = path.join(suiteHome, "bad-plugin");
     enumPluginDir = path.join(suiteHome, "enum-plugin");
-    bluebubblesPluginDir = path.join(suiteHome, "bluebubbles-plugin");
+    testChannelPluginDir = path.join(suiteHome, "test-channel-plugin");
     await writePluginFixture({
       dir: badPluginDir,
       id: "bad-plugin",
@@ -98,28 +97,10 @@ describe("config plugin validation", () => {
       },
     });
     await writePluginFixture({
-      dir: bluebubblesPluginDir,
-      id: "bluebubbles-plugin",
-      channels: ["bluebubbles"],
+      dir: testChannelPluginDir,
+      id: "test-channel-plugin",
+      channels: ["test-channel"],
       schema: { type: "object" },
-    });
-    voiceCallSchemaPluginDir = path.join(suiteHome, "voice-call-schema-plugin");
-    const voiceCallManifestPath = path.join(
-      process.cwd(),
-      "extensions",
-      "voice-call",
-      "foxclaw.plugin.json",
-    );
-    const voiceCallManifest = JSON.parse(await fs.readFile(voiceCallManifestPath, "utf-8")) as {
-      configSchema?: Record<string, unknown>;
-    };
-    if (!voiceCallManifest.configSchema) {
-      throw new Error("voice-call manifest missing configSchema");
-    }
-    await writePluginFixture({
-      dir: voiceCallSchemaPluginDir,
-      id: "voice-call-schema-fixture",
-      schema: voiceCallManifest.configSchema,
     });
     clearPluginManifestRegistryCache();
     // Warm the plugin manifest cache once so path-based validations can reuse
@@ -127,7 +108,7 @@ describe("config plugin validation", () => {
     validateInSuite({
       plugins: {
         enabled: false,
-        load: { paths: [badPluginDir, bluebubblesPluginDir, voiceCallSchemaPluginDir] },
+        load: { paths: [badPluginDir, testChannelPluginDir] },
       },
     });
   });
@@ -255,62 +236,6 @@ describe("config plugin validation", () => {
     }
   });
 
-  it("accepts voice-call webhookSecurity and streaming guard config fields", async () => {
-    const res = validateInSuite({
-      agents: { list: [{ id: "pi" }] },
-      plugins: {
-        enabled: true,
-        load: { paths: [voiceCallSchemaPluginDir] },
-        entries: {
-          "voice-call-schema-fixture": {
-            config: {
-              provider: "twilio",
-              webhookSecurity: {
-                allowedHosts: ["voice.example.com"],
-                trustForwardingHeaders: false,
-                trustedProxyIPs: ["127.0.0.1"],
-              },
-              streaming: {
-                enabled: true,
-                preStartTimeoutMs: 5000,
-                maxPendingConnections: 16,
-                maxPendingConnectionsPerIp: 4,
-                maxConnections: 64,
-              },
-              staleCallReaperSeconds: 180,
-            },
-          },
-        },
-      },
-    });
-    expect(res.ok).toBe(true);
-  });
-
-  it("accepts voice-call OpenAI TTS speed, instructions, and baseUrl config fields", async () => {
-    const res = validateInSuite({
-      agents: { list: [{ id: "pi" }] },
-      plugins: {
-        enabled: true,
-        load: { paths: [voiceCallSchemaPluginDir] },
-        entries: {
-          "voice-call-schema-fixture": {
-            config: {
-              tts: {
-                openai: {
-                  baseUrl: "http://localhost:8880/v1",
-                  voice: "alloy",
-                  speed: 1.5,
-                  instructions: "Speak in a cheerful tone",
-                },
-              },
-            },
-          },
-        },
-      },
-    });
-    expect(res.ok).toBe(true);
-  });
-
   it("accepts known plugin ids and valid channel/heartbeat enums", async () => {
     const res = validateInSuite({
       agents: {
@@ -320,19 +245,19 @@ describe("config plugin validation", () => {
       channels: {
         modelByChannel: {
           openai: {
-            whatsapp: "openai/gpt-5.2",
+            slack: "openai/gpt-5.2",
           },
         },
       },
-      plugins: { enabled: false, entries: { discord: { enabled: true } } },
+      plugins: { enabled: false, entries: { slack: { enabled: true } } },
     });
     expect(res.ok).toBe(true);
   });
 
   it("accepts plugin heartbeat targets", async () => {
     const res = validateInSuite({
-      agents: { defaults: { heartbeat: { target: "bluebubbles" } }, list: [{ id: "pi" }] },
-      plugins: { enabled: false, load: { paths: [bluebubblesPluginDir] } },
+      agents: { defaults: { heartbeat: { target: "test-channel" } }, list: [{ id: "pi" }] },
+      plugins: { enabled: false, load: { paths: [testChannelPluginDir] } },
     });
     expect(res.ok).toBe(true);
   });

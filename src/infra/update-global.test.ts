@@ -34,9 +34,9 @@ describe("update global helpers", () => {
       resolveGlobalInstallSpec({
         packageName: "foxclaw",
         tag: "beta",
-        env: { FOXCLAW_UPDATE_PACKAGE_SPEC: "openclaw@next" },
+        env: { FOXCLAW_UPDATE_PACKAGE_SPEC: "foxclaw@next" },
       }),
-    ).toBe("openclaw@next");
+    ).toBe("foxclaw@next");
   });
 
   it("resolves global roots and package roots from runner output", async () => {
@@ -94,39 +94,39 @@ describe("update global helpers", () => {
   });
 
   it("builds install argv and npm fallback argv", () => {
-    expect(globalInstallArgs("npm", "openclaw@latest")).toEqual([
+    expect(globalInstallArgs("npm", "foxclaw@latest")).toEqual([
       "npm",
       "i",
       "-g",
-      "openclaw@latest",
+      "foxclaw@latest",
       "--no-fund",
       "--no-audit",
       "--loglevel=error",
     ]);
-    expect(globalInstallArgs("pnpm", "openclaw@latest")).toEqual([
+    expect(globalInstallArgs("pnpm", "foxclaw@latest")).toEqual([
       "pnpm",
       "add",
       "-g",
-      "openclaw@latest",
+      "foxclaw@latest",
     ]);
-    expect(globalInstallArgs("bun", "openclaw@latest")).toEqual([
+    expect(globalInstallArgs("bun", "foxclaw@latest")).toEqual([
       "bun",
       "add",
       "-g",
-      "openclaw@latest",
+      "foxclaw@latest",
     ]);
 
-    expect(globalInstallFallbackArgs("npm", "openclaw@latest")).toEqual([
+    expect(globalInstallFallbackArgs("npm", "foxclaw@latest")).toEqual([
       "npm",
       "i",
       "-g",
-      "openclaw@latest",
+      "foxclaw@latest",
       "--omit=optional",
       "--no-fund",
       "--no-audit",
       "--loglevel=error",
     ]);
-    expect(globalInstallFallbackArgs("pnpm", "openclaw@latest")).toBeNull();
+    expect(globalInstallFallbackArgs("pnpm", "foxclaw@latest")).toBeNull();
   });
 
   it("cleans only renamed package directories", async () => {

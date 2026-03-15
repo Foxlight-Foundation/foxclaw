@@ -174,7 +174,7 @@ describe("config io write", () => {
 
       const invalidConfig: FoxClawConfig = {
         channels: {
-          telegram: {
+          slack: {
             dmPolicy: "open",
             allowFrom: [],
           },
@@ -182,10 +182,10 @@ describe("config io write", () => {
       } satisfies FoxClawConfig;
 
       await expect(io.writeConfigFile(invalidConfig)).rejects.toThrow(
-        "foxclaw config set channels.telegram.allowFrom '[\"*\"]'",
+        "foxclaw config set channels.slack.allowFrom '[\"*\"]'",
       );
       await expect(io.writeConfigFile(invalidConfig)).rejects.toThrow(
-        'foxclaw config set channels.telegram.dmPolicy "pairing"',
+        'foxclaw config set channels.slack.dmPolicy "pairing"',
       );
     });
   });
@@ -339,16 +339,12 @@ describe("config io write", () => {
     });
   });
 
-  it("does not reintroduce Slack/Discord legacy dm.policy defaults when writing", async () => {
+  it("does not reintroduce Slack legacy dm.policy defaults when writing", async () => {
     await withSuiteHome(async (home) => {
       const { configPath, io, snapshot } = await writeConfigAndCreateIo({
         home,
         initialConfig: {
           channels: {
-            discord: {
-              dmPolicy: "pairing",
-              dm: { enabled: true, policy: "pairing" },
-            },
             slack: {
               dmPolicy: "pairing",
               dm: { enabled: true, policy: "pairing" },
@@ -360,10 +356,6 @@ describe("config io write", () => {
 
       const next = structuredClone(snapshot.config);
       // Simulate doctor removing legacy keys while keeping dm enabled.
-      if (next.channels?.discord?.dm && typeof next.channels.discord.dm === "object") {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- test helper
-        delete (next.channels.discord.dm as any).policy;
-      }
       if (next.channels?.slack?.dm && typeof next.channels.slack.dm === "object") {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- test helper
         delete (next.channels.slack.dm as any).policy;
@@ -373,13 +365,10 @@ describe("config io write", () => {
 
       const persisted = JSON.parse(await fs.readFile(configPath, "utf-8")) as {
         channels?: {
-          discord?: { dm?: Record<string, unknown>; dmPolicy?: unknown };
           slack?: { dm?: Record<string, unknown>; dmPolicy?: unknown };
         };
       };
 
-      expect(persisted.channels?.discord?.dmPolicy).toBe("pairing");
-      expect(persisted.channels?.discord?.dm).toEqual({ enabled: true });
       expect(persisted.channels?.slack?.dmPolicy).toBe("pairing");
       expect(persisted.channels?.slack?.dm).toEqual({ enabled: true });
     });

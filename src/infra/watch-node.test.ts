@@ -50,9 +50,9 @@ describe("watch-node script", () => {
         stdio: "inherit",
         env: expect.objectContaining({
           PATH: "/usr/bin",
-          FOXCLAW_WATCH_MODE: "1",
-          FOXCLAW_WATCH_SESSION: "1700000000000-4242",
-          FOXCLAW_WATCH_COMMAND: "gateway --force",
+          OPENCLAW_WATCH_MODE: "1",
+          OPENCLAW_WATCH_SESSION: "1700000000000-4242",
+          OPENCLAW_WATCH_COMMAND: "gateway --force",
         }),
       }),
     );

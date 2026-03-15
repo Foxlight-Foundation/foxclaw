@@ -12,65 +12,27 @@ function makeCtx(overrides: Partial<MsgContext>): MsgContext {
 }
 
 describe("resolveSessionKey", () => {
-  describe("Discord DM session key normalization", () => {
-    it("passes through correct discord:direct keys unchanged", () => {
-      const ctx = makeCtx({
-        SessionKey: "agent:fina:discord:direct:123456",
-        ChatType: "direct",
-        From: "discord:123456",
-        SenderId: "123456",
-      });
-      expect(resolveSessionKey("per-sender", ctx)).toBe("agent:fina:discord:direct:123456");
-    });
+  // Discord DM session key normalization tests were removed because
+  // discord was stripped from the codebase and the normalizer no longer
+  // handles discord-specific key patterns.
 
-    it("migrates legacy discord:dm: keys to discord:direct:", () => {
-      const ctx = makeCtx({
-        SessionKey: "agent:fina:discord:dm:123456",
-        ChatType: "direct",
-        From: "discord:123456",
-        SenderId: "123456",
-      });
-      expect(resolveSessionKey("per-sender", ctx)).toBe("agent:fina:discord:direct:123456");
+  it("passes through correct keys unchanged", () => {
+    const ctx = makeCtx({
+      SessionKey: "agent:fina:slack:direct:U123",
+      ChatType: "direct",
+      From: "slack:U123",
+      SenderId: "U123",
     });
+    expect(resolveSessionKey("per-sender", ctx)).toBe("agent:fina:slack:direct:u123");
+  });
 
-    it("fixes phantom discord:channel:USERID keys when sender matches", () => {
-      const ctx = makeCtx({
-        SessionKey: "agent:fina:discord:channel:123456",
-        ChatType: "direct",
-        From: "discord:123456",
-        SenderId: "123456",
-      });
-      expect(resolveSessionKey("per-sender", ctx)).toBe("agent:fina:discord:direct:123456");
+  it("does not rewrite channel keys for non-direct chats", () => {
+    const ctx = makeCtx({
+      SessionKey: "agent:fina:slack:channel:C123",
+      ChatType: "channel",
+      From: "slack:channel:C123",
+      SenderId: "U789",
     });
-
-    it("does not rewrite discord:channel: keys for non-direct chats", () => {
-      const ctx = makeCtx({
-        SessionKey: "agent:fina:discord:channel:123456",
-        ChatType: "channel",
-        From: "discord:channel:123456",
-        SenderId: "789",
-      });
-      expect(resolveSessionKey("per-sender", ctx)).toBe("agent:fina:discord:channel:123456");
-    });
-
-    it("does not rewrite discord:channel: keys when sender does not match", () => {
-      const ctx = makeCtx({
-        SessionKey: "agent:fina:discord:channel:123456",
-        ChatType: "direct",
-        From: "discord:789",
-        SenderId: "789",
-      });
-      expect(resolveSessionKey("per-sender", ctx)).toBe("agent:fina:discord:channel:123456");
-    });
-
-    it("handles keys without an agent prefix", () => {
-      const ctx = makeCtx({
-        SessionKey: "discord:channel:123456",
-        ChatType: "direct",
-        From: "discord:123456",
-        SenderId: "123456",
-      });
-      expect(resolveSessionKey("per-sender", ctx)).toBe("discord:direct:123456");
-    });
+    expect(resolveSessionKey("per-sender", ctx)).toBe("agent:fina:slack:channel:c123");
   });
 });

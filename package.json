@@ -100,10 +100,6 @@
       "types": "./dist/plugin-sdk/open-prose.d.ts",
       "default": "./dist/plugin-sdk/open-prose.js"
     },
-    "./plugin-sdk/phone-control": {
-      "types": "./dist/plugin-sdk/phone-control.d.ts",
-      "default": "./dist/plugin-sdk/phone-control.js"
-    },
     "./plugin-sdk/qwen-portal-auth": {
       "types": "./dist/plugin-sdk/qwen-portal-auth.d.ts",
       "default": "./dist/plugin-sdk/qwen-portal-auth.js"

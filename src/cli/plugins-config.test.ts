@@ -33,35 +33,35 @@ describe("setPluginEnabledInConfig", () => {
   it("keeps built-in channel and plugin entry flags in sync", () => {
     const config = {
       channels: {
-        telegram: {
+        slack: {
           enabled: true,
           dmPolicy: "open",
         },
       },
       plugins: {
         entries: {
-          telegram: {
+          slack: {
             enabled: true,
           },
         },
       },
     } as FoxClawConfig;
 
-    const disabled = setPluginEnabledInConfig(config, "telegram", false);
-    expect(disabled.channels?.telegram).toEqual({
+    const disabled = setPluginEnabledInConfig(config, "slack", false);
+    expect(disabled.channels?.slack).toEqual({
       enabled: false,
       dmPolicy: "open",
     });
-    expect(disabled.plugins?.entries?.telegram).toEqual({
+    expect(disabled.plugins?.entries?.slack).toEqual({
       enabled: false,
     });
 
-    const reenabled = setPluginEnabledInConfig(disabled, "telegram", true);
-    expect(reenabled.channels?.telegram).toEqual({
+    const reenabled = setPluginEnabledInConfig(disabled, "slack", true);
+    expect(reenabled.channels?.slack).toEqual({
       enabled: true,
       dmPolicy: "open",
     });
-    expect(reenabled.plugins?.entries?.telegram).toEqual({
+    expect(reenabled.plugins?.entries?.slack).toEqual({
       enabled: true,
     });
   });

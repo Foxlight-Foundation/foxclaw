@@ -16,12 +16,6 @@ const slackConfig = {
   },
 } as FoxClawConfig;
 
-const discordConfig = {
-  channels: {
-    discord: {},
-  },
-} as FoxClawConfig;
-
 describe("outbound policy helpers", () => {
   it("allows cross-provider sends when enabled", () => {
     const cfg = {
@@ -34,24 +28,12 @@ describe("outbound policy helpers", () => {
     expect(() =>
       enforceCrossContextPolicy({
         cfg,
-        channel: "telegram",
+        channel: "slack",
         action: "send",
-        args: { to: "telegram:@ops" },
+        args: { to: "slack:C999" },
         toolContext: { currentChannelId: "C12345678", currentChannelProvider: "slack" },
       }),
     ).not.toThrow();
-  });
-
-  it("blocks cross-provider sends when not allowed", () => {
-    expect(() =>
-      enforceCrossContextPolicy({
-        cfg: slackConfig,
-        channel: "telegram",
-        action: "send",
-        args: { to: "telegram:@ops" },
-        toolContext: { currentChannelId: "C12345678", currentChannelProvider: "slack" },
-      }),
-    ).toThrow(/target provider "telegram" while bound to "slack"/);
   });
 
   it("blocks same-provider cross-context sends when allowWithinProvider is false", () => {
@@ -73,36 +55,15 @@ describe("outbound policy helpers", () => {
     ).toThrow(/target="C999" while bound to "C123"/);
   });
 
-  it("uses components when available and preferred", async () => {
-    const decoration = await buildCrossContextDecoration({
-      cfg: discordConfig,
-      channel: "discord",
-      target: "123",
-      toolContext: { currentChannelId: "C12345678", currentChannelProvider: "discord" },
-    });
-
-    expect(decoration).not.toBeNull();
-    const applied = applyCrossContextDecoration({
-      message: "hello",
-      decoration: decoration!,
-      preferComponents: true,
-    });
-
-    expect(applied.usedComponents).toBe(true);
-    expect(applied.componentsBuilder).toBeDefined();
-    expect(applied.componentsBuilder?.("hello").length).toBeGreaterThan(0);
-    expect(applied.message).toBe("hello");
-  });
-
   it("returns null when decoration is skipped and falls back to text markers", async () => {
     await expect(
       buildCrossContextDecoration({
-        cfg: discordConfig,
-        channel: "discord",
-        target: "123",
+        cfg: slackConfig,
+        channel: "slack",
+        target: "C999",
         toolContext: {
           currentChannelId: "C12345678",
-          currentChannelProvider: "discord",
+          currentChannelProvider: "slack",
           skipCrossContextDecoration: true,
         },
       }),

@@ -52,7 +52,7 @@ const DYNAMIC_ARCHIVE_TEMPLATE_PRESETS = [
     outName: "bad.tgz",
     withDistIndex: false,
     packageJson: {
-      name: "@openclaw/nope",
+      name: "@foxclaw/nope",
       version: "0.0.1",
     } as Record<string, unknown>,
   },
@@ -342,7 +342,7 @@ beforeAll(async () => {
   fs.writeFileSync(
     path.join(installPluginFromDirTemplateDir, "package.json"),
     JSON.stringify({
-      name: "@openclaw/test-plugin",
+      name: "@foxclaw/test-plugin",
       version: "0.0.1",
       foxclaw: { extensions: ["./dist/index.js"] },
       dependencies: { "left-pad": "1.3.0" },
@@ -360,7 +360,7 @@ beforeAll(async () => {
   fs.writeFileSync(
     path.join(manifestInstallTemplateDir, "package.json"),
     JSON.stringify({
-      name: "@openclaw/cognee-openclaw",
+      name: "@foxclaw/cognee-foxclaw",
       version: "0.0.1",
       foxclaw: { extensions: ["./dist/index.js"] },
     }),
@@ -497,7 +497,7 @@ describe("installPluginFromArchive", () => {
 
   it("rejects packages without foxclaw.extensions", async () => {
     const result = await installArchivePackageAndReturnResult({
-      packageJson: { name: "@openclaw/nope", version: "0.0.1" },
+      packageJson: { name: "@foxclaw/nope", version: "0.0.1" },
       outName: "bad.tgz",
     });
     expect(result.ok).toBe(false);
@@ -513,7 +513,7 @@ describe("installPluginFromArchive", () => {
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: "@openclaw/legacy-entry-fallback",
+        name: "@foxclaw/legacy-entry-fallback",
         version: "0.0.1",
       }),
       "utf-8",
@@ -693,7 +693,7 @@ describe("installPluginFromDir", () => {
     expect(
       infoMessages.some((msg) =>
         msg.includes(
-          'Plugin manifest id "memory-cognee" differs from npm package name "cognee-openclaw"',
+          'Plugin manifest id "memory-cognee" differs from npm package name "cognee-foxclaw"',
         ),
       ),
     ).toBe(true);
@@ -766,8 +766,8 @@ describe("installPluginFromNpmSpec", () => {
           code: 0,
           stdout: JSON.stringify([
             {
-              id: "@openclaw/voice-call@0.0.1",
-              name: "@openclaw/voice-call",
+              id: "@foxclaw/voice-call@0.0.1",
+              name: "@foxclaw/voice-call",
               version: "0.0.1",
               filename: packedName,
               integrity: "sha512-plugin-test",
@@ -784,7 +784,7 @@ describe("installPluginFromNpmSpec", () => {
     });
 
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/voice-call@0.0.1",
+      spec: "@foxclaw/voice-call@0.0.1",
       extensionsDir,
       logger: { info: () => {}, warn: () => {} },
     });
@@ -792,12 +792,12 @@ describe("installPluginFromNpmSpec", () => {
     if (!result.ok) {
       return;
     }
-    expect(result.npmResolution?.resolvedSpec).toBe("@openclaw/voice-call@0.0.1");
+    expect(result.npmResolution?.resolvedSpec).toBe("@foxclaw/voice-call@0.0.1");
     expect(result.npmResolution?.integrity).toBe("sha512-plugin-test");
 
     expectSingleNpmPackIgnoreScriptsCall({
       calls: run.mock.calls,
-      expectedSpec: "@openclaw/voice-call@0.0.1",
+      expectedSpec: "@foxclaw/voice-call@0.0.1",
     });
 
     expect(packTmpDir).not.toBe("");
@@ -816,8 +816,8 @@ describe("installPluginFromNpmSpec", () => {
   it("aborts when integrity drift callback rejects the fetched artifact", async () => {
     const run = vi.mocked(runCommandWithTimeout);
     mockNpmPackMetadataResult(run, {
-      id: "@openclaw/voice-call@0.0.1",
-      name: "@openclaw/voice-call",
+      id: "@foxclaw/voice-call@0.0.1",
+      name: "@foxclaw/voice-call",
       version: "0.0.1",
       filename: "voice-call-0.0.1.tgz",
       integrity: "sha512-new",
@@ -826,7 +826,7 @@ describe("installPluginFromNpmSpec", () => {
 
     const onIntegrityDrift = vi.fn(async () => false);
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/voice-call@0.0.1",
+      spec: "@foxclaw/voice-call@0.0.1",
       expectedIntegrity: "sha512-old",
       onIntegrityDrift,
     });
@@ -850,7 +850,7 @@ describe("installPluginFromNpmSpec", () => {
     });
 
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/not-found",
+      spec: "@foxclaw/not-found",
       logger: { info: () => {}, warn: () => {} },
     });
     expect(result.ok).toBe(false);
@@ -862,8 +862,8 @@ describe("installPluginFromNpmSpec", () => {
   it("rejects bare npm specs that resolve to prerelease versions", async () => {
     const run = vi.mocked(runCommandWithTimeout);
     mockNpmPackMetadataResult(run, {
-      id: "@openclaw/voice-call@0.0.2-beta.1",
-      name: "@openclaw/voice-call",
+      id: "@foxclaw/voice-call@0.0.2-beta.1",
+      name: "@foxclaw/voice-call",
       version: "0.0.2-beta.1",
       filename: "voice-call-0.0.2-beta.1.tgz",
       integrity: "sha512-beta",
@@ -871,13 +871,13 @@ describe("installPluginFromNpmSpec", () => {
     });
 
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/voice-call",
+      spec: "@foxclaw/voice-call",
       logger: { info: () => {}, warn: () => {} },
     });
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(result.error).toContain("prerelease version 0.0.2-beta.1");
-      expect(result.error).toContain('"@openclaw/voice-call@beta"');
+      expect(result.error).toContain('"@foxclaw/voice-call@beta"');
     }
   });
 
@@ -894,8 +894,8 @@ describe("installPluginFromNpmSpec", () => {
           code: 0,
           stdout: JSON.stringify([
             {
-              id: "@openclaw/voice-call@0.0.2-beta.1",
-              name: "@openclaw/voice-call",
+              id: "@foxclaw/voice-call@0.0.2-beta.1",
+              name: "@foxclaw/voice-call",
               version: "0.0.2-beta.1",
               filename: packedName,
               integrity: "sha512-beta",
@@ -916,7 +916,7 @@ describe("installPluginFromNpmSpec", () => {
       version: "0.0.1",
     });
     const result = await installPluginFromNpmSpec({
-      spec: "@openclaw/voice-call@beta",
+      spec: "@foxclaw/voice-call@beta",
       extensionsDir,
       logger: { info: () => {}, warn: () => {} },
     });
@@ -925,10 +925,10 @@ describe("installPluginFromNpmSpec", () => {
       return;
     }
     expect(result.npmResolution?.version).toBe("0.0.2-beta.1");
-    expect(result.npmResolution?.resolvedSpec).toBe("@openclaw/voice-call@0.0.2-beta.1");
+    expect(result.npmResolution?.resolvedSpec).toBe("@foxclaw/voice-call@0.0.2-beta.1");
     expectSingleNpmPackIgnoreScriptsCall({
       calls: run.mock.calls,
-      expectedSpec: "@openclaw/voice-call@beta",
+      expectedSpec: "@foxclaw/voice-call@beta",
     });
     expect(packTmpDir).not.toBe("");
   });

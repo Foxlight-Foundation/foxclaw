@@ -80,15 +80,15 @@ describe("normalizePluginsConfig", () => {
 });
 
 describe("resolveEffectiveEnableState", () => {
-  function resolveBundledTelegramState(config: Parameters<typeof normalizePluginsConfig>[0]) {
+  function resolveBundledSlackState(config: Parameters<typeof normalizePluginsConfig>[0]) {
     const normalized = normalizePluginsConfig(config);
     return resolveEffectiveEnableState({
-      id: "telegram",
+      id: "slack",
       origin: "bundled",
       config: normalized,
       rootConfig: {
         channels: {
-          telegram: {
+          slack: {
             enabled: true,
           },
         },
@@ -97,17 +97,17 @@ describe("resolveEffectiveEnableState", () => {
   }
 
   it("enables bundled channels when channels.<id>.enabled=true", () => {
-    const state = resolveBundledTelegramState({
+    const state = resolveBundledSlackState({
       enabled: true,
     });
     expect(state).toEqual({ enabled: true });
   });
 
   it("keeps explicit plugin-level disable authoritative", () => {
-    const state = resolveBundledTelegramState({
+    const state = resolveBundledSlackState({
       enabled: true,
       entries: {
-        telegram: {
+        slack: {
           enabled: false,
         },
       },
@@ -122,7 +122,7 @@ describe("resolveEnableState", () => {
       "memory-core",
       "bundled",
       normalizePluginsConfig({
-        allow: ["telegram"],
+        allow: ["slack"],
         slots: { memory: "memory-core" },
       }),
     );
@@ -134,7 +134,7 @@ describe("resolveEnableState", () => {
       "memory-core",
       "bundled",
       normalizePluginsConfig({
-        allow: ["telegram"],
+        allow: ["slack"],
         slots: { memory: "memory-core" },
         entries: {
           "memory-core": {

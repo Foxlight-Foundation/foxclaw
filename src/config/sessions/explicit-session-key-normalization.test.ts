@@ -12,45 +12,8 @@ function makeCtx(overrides: Partial<MsgContext>): MsgContext {
 }
 
 describe("normalizeExplicitSessionKey", () => {
-  it("dispatches discord keys through the provider normalizer", () => {
-    expect(
-      normalizeExplicitSessionKey(
-        "agent:fina:discord:channel:123456",
-        makeCtx({
-          Surface: "discord",
-          ChatType: "direct",
-          From: "discord:123456",
-          SenderId: "123456",
-        }),
-      ),
-    ).toBe("agent:fina:discord:direct:123456");
-  });
-
-  it("infers the provider from From when explicit provider fields are absent", () => {
-    expect(
-      normalizeExplicitSessionKey(
-        "discord:dm:123456",
-        makeCtx({
-          ChatType: "direct",
-          From: "discord:123456",
-          SenderId: "123456",
-        }),
-      ),
-    ).toBe("discord:direct:123456");
-  });
-
-  it("uses Provider when Surface is absent", () => {
-    expect(
-      normalizeExplicitSessionKey(
-        "agent:fina:discord:dm:123456",
-        makeCtx({
-          Provider: "Discord",
-          ChatType: "direct",
-          SenderId: "123456",
-        }),
-      ),
-    ).toBe("agent:fina:discord:direct:123456");
-  });
+  // Discord-specific session key normalization tests were removed because
+  // discord was stripped from the codebase.
 
   it("lowercases and passes through unknown providers unchanged", () => {
     expect(

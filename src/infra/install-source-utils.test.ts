@@ -254,16 +254,16 @@ describe("packNpmSpecToArchive", () => {
     const cwd = await createFixtureDir();
     mockPackCommandResult({
       stdout: "",
-      stderr: "npm error code E404\nnpm error 404  '@openclaw/whatsapp@*' is not in this registry.",
+      stderr: "npm error code E404\nnpm error 404  '@foxclaw/whatsapp@*' is not in this registry.",
       code: 1,
     });
 
-    const result = await runPack("@openclaw/whatsapp", cwd);
+    const result = await runPack("@foxclaw/whatsapp", cwd);
 
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(result.error).toContain("Package not found on npm");
-      expect(result.error).toContain("@openclaw/whatsapp");
+      expect(result.error).toContain("@foxclaw/whatsapp");
       expect(result.error).toContain("docs.foxclaw.ai/tools/plugin");
     }
   });
@@ -290,18 +290,18 @@ describe("packNpmSpecToArchive", () => {
         "npm notice creating package\n" +
         JSON.stringify([
           {
-            id: "@openclaw/plugin-demo@2.0.0",
+            id: "@foxclaw/plugin-demo@2.0.0",
             filename: "foxclaw-plugin-demo-2.0.0.tgz",
           },
         ]),
     });
 
-    const result = await runPack("@openclaw/plugin-demo@2.0.0", cwd);
+    const result = await runPack("@foxclaw/plugin-demo@2.0.0", cwd);
     expect(result).toEqual({
       ok: true,
       archivePath: path.join(cwd, "foxclaw-plugin-demo-2.0.0.tgz"),
       metadata: {
-        resolvedSpec: "@openclaw/plugin-demo@2.0.0",
+        resolvedSpec: "@foxclaw/plugin-demo@2.0.0",
       },
     });
   });

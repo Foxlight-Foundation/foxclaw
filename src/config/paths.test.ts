@@ -76,6 +76,8 @@ describe("state + config path candidates", () => {
     const home = "/home/test";
     const resolvedHome = path.resolve(home);
     const candidates = resolveDefaultConfigCandidates({} as NodeJS.ProcessEnv, () => home);
+    // .foxclaw is both the new state dir and the first legacy dir, so its
+    // entries appear only once (deduped).
     const expected = [
       path.join(resolvedHome, ".foxclaw", "foxclaw.json"),
       path.join(resolvedHome, ".foxclaw", "clawdbot.json"),

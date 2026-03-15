@@ -109,5 +109,5 @@ export function formatNodeServiceDescription(params?: { version?: string }): str
   if (!version) {
     return "FoxClaw Node Host";
   }
-  return `OpenClaw Node Host (v${version})`;
+  return `FoxClaw Node Host (v${version})`;
 }

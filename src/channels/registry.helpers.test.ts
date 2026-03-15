@@ -6,24 +6,17 @@ import {
 } from "./registry.js";
 
 describe("channel registry helpers", () => {
-  it("normalizes aliases + trims whitespace", () => {
-    expect(normalizeChatChannelId(" imsg ")).toBe("imessage");
-    expect(normalizeChatChannelId("gchat")).toBe("googlechat");
-    expect(normalizeChatChannelId("google-chat")).toBe("googlechat");
-    expect(normalizeChatChannelId("internet-relay-chat")).toBe("irc");
-    expect(normalizeChatChannelId("telegram")).toBe("telegram");
+  it("normalizes slack and rejects unknown channels", () => {
+    expect(normalizeChatChannelId("slack")).toBe("slack");
+    expect(normalizeChatChannelId(" Slack ")).toBe("slack");
     expect(normalizeChatChannelId("web")).toBeNull();
     expect(normalizeChatChannelId("nope")).toBeNull();
   });
 
-  it("keeps Telegram first in the default order", () => {
+  it("lists only slack", () => {
     const channels = listChatChannels();
-    expect(channels[0]?.id).toBe("telegram");
-  });
-
-  it("does not include MS Teams by default", () => {
-    const channels = listChatChannels();
-    expect(channels.some((channel) => channel.id === "msteams")).toBe(false);
+    expect(channels).toHaveLength(1);
+    expect(channels[0]?.id).toBe("slack");
   });
 
   it("formats selection lines with docs labels + website extras", () => {
@@ -35,8 +28,7 @@ describe("channel registry helpers", () => {
     const line = formatChannelSelectionLine(first, (path, label) =>
       [label, path].filter(Boolean).join(":"),
     );
-    expect(line).not.toContain("Docs:");
-    expect(line).toContain("/channels/telegram");
-    expect(line).toContain("https://foxclaw.ai");
+    expect(line).toContain("Docs:");
+    expect(line).toContain("/channels/slack");
   });
 });

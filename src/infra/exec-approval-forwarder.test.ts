@@ -60,42 +60,6 @@ function createForwarder(params: {
   return { deliver, forwarder };
 }
 
-function makeSessionCfg(options: { discordExecApprovalsEnabled?: boolean } = {}): FoxClawConfig {
-  return {
-    ...(options.discordExecApprovalsEnabled
-      ? {
-          channels: {
-            discord: {
-              execApprovals: {
-                enabled: true,
-                approvers: ["123"],
-              },
-            },
-          },
-        }
-      : {}),
-    approvals: { exec: { enabled: true, mode: "session" } },
-  } as FoxClawConfig;
-}
-
-async function expectDiscordSessionTargetRequest(params: {
-  cfg: FoxClawConfig;
-  expectedAccepted: boolean;
-  expectedDeliveryCount: number;
-}) {
-  vi.useFakeTimers();
-  const { deliver, forwarder } = createForwarder({
-    cfg: params.cfg,
-    resolveSessionTarget: () => ({ channel: "discord", to: "channel:123" }),
-  });
-
-  await expect(forwarder.handleRequested(baseRequest)).resolves.toBe(params.expectedAccepted);
-  if (params.expectedDeliveryCount === 0) {
-    expect(deliver).not.toHaveBeenCalled();
-    return;
-  }
-  expect(deliver).toHaveBeenCalledTimes(params.expectedDeliveryCount);
-}
 
 async function expectSessionFilterRequestResult(params: {
   sessionFilter: string[];
@@ -177,99 +141,6 @@ describe("exec approval forwarder", () => {
     expect(deliver).toHaveBeenCalledTimes(2);
   });
 
-  it("skips telegram forwarding when telegram exec approvals handler is enabled", async () => {
-    vi.useFakeTimers();
-    const cfg = {
-      approvals: {
-        exec: {
-          enabled: true,
-          mode: "session",
-        },
-      },
-      channels: {
-        telegram: {
-          execApprovals: {
-            enabled: true,
-            approvers: ["123"],
-            target: "channel",
-          },
-        },
-      },
-    } as FoxClawConfig;
-
-    const { deliver, forwarder } = createForwarder({
-      cfg,
-      resolveSessionTarget: () => ({ channel: "telegram", to: "-100999", threadId: 77 }),
-    });
-
-    await expect(
-      forwarder.handleRequested({
-        ...baseRequest,
-        request: {
-          ...baseRequest.request,
-          turnSourceChannel: "telegram",
-          turnSourceTo: "-100999",
-          turnSourceThreadId: "77",
-          turnSourceAccountId: "default",
-        },
-      }),
-    ).resolves.toBe(false);
-
-    expect(deliver).not.toHaveBeenCalled();
-  });
-
-  it("attaches explicit telegram buttons in forwarded telegram fallback payloads", async () => {
-    vi.useFakeTimers();
-    const cfg = {
-      approvals: {
-        exec: {
-          enabled: true,
-          mode: "targets",
-          targets: [{ channel: "telegram", to: "123" }],
-        },
-      },
-    } as FoxClawConfig;
-
-    const { deliver, forwarder } = createForwarder({ cfg });
-
-    await expect(
-      forwarder.handleRequested({
-        ...baseRequest,
-        request: {
-          ...baseRequest.request,
-          turnSourceChannel: "discord",
-          turnSourceTo: "channel:123",
-        },
-      }),
-    ).resolves.toBe(true);
-
-    expect(deliver).toHaveBeenCalledTimes(1);
-    expect(deliver).toHaveBeenCalledWith(
-      expect.objectContaining({
-        channel: "telegram",
-        to: "123",
-        payloads: [
-          expect.objectContaining({
-            channelData: {
-              execApproval: expect.objectContaining({
-                approvalId: "req-1",
-              }),
-              telegram: {
-                buttons: [
-                  [
-                    { text: "Allow Once", callback_data: "/approve req-1 allow-once" },
-                    { text: "Allow Always", callback_data: "/approve req-1 allow-always" },
-                  ],
-                  [{ text: "Deny", callback_data: "/approve req-1 deny" }],
-                ],
-              },
-            },
-          }),
-        ],
-      }),
-    );
-  });
-
   it("formats single-line commands as inline code", async () => {
     vi.useFakeTimers();
     const { deliver, forwarder } = createForwarder({ cfg: TARGETS_CFG });
@@ -346,28 +217,19 @@ describe("exec approval forwarder", () => {
     });
   });
 
-  it("returns false when all targets are skipped", async () => {
-    await expectDiscordSessionTargetRequest({
-      cfg: makeSessionCfg({ discordExecApprovalsEnabled: true }),
-      expectedAccepted: false,
-      expectedDeliveryCount: 0,
-    });
-  });
+  it("forwards to session target via slack", async () => {
+    vi.useFakeTimers();
+    const cfg = {
+      approvals: { exec: { enabled: true, mode: "session" } },
+    } as FoxClawConfig;
 
-  it("forwards to discord when discord exec approvals handler is disabled", async () => {
-    await expectDiscordSessionTargetRequest({
-      cfg: makeSessionCfg(),
-      expectedAccepted: true,
-      expectedDeliveryCount: 1,
+    const { deliver, forwarder } = createForwarder({
+      cfg,
+      resolveSessionTarget: () => ({ channel: "slack", to: "C123" }),
     });
-  });
 
-  it("skips discord forwarding when discord exec approvals handler is enabled", async () => {
-    await expectDiscordSessionTargetRequest({
-      cfg: makeSessionCfg({ discordExecApprovalsEnabled: true }),
-      expectedAccepted: false,
-      expectedDeliveryCount: 0,
-    });
+    await expect(forwarder.handleRequested(baseRequest)).resolves.toBe(true);
+    expect(deliver).toHaveBeenCalledTimes(1);
   });
 
   it("can forward resolved notices without pending cache when request payload is present", async () => {
@@ -377,7 +239,7 @@ describe("exec approval forwarder", () => {
         exec: {
           enabled: true,
           mode: "targets",
-          targets: [{ channel: "telegram", to: "123" }],
+          targets: [{ channel: "slack", to: "C123" }],
         },
       },
     } as FoxClawConfig;
@@ -386,7 +248,7 @@ describe("exec approval forwarder", () => {
     await forwarder.handleResolved({
       id: "req-missing",
       decision: "allow-once",
-      resolvedBy: "telegram:123",
+      resolvedBy: "slack:C123",
       ts: 2000,
       request: {
         command: "echo ok",

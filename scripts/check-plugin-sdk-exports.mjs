@@ -57,7 +57,6 @@ const requiredSubpathEntries = [
   "memory-lancedb",
   "minimax-portal-auth",
   "open-prose",
-  "phone-control",
   "qwen-portal-auth",
   "test-utils",
   "thread-ownership",

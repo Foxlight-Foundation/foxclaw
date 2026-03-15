@@ -471,7 +471,7 @@ export async function ensureChromeExtensionRelayServer(opts: {
         case "Browser.getVersion":
           return {
             protocolVersion: "1.3",
-            product: "Chrome/OpenClaw-Extension-Relay",
+            product: "Chrome/FoxClaw-Extension-Relay",
             revision: "0",
             userAgent: "FoxClaw-Extension-Relay",
             jsVersion: "V8",

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-const resolveCliChannelOptionsMock = vi.fn(() => ["telegram", "whatsapp"]);
+const resolveCliChannelOptionsMock = vi.fn(() => ["slack"]);
 
 vi.mock("../../version.js", () => ({
   VERSION: "9.9.9-test",
@@ -14,13 +14,13 @@ const { createProgramContext } = await import("./context.js");
 
 describe("createProgramContext", () => {
   it("builds program context from version and resolved channel options", () => {
-    resolveCliChannelOptionsMock.mockClear().mockReturnValue(["telegram", "whatsapp"]);
+    resolveCliChannelOptionsMock.mockClear().mockReturnValue(["slack"]);
     const ctx = createProgramContext();
     expect(ctx).toEqual({
       programVersion: "9.9.9-test",
-      channelOptions: ["telegram", "whatsapp"],
-      messageChannelOptions: "telegram|whatsapp",
-      agentChannelOptions: "last|telegram|whatsapp",
+      channelOptions: ["slack"],
+      messageChannelOptions: "slack",
+      agentChannelOptions: "last|slack",
     });
     expect(resolveCliChannelOptionsMock).toHaveBeenCalledOnce();
   });
@@ -44,11 +44,11 @@ describe("createProgramContext", () => {
   });
 
   it("reuses one channel option resolution across all getters", () => {
-    resolveCliChannelOptionsMock.mockClear().mockReturnValue(["telegram"]);
+    resolveCliChannelOptionsMock.mockClear().mockReturnValue(["slack"]);
     const ctx = createProgramContext();
-    expect(ctx.channelOptions).toEqual(["telegram"]);
-    expect(ctx.messageChannelOptions).toBe("telegram");
-    expect(ctx.agentChannelOptions).toBe("last|telegram");
+    expect(ctx.channelOptions).toEqual(["slack"]);
+    expect(ctx.messageChannelOptions).toBe("slack");
+    expect(ctx.agentChannelOptions).toBe("last|slack");
     expect(resolveCliChannelOptionsMock).toHaveBeenCalledOnce();
   });
 

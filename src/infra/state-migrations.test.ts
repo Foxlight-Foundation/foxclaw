@@ -2,7 +2,6 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import type { FoxClawConfig } from "../config/config.js";
-import { resolveChannelAllowFromPath } from "../pairing/pairing-store.js";
 import { createTrackedTempDirs } from "../test-utils/tracked-temp-dirs.js";
 import { detectLegacyStateMigrations, runLegacyStateMigrations } from "./state-migrations.js";
 
@@ -16,14 +15,6 @@ function createConfig(): FoxClawConfig {
     },
     session: {
       mainKey: "desk",
-    },
-    channels: {
-      telegram: {
-        accounts: {
-          beta: {},
-          alpha: {},
-        },
-      },
     },
   } as FoxClawConfig;
 }
@@ -40,7 +31,7 @@ afterEach(async () => {
 });
 
 describe("state migrations", () => {
-  it("detects legacy sessions, agent files, whatsapp auth, and telegram allowFrom copies", async () => {
+  it("detects legacy sessions, agent files, and whatsapp auth", async () => {
     const root = await createTempDir();
     const stateDir = path.join(root, ".foxclaw");
     const env = createEnv(stateDir);
@@ -69,7 +60,6 @@ describe("state migrations", () => {
       '{"oauth":true}\n',
       "utf8",
     );
-    await fs.writeFile(resolveChannelAllowFromPath("telegram", env), '["123","456"]\n', "utf8");
 
     const detected = await detectLegacyStateMigrations({
       cfg,
@@ -83,18 +73,13 @@ describe("state migrations", () => {
     expect(detected.sessions.legacyKeys).toEqual(["group:123@g.us"]);
     expect(detected.agentDir.hasLegacy).toBe(true);
     expect(detected.whatsappAuth.hasLegacy).toBe(true);
-    expect(detected.pairingAllowFrom.hasLegacyTelegram).toBe(true);
-    expect(detected.pairingAllowFrom.copyPlans.map((plan) => plan.targetPath)).toEqual([
-      resolveChannelAllowFromPath("telegram", env, "alpha"),
-      resolveChannelAllowFromPath("telegram", env, "beta"),
-    ]);
+    expect(detected.pairingAllowFrom.hasLegacyTelegram).toBe(false);
+    expect(detected.pairingAllowFrom.copyPlans).toEqual([]);
     expect(detected.preview).toEqual([
       `- Sessions: ${path.join(stateDir, "sessions")} → ${path.join(stateDir, "agents", "worker-1", "sessions")}`,
       `- Sessions: canonicalize legacy keys in ${path.join(stateDir, "agents", "worker-1", "sessions", "sessions.json")}`,
       `- Agent dir: ${path.join(stateDir, "agent")} → ${path.join(stateDir, "agents", "worker-1", "agent")}`,
       `- WhatsApp auth: ${path.join(stateDir, "credentials")} → ${path.join(stateDir, "credentials", "whatsapp", "default")} (keep oauth.json)`,
-      `- Telegram pairing allowFrom: ${resolveChannelAllowFromPath("telegram", env)} → ${resolveChannelAllowFromPath("telegram", env, "alpha")}`,
-      `- Telegram pairing allowFrom: ${resolveChannelAllowFromPath("telegram", env)} → ${resolveChannelAllowFromPath("telegram", env, "beta")}`,
     ]);
   });
 
@@ -132,8 +117,6 @@ describe("state migrations", () => {
       '{"oauth":true}\n',
       "utf8",
     );
-    await fs.writeFile(resolveChannelAllowFromPath("telegram", env), '["123","456"]\n', "utf8");
-
     const detected = await detectLegacyStateMigrations({
       cfg,
       env,
@@ -153,8 +136,6 @@ describe("state migrations", () => {
       "Moved agent file settings.json → agents/worker-1/agent",
       "Moved WhatsApp auth creds.json → whatsapp/default",
       "Moved WhatsApp auth pre-key-1.json → whatsapp/default",
-      `Copied Telegram pairing allowFrom → ${resolveChannelAllowFromPath("telegram", env, "alpha")}`,
-      `Copied Telegram pairing allowFrom → ${resolveChannelAllowFromPath("telegram", env, "beta")}`,
     ]);
 
     const mergedStore = JSON.parse(
@@ -191,11 +172,5 @@ describe("state migrations", () => {
     await expect(
       fs.readFile(path.join(stateDir, "credentials", "oauth.json"), "utf8"),
     ).resolves.toContain('"oauth":true');
-    await expect(
-      fs.readFile(resolveChannelAllowFromPath("telegram", env, "alpha"), "utf8"),
-    ).resolves.toBe('["123","456"]\n');
-    await expect(
-      fs.readFile(resolveChannelAllowFromPath("telegram", env, "beta"), "utf8"),
-    ).resolves.toBe('["123","456"]\n');
   });
 });

@@ -34,10 +34,10 @@ describe("enablePluginInConfig", () => {
 
   it("writes built-in channels to channels.<id>.enabled and plugins.entries", () => {
     const cfg: FoxClawConfig = {};
-    const result = enablePluginInConfig(cfg, "telegram");
+    const result = enablePluginInConfig(cfg, "slack");
     expect(result.enabled).toBe(true);
-    expect(result.config.channels?.telegram?.enabled).toBe(true);
-    expect(result.config.plugins?.entries?.telegram?.enabled).toBe(true);
+    expect(result.config.channels?.slack?.enabled).toBe(true);
+    expect(result.config.plugins?.entries?.slack?.enabled).toBe(true);
   });
 
   it("adds built-in channel id to allowlist when allowlist is configured", () => {
@@ -46,30 +46,30 @@ describe("enablePluginInConfig", () => {
         allow: ["memory-core"],
       },
     };
-    const result = enablePluginInConfig(cfg, "telegram");
+    const result = enablePluginInConfig(cfg, "slack");
     expect(result.enabled).toBe(true);
-    expect(result.config.channels?.telegram?.enabled).toBe(true);
-    expect(result.config.plugins?.allow).toEqual(["memory-core", "telegram"]);
+    expect(result.config.channels?.slack?.enabled).toBe(true);
+    expect(result.config.plugins?.allow).toEqual(["memory-core", "slack"]);
   });
 
   it("re-enables built-in channels after explicit plugin-level disable", () => {
     const cfg: FoxClawConfig = {
       channels: {
-        telegram: {
+        slack: {
           enabled: true,
         },
       },
       plugins: {
         entries: {
-          telegram: {
+          slack: {
             enabled: false,
           },
         },
       },
     };
-    const result = enablePluginInConfig(cfg, "telegram");
+    const result = enablePluginInConfig(cfg, "slack");
     expect(result.enabled).toBe(true);
-    expect(result.config.channels?.telegram?.enabled).toBe(true);
-    expect(result.config.plugins?.entries?.telegram?.enabled).toBe(true);
+    expect(result.config.channels?.slack?.enabled).toBe(true);
+    expect(result.config.plugins?.entries?.slack?.enabled).toBe(true);
   });
 });

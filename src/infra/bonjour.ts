@@ -45,7 +45,7 @@ function safeServiceName(name: string) {
 
 function prettifyInstanceName(name: string) {
   const normalized = name.trim().replace(/\s+/g, " ");
-  return normalized.replace(/\s+\(OpenClaw\)\s*$/i, "").trim() || normalized;
+  return normalized.replace(/\s+\((?:Open|Fox)Claw\)\s*$/i, "").trim() || normalized;
 }
 
 type BonjourService = {

@@ -13,25 +13,20 @@ async function withTempHome<T>(fn: (home: string) => Promise<T>): Promise<T> {
   return withTempHomeBase(fn, { prefix: "foxclaw-cron-heartbeat-suite-" });
 }
 
-async function createTelegramDeliveryFixture(home: string): Promise<{
+async function createSlackDeliveryFixture(home: string): Promise<{
   storePath: string;
   deps: CliDeps;
 }> {
   const storePath = await writeSessionStore(home, {
-    lastProvider: "telegram",
-    lastChannel: "telegram",
-    lastTo: "123",
+    lastProvider: "slack",
+    lastChannel: "slack",
+    lastTo: "C123",
   });
   const deps: CliDeps = {
-    sendMessageSlack: vi.fn(),
-    sendMessageWhatsApp: vi.fn(),
-    sendMessageTelegram: vi.fn().mockResolvedValue({
-      messageId: "t1",
-      chatId: "123",
+    sendMessageSlack: vi.fn().mockResolvedValue({
+      messageTs: "slack-1",
+      channel: "C123",
     }),
-    sendMessageDiscord: vi.fn(),
-    sendMessageSignal: vi.fn(),
-    sendMessageIMessage: vi.fn(),
   };
   return { storePath, deps };
 }
@@ -46,7 +41,7 @@ function mockEmbeddedAgentPayloads(payloads: Array<{ text: string; mediaUrl?: st
   });
 }
 
-async function runTelegramAnnounceTurn(params: {
+async function runSlackAnnounceTurn(params: {
   home: string;
   storePath: string;
   deps: CliDeps;
@@ -54,14 +49,16 @@ async function runTelegramAnnounceTurn(params: {
   signal?: AbortSignal;
 }) {
   return runCronIsolatedAgentTurn({
-    cfg: params.cfg ?? makeCfg(params.home, params.storePath),
+    cfg: params.cfg ?? makeCfg(params.home, params.storePath, {
+      channels: { slack: { botToken: "xoxb-1" } },
+    }),
     deps: params.deps,
     job: {
       ...makeJob({
         kind: "agentTurn",
         message: "do it",
       }),
-      delivery: { mode: "announce", channel: "telegram", to: "123" },
+      delivery: { mode: "announce", channel: "slack", to: "C123" },
     },
     message: "do it",
     sessionKey: "cron:job-1",
@@ -75,18 +72,17 @@ describe("runCronIsolatedAgentTurn", () => {
     setupIsolatedAgentTurnMocks({ fast: true });
   });
 
-  it("does not fan out telegram cron delivery across allowFrom entries", async () => {
+  it("does not fan out slack cron delivery across allowFrom entries", async () => {
     await withTempHome(async (home) => {
-      const { storePath, deps } = await createTelegramDeliveryFixture(home);
+      const { storePath, deps } = await createSlackDeliveryFixture(home);
       mockEmbeddedAgentPayloads([
         { text: "HEARTBEAT_OK", mediaUrl: "https://example.com/img.png" },
       ]);
 
       const cfg = makeCfg(home, storePath, {
         channels: {
-          telegram: {
-            botToken: "tok",
-            allowFrom: ["111", "222", "333"],
+          slack: {
+            botToken: "xoxb-1",
           },
         },
       });
@@ -99,7 +95,7 @@ describe("runCronIsolatedAgentTurn", () => {
             kind: "agentTurn",
             message: "deliver once",
           }),
-          delivery: { mode: "announce", channel: "telegram", to: "123" },
+          delivery: { mode: "announce", channel: "slack", to: "C123" },
         },
         message: "deliver once",
         sessionKey: "cron:job-1",
@@ -108,9 +104,9 @@ describe("runCronIsolatedAgentTurn", () => {
 
       expect(res.status).toBe("ok");
       expect(res.delivered).toBe(true);
-      expect(deps.sendMessageTelegram).toHaveBeenCalledTimes(1);
-      expect(deps.sendMessageTelegram).toHaveBeenCalledWith(
-        "123",
+      expect(deps.sendMessageSlack).toHaveBeenCalledTimes(1);
+      expect(deps.sendMessageSlack).toHaveBeenCalledWith(
+        "C123",
         "HEARTBEAT_OK",
         expect.objectContaining({ accountId: undefined }),
       );
@@ -119,13 +115,13 @@ describe("runCronIsolatedAgentTurn", () => {
 
   it("suppresses announce delivery for multi-payload narration ending in HEARTBEAT_OK", async () => {
     await withTempHome(async (home) => {
-      const { storePath, deps } = await createTelegramDeliveryFixture(home);
+      const { storePath, deps } = await createSlackDeliveryFixture(home);
       mockEmbeddedAgentPayloads([
         { text: "Checked inbox and calendar. Nothing actionable yet." },
         { text: "HEARTBEAT_OK" },
       ]);
 
-      const res = await runTelegramAnnounceTurn({
+      const res = await runSlackAnnounceTurn({
         home,
         storePath,
         deps,
@@ -133,40 +129,42 @@ describe("runCronIsolatedAgentTurn", () => {
 
       expect(res.status).toBe("ok");
       expect(res.delivered).toBe(false);
-      expect(deps.sendMessageTelegram).not.toHaveBeenCalled();
+      expect(deps.sendMessageSlack).not.toHaveBeenCalled();
       expect(runSubagentAnnounceFlow).not.toHaveBeenCalled();
     });
   });
 
   it("delivers media payloads even when heartbeat text is suppressed", async () => {
     await withTempHome(async (home) => {
-      const { storePath, deps } = await createTelegramDeliveryFixture(home);
+      const { storePath, deps } = await createSlackDeliveryFixture(home);
 
       mockEmbeddedAgentPayloads([
         { text: "HEARTBEAT_OK", mediaUrl: "https://example.com/img.png" },
       ]);
 
-      const mediaRes = await runTelegramAnnounceTurn({
+      const mediaRes = await runSlackAnnounceTurn({
         home,
         storePath,
         deps,
       });
 
       expect(mediaRes.status).toBe("ok");
-      expect(deps.sendMessageTelegram).toHaveBeenCalled();
+      expect(deps.sendMessageSlack).toHaveBeenCalled();
       expect(runSubagentAnnounceFlow).not.toHaveBeenCalled();
     });
   });
 
   it("keeps non-empty heartbeat text when last-target ack suppression is disabled", async () => {
     await withTempHome(async (home) => {
-      const { storePath, deps } = await createTelegramDeliveryFixture(home);
+      const { storePath, deps } = await createSlackDeliveryFixture(home);
 
       vi.mocked(runSubagentAnnounceFlow).mockClear();
-      vi.mocked(deps.sendMessageTelegram as (...args: unknown[]) => unknown).mockClear();
+      vi.mocked(deps.sendMessageSlack as (...args: unknown[]) => unknown).mockClear();
       mockEmbeddedAgentPayloads([{ text: "HEARTBEAT_OK 🦞" }]);
 
-      const cfg = makeCfg(home, storePath);
+      const cfg = makeCfg(home, storePath, {
+        channels: { slack: { botToken: "xoxb-1" } },
+      });
       cfg.agents = {
         ...cfg.agents,
         defaults: {
@@ -193,9 +191,9 @@ describe("runCronIsolatedAgentTurn", () => {
       expect(keepRes.status).toBe("ok");
       expect(keepRes.delivered).toBe(true);
       expect(runSubagentAnnounceFlow).not.toHaveBeenCalled();
-      expect(deps.sendMessageTelegram).toHaveBeenCalledTimes(1);
-      expect(deps.sendMessageTelegram).toHaveBeenCalledWith(
-        "123",
+      expect(deps.sendMessageSlack).toHaveBeenCalledTimes(1);
+      expect(deps.sendMessageSlack).toHaveBeenCalledWith(
+        "C123",
         "HEARTBEAT_OK 🦞",
         expect.objectContaining({ accountId: undefined }),
       );
@@ -204,11 +202,13 @@ describe("runCronIsolatedAgentTurn", () => {
 
   it("deletes the direct cron session after last-target text delivery", async () => {
     await withTempHome(async (home) => {
-      const { storePath, deps } = await createTelegramDeliveryFixture(home);
+      const { storePath, deps } = await createSlackDeliveryFixture(home);
 
       mockEmbeddedAgentPayloads([{ text: "HEARTBEAT_OK 🦞" }]);
 
-      const cfg = makeCfg(home, storePath);
+      const cfg = makeCfg(home, storePath, {
+        channels: { slack: { botToken: "xoxb-1" } },
+      });
       cfg.agents = {
         ...cfg.agents,
         defaults: {
@@ -217,7 +217,7 @@ describe("runCronIsolatedAgentTurn", () => {
         },
       };
 
-      vi.mocked(deps.sendMessageTelegram as (...args: unknown[]) => unknown).mockClear();
+      vi.mocked(deps.sendMessageSlack as (...args: unknown[]) => unknown).mockClear();
       vi.mocked(runSubagentAnnounceFlow).mockClear();
       vi.mocked(callGateway).mockClear();
 
@@ -240,9 +240,9 @@ describe("runCronIsolatedAgentTurn", () => {
       expect(deleteRes.status).toBe("ok");
       expect(deleteRes.delivered).toBe(true);
       expect(runSubagentAnnounceFlow).not.toHaveBeenCalled();
-      expect(deps.sendMessageTelegram).toHaveBeenCalledTimes(1);
-      expect(deps.sendMessageTelegram).toHaveBeenCalledWith(
-        "123",
+      expect(deps.sendMessageSlack).toHaveBeenCalledTimes(1);
+      expect(deps.sendMessageSlack).toHaveBeenCalledWith(
+        "C123",
         "HEARTBEAT_OK 🦞",
         expect.objectContaining({ accountId: undefined }),
       );
@@ -262,7 +262,7 @@ describe("runCronIsolatedAgentTurn", () => {
 
   it("skips structured outbound delivery when timeout abort is already set", async () => {
     await withTempHome(async (home) => {
-      const { storePath, deps } = await createTelegramDeliveryFixture(home);
+      const { storePath, deps } = await createSlackDeliveryFixture(home);
       const controller = new AbortController();
       controller.abort("cron: job execution timed out");
 
@@ -270,7 +270,7 @@ describe("runCronIsolatedAgentTurn", () => {
         { text: "HEARTBEAT_OK", mediaUrl: "https://example.com/img.png" },
       ]);
 
-      const res = await runTelegramAnnounceTurn({
+      const res = await runSlackAnnounceTurn({
         home,
         storePath,
         deps,
@@ -279,7 +279,7 @@ describe("runCronIsolatedAgentTurn", () => {
 
       expect(res.status).toBe("error");
       expect(res.error).toContain("timed out");
-      expect(deps.sendMessageTelegram).not.toHaveBeenCalled();
+      expect(deps.sendMessageSlack).not.toHaveBeenCalled();
       expect(runSubagentAnnounceFlow).not.toHaveBeenCalled();
     });
   });

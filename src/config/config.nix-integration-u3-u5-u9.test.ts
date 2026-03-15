@@ -164,15 +164,6 @@ describe("Nix integration (U3, U5, U9)", () => {
                   },
                 ],
               },
-              channels: {
-                whatsapp: {
-                  accounts: {
-                    personal: {
-                      authDir: "~/.foxclaw/credentials/wa-personal",
-                    },
-                  },
-                },
-              },
             },
             null,
             2,
@@ -189,9 +180,6 @@ describe("Nix integration (U3, U5, U9)", () => {
           path.join(home, ".foxclaw", "agents", "main"),
         );
         expect(cfg.agents?.list?.[0]?.sandbox?.workspaceRoot).toBe(path.join(home, "sandbox-root"));
-        expect(cfg.channels?.whatsapp?.accounts?.personal?.authDir).toBe(
-          path.join(home, ".foxclaw", "credentials", "wa-personal"),
-        );
       });
     });
   });
@@ -222,46 +210,5 @@ describe("Nix integration (U3, U5, U9)", () => {
     });
   });
 
-  describe("U9: telegram.tokenFile schema validation", () => {
-    it("accepts config with only botToken", async () => {
-      await withLoadedConfigForHome(
-        {
-          channels: { telegram: { botToken: "123:ABC" } },
-        },
-        async (cfg) => {
-          expect(cfg.channels?.telegram?.botToken).toBe("123:ABC");
-          expect(cfg.channels?.telegram?.tokenFile).toBeUndefined();
-        },
-      );
-    });
-
-    it("accepts config with only tokenFile", async () => {
-      await withLoadedConfigForHome(
-        {
-          channels: { telegram: { tokenFile: "/run/agenix/telegram-token" } },
-        },
-        async (cfg) => {
-          expect(cfg.channels?.telegram?.tokenFile).toBe("/run/agenix/telegram-token");
-          expect(cfg.channels?.telegram?.botToken).toBeUndefined();
-        },
-      );
-    });
-
-    it("accepts config with both botToken and tokenFile", async () => {
-      await withLoadedConfigForHome(
-        {
-          channels: {
-            telegram: {
-              botToken: "fallback:token",
-              tokenFile: "/run/agenix/telegram-token",
-            },
-          },
-        },
-        async (cfg) => {
-          expect(cfg.channels?.telegram?.botToken).toBe("fallback:token");
-          expect(cfg.channels?.telegram?.tokenFile).toBe("/run/agenix/telegram-token");
-        },
-      );
-    });
-  });
+  // U9: telegram.tokenFile schema validation was removed (telegram channel stripped).
 });

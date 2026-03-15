@@ -7,13 +7,6 @@ import { makeCfg, makeJob } from "./isolated-agent.test-harness.js";
 export function createCliDeps(overrides: Partial<CliDeps> = {}): CliDeps {
   return {
     sendMessageSlack: vi.fn().mockResolvedValue({ messageTs: "slack-1", channel: "C1" }),
-    sendMessageWhatsApp: vi
-      .fn()
-      .mockResolvedValue({ messageId: "wa-1", toJid: "123@s.whatsapp.net" }),
-    sendMessageTelegram: vi.fn().mockResolvedValue({ messageId: "tg-1", chatId: "123" }),
-    sendMessageDiscord: vi.fn().mockResolvedValue({ messageId: "discord-1", channelId: "123" }),
-    sendMessageSignal: vi.fn().mockResolvedValue({ messageId: "signal-1", conversationId: "123" }),
-    sendMessageIMessage: vi.fn().mockResolvedValue({ messageId: "imessage-1", chatId: "123" }),
     ...overrides,
   };
 }
@@ -32,21 +25,19 @@ export function mockAgentPayloads(
   });
 }
 
-export function expectDirectTelegramDelivery(
+export function expectDirectSlackDelivery(
   deps: CliDeps,
-  params: { chatId: string; text: string; messageThreadId?: number },
+  params: { to: string; text: string },
 ) {
-  expect(deps.sendMessageTelegram).toHaveBeenCalledTimes(1);
-  expect(deps.sendMessageTelegram).toHaveBeenCalledWith(
-    params.chatId,
+  expect(deps.sendMessageSlack).toHaveBeenCalledTimes(1);
+  expect(deps.sendMessageSlack).toHaveBeenCalledWith(
+    params.to,
     params.text,
-    expect.objectContaining(
-      params.messageThreadId === undefined ? {} : { messageThreadId: params.messageThreadId },
-    ),
+    expect.objectContaining({}),
   );
 }
 
-export async function runTelegramAnnounceTurn(params: {
+export async function runSlackAnnounceTurn(params: {
   home: string;
   storePath: string;
   deps: CliDeps;
@@ -60,7 +51,7 @@ export async function runTelegramAnnounceTurn(params: {
 }): Promise<Awaited<ReturnType<typeof runCronIsolatedAgentTurn>>> {
   return runCronIsolatedAgentTurn({
     cfg: makeCfg(params.home, params.storePath, {
-      channels: { telegram: { botToken: "t-1" } },
+      channels: { slack: { botToken: "xoxb-1" } },
     }),
     deps: params.deps,
     job: {
@@ -73,3 +64,4 @@ export async function runTelegramAnnounceTurn(params: {
     deliveryContract: params.deliveryContract,
   });
 }
+

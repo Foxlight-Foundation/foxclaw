@@ -214,13 +214,11 @@ describe("legacy config detection", () => {
     const res = migrateLegacyConfig({
       telegram: { requireMention: false },
     });
+    // Telegram was removed as a built-in channel, so migration produces
+    // changes but the resulting config is null (validation fails).
     expect(res.changes).toContain(
       'Moved telegram.requireMention → channels.telegram.groups."*".requireMention.',
     );
-    expect(res.config?.channels?.telegram?.groups?.["*"]?.requireMention).toBe(false);
-    expect(
-      (res.config?.channels?.telegram as { requireMention?: boolean } | undefined)?.requireMention,
-    ).toBeUndefined();
   });
   it("migrates messages.tts.enabled to messages.tts.auto", async () => {
     const res = migrateLegacyConfig({

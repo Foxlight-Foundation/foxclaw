@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
+import { applyLegacyMigrations } from "./legacy.js";
 import { migrateLegacyConfig } from "./legacy-migrate.js";
 import { WHISPER_BASE_AUDIO_MODEL } from "./legacy-migrate.test-helpers.js";
+
+// Helper that applies legacy migrations without validation (for testing
+// migrations that produce configs with removed channels like telegram/imessage).
+function applyMigrations(raw: unknown) {
+  const { next, changes } = applyLegacyMigrations(raw);
+  return { config: next as Record<string, unknown> | null, changes };
+}
 
 describe("legacy migrate audio transcription", () => {
   it("moves routing.transcribeAudio into tools.media.audio.models", () => {
@@ -58,7 +66,9 @@ describe("legacy migrate audio transcription", () => {
 
 describe("legacy migrate mention routing", () => {
   it("moves routing.groupChat.requireMention into channel group defaults", () => {
-    const res = migrateLegacyConfig({
+    // Uses applyMigrations (no validation) because telegram/imessage were
+    // removed as built-in channels so validation would reject the output.
+    const res = applyMigrations({
       routing: {
         groupChat: {
           requireMention: true,
@@ -72,13 +82,20 @@ describe("legacy migrate mention routing", () => {
     expect(res.changes).toContain(
       'Moved routing.groupChat.requireMention → channels.imessage.groups."*".requireMention.',
     );
-    expect(res.config?.channels?.telegram?.groups?.["*"]?.requireMention).toBe(true);
-    expect(res.config?.channels?.imessage?.groups?.["*"]?.requireMention).toBe(true);
-    expect((res.config as { routing?: unknown } | null)?.routing).toBeUndefined();
+    const channels = (res.config as Record<string, unknown> | null)?.channels as
+      | Record<string, unknown>
+      | undefined;
+    const telegram = channels?.telegram as Record<string, unknown> | undefined;
+    const imessage = channels?.imessage as Record<string, unknown> | undefined;
+    const telegramGroups = telegram?.groups as Record<string, Record<string, unknown>> | undefined;
+    const imessageGroups = imessage?.groups as Record<string, Record<string, unknown>> | undefined;
+    expect(telegramGroups?.["*"]?.requireMention).toBe(true);
+    expect(imessageGroups?.["*"]?.requireMention).toBe(true);
+    expect(res.config?.routing).toBeUndefined();
   });
 
   it("moves channels.telegram.requireMention into groups.*.requireMention", () => {
-    const res = migrateLegacyConfig({
+    const res = applyMigrations({
       channels: {
         telegram: {
           requireMention: false,
@@ -89,10 +106,13 @@ describe("legacy migrate mention routing", () => {
     expect(res.changes).toContain(
       'Moved telegram.requireMention → channels.telegram.groups."*".requireMention.',
     );
-    expect(res.config?.channels?.telegram?.groups?.["*"]?.requireMention).toBe(false);
-    expect(
-      (res.config?.channels?.telegram as { requireMention?: unknown } | undefined)?.requireMention,
-    ).toBeUndefined();
+    const channels = (res.config as Record<string, unknown> | null)?.channels as
+      | Record<string, unknown>
+      | undefined;
+    const telegram = channels?.telegram as Record<string, unknown> | undefined;
+    const groups = telegram?.groups as Record<string, Record<string, unknown>> | undefined;
+    expect(groups?.["*"]?.requireMention).toBe(false);
+    expect(telegram?.requireMention).toBeUndefined();
   });
 });
 
@@ -141,7 +161,7 @@ describe("legacy migrate heartbeat config", () => {
         defaults: {
           heartbeat: {
             every: "1h",
-            target: "telegram",
+            target: "slack",
           },
         },
       },
@@ -152,7 +172,7 @@ describe("legacy migrate heartbeat config", () => {
     );
     expect(res.config?.agents?.defaults?.heartbeat).toEqual({
       every: "1h",
-      target: "telegram",
+      target: "slack",
       model: "anthropic/claude-3-5-haiku-20241022",
     });
     expect((res.config as { heartbeat?: unknown } | null)?.heartbeat).toBeUndefined();
@@ -190,19 +210,19 @@ describe("legacy migrate heartbeat config", () => {
       agent: {
         heartbeat: {
           every: "1h",
-          target: "telegram",
+          target: "slack",
         },
       },
       heartbeat: {
         every: "30m",
-        target: "discord",
+        target: "last",
         model: "anthropic/claude-3-5-haiku-20241022",
       },
     });
 
     expect(res.config?.agents?.defaults?.heartbeat).toEqual({
       every: "1h",
-      target: "telegram",
+      target: "slack",
       model: "anthropic/claude-3-5-haiku-20241022",
     });
     expect((res.config as { heartbeat?: unknown } | null)?.heartbeat).toBeUndefined();

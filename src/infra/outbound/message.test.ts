@@ -36,6 +36,27 @@ vi.mock("../../plugins/loader.js", () => ({
   loadFoxClawPlugins: mocks.loadFoxClawPlugins,
 }));
 
+vi.mock("./channel-selection.js", () => ({
+  resolveMessageChannelSelection: async ({ channel }: { channel?: string }) => ({
+    channel: channel?.trim().toLowerCase() ?? "slack",
+    configured: [],
+    source: "explicit",
+  }),
+}));
+
+vi.mock("../../utils/message-channel.js", async () => {
+  const actual = await vi.importActual<typeof import("../../utils/message-channel.js")>(
+    "../../utils/message-channel.js",
+  );
+  return {
+    ...actual,
+    normalizeMessageChannel: (value?: string | null) =>
+      typeof value === "string" ? value.trim().toLowerCase() || undefined : undefined,
+    isDeliverableMessageChannel: () => true,
+    listDeliverableMessageChannels: () => ["slack", "matrix"],
+  };
+});
+
 vi.mock("./targets.js", () => ({
   resolveOutboundTarget: mocks.resolveOutboundTarget,
 }));
@@ -60,14 +81,14 @@ describe("sendMessage", () => {
       outbound: { deliveryMode: "direct" },
     });
     mocks.resolveOutboundTarget.mockImplementation(({ to }: { to: string }) => ({ ok: true, to }));
-    mocks.deliverOutboundPayloads.mockResolvedValue([{ channel: "mattermost", messageId: "m1" }]);
+    mocks.deliverOutboundPayloads.mockResolvedValue([{ channel: "slack", messageId: "m1" }]);
   });
 
   it("passes explicit agentId to outbound delivery for scoped media roots", async () => {
     await sendMessage({
       cfg: {},
-      channel: "telegram",
-      to: "123456",
+      channel: "slack",
+      to: "C123",
       content: "hi",
       agentId: "work",
     });
@@ -75,8 +96,8 @@ describe("sendMessage", () => {
     expect(mocks.deliverOutboundPayloads).toHaveBeenCalledWith(
       expect.objectContaining({
         session: expect.objectContaining({ agentId: "work" }),
-        channel: "telegram",
-        to: "123456",
+        channel: "slack",
+        to: "C123",
       }),
     );
   });
@@ -84,19 +105,19 @@ describe("sendMessage", () => {
   it("propagates the send idempotency key into mirrored transcript delivery", async () => {
     await sendMessage({
       cfg: {},
-      channel: "telegram",
-      to: "123456",
+      channel: "slack",
+      to: "C123",
       content: "hi",
       idempotencyKey: "idem-send-1",
       mirror: {
-        sessionKey: "agent:main:telegram:dm:123456",
+        sessionKey: "agent:main:slack:channel:C123",
       },
     });
 
     expect(mocks.deliverOutboundPayloads).toHaveBeenCalledWith(
       expect.objectContaining({
         mirror: expect.objectContaining({
-          sessionKey: "agent:main:telegram:dm:123456",
+          sessionKey: "agent:main:slack:channel:C123",
           text: "hi",
           idempotencyKey: "idem-send-1",
         }),
@@ -104,25 +125,25 @@ describe("sendMessage", () => {
     );
   });
 
-  it("recovers telegram plugin resolution so message/send does not fail with Unknown channel: telegram", async () => {
-    const telegramPlugin = {
+  it("recovers plugin resolution so message/send does not fail with Unknown channel", async () => {
+    const matrixPlugin = {
       outbound: { deliveryMode: "direct" },
     };
     mocks.getChannelPlugin
       .mockReturnValueOnce(undefined)
-      .mockReturnValueOnce(telegramPlugin)
-      .mockReturnValue(telegramPlugin);
+      .mockReturnValueOnce(matrixPlugin)
+      .mockReturnValue(matrixPlugin);
 
     await expect(
       sendMessage({
-        cfg: { channels: { telegram: { botToken: "test-token" } } },
-        channel: "telegram",
-        to: "123456",
+        cfg: { channels: { matrix: { homeserver: "https://example.com" } } },
+        channel: "matrix",
+        to: "!room:example.com",
         content: "hi",
       }),
     ).resolves.toMatchObject({
-      channel: "telegram",
-      to: "123456",
+      channel: "matrix",
+      to: "!room:example.com",
       via: "direct",
     });
 

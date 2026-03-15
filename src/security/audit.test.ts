@@ -27,7 +27,7 @@ const execDockerRawUnavailable: NonNullable<SecurityAuditOptions["execDockerRawF
 };
 
 function stubChannelPlugin(params: {
-  id: "discord" | "slack" | "telegram" | "zalouser";
+  id: "discord" | "slack" | "zalouser";
   label: string;
   resolveAccount: (cfg: FoxClawConfig, accountId: string | null | undefined) => unknown;
   inspectAccount?: (cfg: FoxClawConfig, accountId: string | null | undefined) => unknown;
@@ -91,21 +91,6 @@ const slackPlugin = stubChannelPlugin({
     const resolvedAccountId = typeof accountId === "string" && accountId ? accountId : "default";
     const base = cfg.channels?.slack ?? {};
     const account = cfg.channels?.slack?.accounts?.[resolvedAccountId] ?? {};
-    return { config: { ...base, ...account } };
-  },
-});
-
-const telegramPlugin = stubChannelPlugin({
-  id: "telegram",
-  label: "Telegram",
-  listAccountIds: (cfg) => {
-    const ids = Object.keys(cfg.channels?.telegram?.accounts ?? {});
-    return ids.length > 0 ? ids : ["default"];
-  },
-  resolveAccount: (cfg, accountId) => {
-    const resolvedAccountId = typeof accountId === "string" && accountId ? accountId : "default";
-    const base = cfg.channels?.telegram ?? {};
-    const account = cfg.channels?.telegram?.accounts?.[resolvedAccountId] ?? {};
     return { config: { ...base, ...account } };
   },
 });
@@ -2560,69 +2545,6 @@ description: test skill
     });
   });
 
-  it("flags Telegram group commands without a sender allowlist", async () => {
-    await withChannelSecurityStateDir(async () => {
-      const cfg: FoxClawConfig = {
-        channels: {
-          telegram: {
-            enabled: true,
-            botToken: "t",
-            groupPolicy: "allowlist",
-            groups: { "-100123": {} },
-          },
-        },
-      };
-
-      const res = await runSecurityAudit({
-        config: cfg,
-        includeFilesystem: false,
-        includeChannelSecurity: true,
-        plugins: [telegramPlugin],
-      });
-
-      expect(res.findings).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            checkId: "channels.telegram.groups.allowFrom.missing",
-            severity: "critical",
-          }),
-        ]),
-      );
-    });
-  });
-
-  it("warns when Telegram allowFrom entries are non-numeric (legacy @username configs)", async () => {
-    await withChannelSecurityStateDir(async () => {
-      const cfg: FoxClawConfig = {
-        channels: {
-          telegram: {
-            enabled: true,
-            botToken: "t",
-            groupPolicy: "allowlist",
-            groupAllowFrom: ["@TrustedOperator"],
-            groups: { "-100123": {} },
-          },
-        },
-      };
-
-      const res = await runSecurityAudit({
-        config: cfg,
-        includeFilesystem: false,
-        includeChannelSecurity: true,
-        plugins: [telegramPlugin],
-      });
-
-      expect(res.findings).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            checkId: "channels.telegram.allowFrom.invalid_entries",
-            severity: "warn",
-          }),
-        ]),
-      );
-    });
-  });
-
   it("adds probe_failed warnings for deep probe failure modes", async () => {
     const cfg: FoxClawConfig = { gateway: { mode: "local" } };
     const cases: Array<{
@@ -3041,7 +2963,7 @@ description: test skill
         installs: {
           "voice-call": {
             source: "npm",
-            spec: "@openclaw/voice-call",
+            spec: "@foxclaw/voice-call",
           },
         },
       },
@@ -3050,7 +2972,7 @@ description: test skill
           installs: {
             "test-hooks": {
               source: "npm",
-              spec: "@openclaw/test-hooks",
+              spec: "@foxclaw/test-hooks",
             },
           },
         },
@@ -3078,7 +3000,7 @@ description: test skill
         installs: {
           "voice-call": {
             source: "npm",
-            spec: "@openclaw/voice-call@1.2.3",
+            spec: "@foxclaw/voice-call@1.2.3",
             integrity: "sha512-plugin",
           },
         },
@@ -3088,7 +3010,7 @@ description: test skill
           installs: {
             "test-hooks": {
               source: "npm",
-              spec: "@openclaw/test-hooks@1.2.3",
+              spec: "@foxclaw/test-hooks@1.2.3",
               integrity: "sha512-hook",
             },
           },
@@ -3120,12 +3042,12 @@ description: test skill
     await fs.mkdir(hookDir, { recursive: true });
     await fs.writeFile(
       path.join(pluginDir, "package.json"),
-      JSON.stringify({ name: "@openclaw/voice-call", version: "9.9.9" }),
+      JSON.stringify({ name: "@foxclaw/voice-call", version: "9.9.9" }),
       "utf-8",
     );
     await fs.writeFile(
       path.join(hookDir, "package.json"),
-      JSON.stringify({ name: "@openclaw/test-hooks", version: "8.8.8" }),
+      JSON.stringify({ name: "@foxclaw/test-hooks", version: "8.8.8" }),
       "utf-8",
     );
 
@@ -3134,7 +3056,7 @@ description: test skill
         installs: {
           "voice-call": {
             source: "npm",
-            spec: "@openclaw/voice-call@1.2.3",
+            spec: "@foxclaw/voice-call@1.2.3",
             integrity: "sha512-plugin",
             resolvedVersion: "1.2.3",
           },
@@ -3145,7 +3067,7 @@ description: test skill
           installs: {
             "test-hooks": {
               source: "npm",
-              spec: "@openclaw/test-hooks@1.2.3",
+              spec: "@foxclaw/test-hooks@1.2.3",
               integrity: "sha512-hook",
               resolvedVersion: "1.2.3",
             },

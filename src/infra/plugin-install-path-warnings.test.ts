@@ -65,12 +65,12 @@ describe("plugin install path warnings", () => {
       formatPluginInstallPathIssue({
         issue: issue!,
         pluginLabel: "Matrix",
-        defaultInstallCommand: "foxclaw plugins install @openclaw/matrix",
+        defaultInstallCommand: "foxclaw plugins install @foxclaw/matrix",
         repoInstallCommand: "foxclaw plugins install ./extensions/matrix",
       }),
     ).toEqual([
       "Matrix is installed from a custom path that no longer exists: /tmp/foxclaw-matrix-missing",
-      'Reinstall with "foxclaw plugins install @openclaw/matrix".',
+      'Reinstall with "foxclaw plugins install @foxclaw/matrix".',
       'If you are running from a repo checkout, you can also use "foxclaw plugins install ./extensions/matrix".',
     ]);
   });
@@ -104,14 +104,14 @@ describe("plugin install path warnings", () => {
           path: "/tmp/matrix-plugin",
         },
         pluginLabel: "Matrix",
-        defaultInstallCommand: "foxclaw plugins install @openclaw/matrix",
+        defaultInstallCommand: "foxclaw plugins install @foxclaw/matrix",
         repoInstallCommand: "foxclaw plugins install ./extensions/matrix",
         formatCommand: (command) => `<${command}>`,
       }),
     ).toEqual([
       "Matrix is installed from a custom path: /tmp/matrix-plugin",
       "Main updates will not automatically replace that plugin with the repo's default Matrix package.",
-      'Reinstall with "<foxclaw plugins install @openclaw/matrix>" when you want to return to the standard Matrix plugin.',
+      'Reinstall with "<foxclaw plugins install @foxclaw/matrix>" when you want to return to the standard Matrix plugin.',
       'If you are intentionally running from a repo checkout, reinstall that checkout explicitly with "<foxclaw plugins install ./extensions/matrix>" after updates.',
     ]);
   });

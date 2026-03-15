@@ -7,7 +7,6 @@ import {
   clearPluginManifestRegistryCache,
   type PluginManifestRegistry,
 } from "../plugins/manifest-registry.js";
-import { validateConfigObject } from "./config.js";
 import { applyPluginAutoEnable } from "./plugin-auto-enable.js";
 
 const tempDirs: string[] = [];
@@ -75,13 +74,6 @@ function makeApnChannelConfig() {
   return { channels: { apn: { someKey: "value" } } };
 }
 
-function makeBluebubblesAndImessageChannels() {
-  return {
-    bluebubbles: { serverUrl: "http://localhost:1234", password: "x" },
-    imessage: { cliPath: "/usr/local/bin/imsg" },
-  };
-}
-
 function applyWithSlackConfig(extra?: { plugins?: { allow?: string[] } }) {
   return applyPluginAutoEnable({
     config: {
@@ -102,18 +94,6 @@ function applyWithApnChannelConfig(extra?: {
     },
     env: {},
     manifestRegistry: makeRegistry([{ id: "apn-channel", channels: ["apn"] }]),
-  });
-}
-
-function applyWithBluebubblesImessageConfig(extra?: {
-  plugins?: { entries?: Record<string, { enabled: boolean }>; deny?: string[] };
-}) {
-  return applyPluginAutoEnable({
-    config: {
-      channels: makeBluebubblesAndImessageChannels(),
-      ...(extra?.plugins ? { plugins: extra.plugins } : {}),
-    },
-    env: {},
   });
 }
 
@@ -161,23 +141,6 @@ describe("applyPluginAutoEnable", () => {
     expect(result.changes).toEqual([]);
   });
 
-  it("keeps auto-enabled WhatsApp config schema-valid", () => {
-    const result = applyPluginAutoEnable({
-      config: {
-        channels: {
-          whatsapp: {
-            allowFrom: ["+15555550123"],
-          },
-        },
-      },
-      env: {},
-    });
-
-    expect(result.config.channels?.whatsapp?.enabled).toBe(true);
-    const validated = validateConfigObject(result.config);
-    expect(validated.ok).toBe(true);
-  });
-
   it("respects explicit disable", () => {
     const result = applyPluginAutoEnable({
       config: {
@@ -202,19 +165,6 @@ describe("applyPluginAutoEnable", () => {
     expect(result.config.channels?.slack?.enabled).toBe(false);
     expect(result.config.plugins?.entries?.slack).toBeUndefined();
     expect(result.changes).toEqual([]);
-  });
-
-  it("auto-enables irc when configured via env", () => {
-    const result = applyPluginAutoEnable({
-      config: {},
-      env: {
-        IRC_HOST: "irc.libera.chat",
-        IRC_NICK: "foxclaw-bot",
-      },
-    });
-
-    expect(result.config.channels?.irc?.enabled).toBe(true);
-    expect(result.changes.join("\n")).toContain("IRC configured, enabled automatically.");
   });
 
   it("uses the provided env when loading plugin manifests automatically", () => {
@@ -252,7 +202,7 @@ describe("applyPluginAutoEnable", () => {
       JSON.stringify({
         entries: [
           {
-            name: "@openclaw/env-secondary",
+            name: "@foxclaw/env-secondary",
             foxclaw: {
               channel: {
                 id: "env-secondary",
@@ -263,7 +213,7 @@ describe("applyPluginAutoEnable", () => {
                 preferOver: ["env-primary"],
               },
               install: {
-                npmSpec: "@openclaw/env-secondary",
+                npmSpec: "@foxclaw/env-secondary",
               },
             },
           },
@@ -394,57 +344,6 @@ describe("applyPluginAutoEnable", () => {
   });
 
   describe("preferOver channel prioritization", () => {
-    it("prefers bluebubbles: skips imessage auto-configure when both are configured", () => {
-      const result = applyWithBluebubblesImessageConfig();
-
-      expect(result.config.plugins?.entries?.bluebubbles?.enabled).toBe(true);
-      expect(result.config.plugins?.entries?.imessage?.enabled).toBeUndefined();
-      expect(result.changes.join("\n")).toContain("bluebubbles configured, enabled automatically.");
-      expect(result.changes.join("\n")).not.toContain(
-        "iMessage configured, enabled automatically.",
-      );
-    });
-
-    it("keeps imessage enabled if already explicitly enabled (non-destructive)", () => {
-      const result = applyWithBluebubblesImessageConfig({
-        plugins: { entries: { imessage: { enabled: true } } },
-      });
-
-      expect(result.config.plugins?.entries?.bluebubbles?.enabled).toBe(true);
-      expect(result.config.plugins?.entries?.imessage?.enabled).toBe(true);
-    });
-
-    it("allows imessage auto-configure when bluebubbles is explicitly disabled", () => {
-      const result = applyWithBluebubblesImessageConfig({
-        plugins: { entries: { bluebubbles: { enabled: false } } },
-      });
-
-      expect(result.config.plugins?.entries?.bluebubbles?.enabled).toBe(false);
-      expect(result.config.channels?.imessage?.enabled).toBe(true);
-      expect(result.changes.join("\n")).toContain("iMessage configured, enabled automatically.");
-    });
-
-    it("allows imessage auto-configure when bluebubbles is in deny list", () => {
-      const result = applyWithBluebubblesImessageConfig({
-        plugins: { deny: ["bluebubbles"] },
-      });
-
-      expect(result.config.plugins?.entries?.bluebubbles?.enabled).toBeUndefined();
-      expect(result.config.channels?.imessage?.enabled).toBe(true);
-    });
-
-    it("auto-enables imessage when only imessage is configured", () => {
-      const result = applyPluginAutoEnable({
-        config: {
-          channels: { imessage: { cliPath: "/usr/local/bin/imsg" } },
-        },
-        env: {},
-      });
-
-      expect(result.config.channels?.imessage?.enabled).toBe(true);
-      expect(result.changes.join("\n")).toContain("iMessage configured, enabled automatically.");
-    });
-
     it("uses the provided env when loading installed plugin manifests", () => {
       const stateDir = makeTempDir();
       const pluginDir = path.join(stateDir, "extensions", "apn-channel");

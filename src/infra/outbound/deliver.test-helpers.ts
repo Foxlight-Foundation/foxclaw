@@ -1,10 +1,7 @@
 import { vi } from "vitest";
-import type { ChannelOutboundAdapter } from "../../channels/plugins/types.js";
-import type { FoxClawConfig } from "../../config/config.js";
 import { setActivePluginRegistry } from "../../plugins/runtime.js";
-import { createOutboundTestPlugin, createTestRegistry } from "../../test-utils/channel-plugins.js";
+import { createTestRegistry } from "../../test-utils/channel-plugins.js";
 import { createInternalHookEventPayload } from "../../test-utils/internal-hook-event-payload.js";
-import type { DeliverOutboundPayloadsParams, OutboundDeliveryResult } from "./deliver.js";
 
 type DeliverMockState = {
   sessions: {
@@ -138,50 +135,7 @@ vi.mock("../../logging/subsystem.js", () => ({
   },
 }));
 
-export const whatsappChunkConfig: FoxClawConfig = {
-  channels: { whatsapp: { textChunkLimit: 4000 } },
-};
-
-const createMockOutbound = (channel: string): ChannelOutboundAdapter => ({
-  deliveryMode: "direct",
-  sendText: async () => ({ channel, messageId: "mock", chatId: "mock" }),
-  sendMedia: async () => ({ channel, messageId: "mock", chatId: "mock" }),
-});
-
-export const defaultRegistry = createTestRegistry([
-  {
-    pluginId: "signal",
-    source: "test",
-    plugin: createOutboundTestPlugin({
-      id: "signal",
-      outbound: createMockOutbound("signal"),
-    }),
-  },
-  {
-    pluginId: "telegram",
-    source: "test",
-    plugin: createOutboundTestPlugin({
-      id: "telegram",
-      outbound: createMockOutbound("telegram"),
-    }),
-  },
-  {
-    pluginId: "whatsapp",
-    source: "test",
-    plugin: createOutboundTestPlugin({
-      id: "whatsapp",
-      outbound: createMockOutbound("whatsapp"),
-    }),
-  },
-  {
-    pluginId: "imessage",
-    source: "test",
-    plugin: createOutboundTestPlugin({
-      id: "imessage",
-      outbound: createMockOutbound("imessage"),
-    }),
-  },
-]);
+export const defaultRegistry = createTestRegistry([]);
 
 export const emptyRegistry = createTestRegistry([]);
 
@@ -219,28 +173,3 @@ export function resetDeliverTestMocks(params?: { includeSessionMocks?: boolean }
   }
 }
 
-export async function runChunkedWhatsAppDelivery(params: {
-  deliverOutboundPayloads: (
-    params: DeliverOutboundPayloadsParams,
-  ) => Promise<OutboundDeliveryResult[]>;
-  mirror?: DeliverOutboundPayloadsParams["mirror"];
-}) {
-  const sendWhatsApp = vi
-    .fn<
-      (to: string, text: string, opts?: unknown) => Promise<{ messageId: string; toJid: string }>
-    >()
-    .mockResolvedValueOnce({ messageId: "w1", toJid: "jid" })
-    .mockResolvedValueOnce({ messageId: "w2", toJid: "jid" });
-  const cfg: FoxClawConfig = {
-    channels: { whatsapp: { textChunkLimit: 2 } },
-  };
-  const results = await params.deliverOutboundPayloads({
-    cfg,
-    channel: "whatsapp",
-    to: "+1555",
-    payloads: [{ text: "abcd" }],
-    deps: { sendWhatsApp },
-    ...(params.mirror ? { mirror: params.mirror } : {}),
-  });
-  return { sendWhatsApp, results };
-}

@@ -14,11 +14,11 @@ describe("shared/assistant-identity-values", () => {
   });
 
   it("truncates overlong trimmed values at the exact limit", () => {
-    expect(coerceIdentityValue("  FoxClaw Assistant  ", 8)).toBe("FoxClaw");
+    expect(coerceIdentityValue("  FoxClaw Assistant  ", 7)).toBe("FoxClaw");
   });
 
   it("returns an empty string when truncating to a zero-length limit", () => {
     expect(coerceIdentityValue("  FoxClaw  ", 0)).toBe("");
-    expect(coerceIdentityValue("  FoxClaw  ", -1)).toBe("OpenCla");
+    expect(coerceIdentityValue("  FoxClaw  ", -1)).toBe("FoxCla");
   });
 });

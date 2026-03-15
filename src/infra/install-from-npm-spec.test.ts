@@ -51,7 +51,7 @@ describe("installFromValidatedNpmSpecArchive", () => {
 
     await expect(
       installFromValidatedNpmSpecArchive({
-        spec: "  @openclaw/demo@beta  ",
+        spec: "  @foxclaw/demo@beta  ",
         timeoutMs: 45_000,
         tempDirPrefix: "foxclaw-npm-",
         expectedIntegrity: "sha512-demo",
@@ -64,7 +64,7 @@ describe("installFromValidatedNpmSpecArchive", () => {
 
     expect(installFromNpmSpecArchiveWithInstallerMock).toHaveBeenCalledWith({
       tempDirPrefix: "foxclaw-npm-",
-      spec: "@openclaw/demo@beta",
+      spec: "@foxclaw/demo@beta",
       timeoutMs: 45_000,
       expectedIntegrity: "sha512-demo",
       onIntegrityDrift,

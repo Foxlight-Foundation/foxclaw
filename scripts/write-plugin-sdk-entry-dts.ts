@@ -38,7 +38,6 @@ const entrypoints = [
   "nextcloud-talk",
   "nostr",
   "open-prose",
-  "phone-control",
   "qwen-portal-auth",
   "synology-chat",
   "talk-voice",

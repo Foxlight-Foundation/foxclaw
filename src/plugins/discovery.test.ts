@@ -164,7 +164,7 @@ describe("discoverFoxClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: globalExt,
-      packageName: "@openclaw/voice-call",
+      packageName: "@foxclaw/voice-call",
       extensions: ["./src/index.ts"],
     });
     fs.writeFileSync(
@@ -186,7 +186,7 @@ describe("discoverFoxClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: globalExt,
-      packageName: "@openclaw/ollama-provider",
+      packageName: "@foxclaw/ollama-provider",
       extensions: ["./src/index.ts"],
     });
     fs.writeFileSync(
@@ -209,7 +209,7 @@ describe("discoverFoxClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: packDir,
-      packageName: "@openclaw/demo-plugin-dir",
+      packageName: "@foxclaw/demo-plugin-dir",
       extensions: ["./index.js"],
     });
     fs.writeFileSync(path.join(packDir, "index.js"), "module.exports = {}", "utf-8");
@@ -227,7 +227,7 @@ describe("discoverFoxClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: globalExt,
-      packageName: "@openclaw/escape-pack",
+      packageName: "@foxclaw/escape-pack",
       extensions: ["../../outside.js"],
     });
     fs.writeFileSync(outside, "export default function () {}", "utf-8");
@@ -254,7 +254,7 @@ describe("discoverFoxClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: globalExt,
-      packageName: "@openclaw/pack",
+      packageName: "@foxclaw/pack",
       extensions: ["./linked/escape.ts"],
     });
 
@@ -287,7 +287,7 @@ describe("discoverFoxClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: globalExt,
-      packageName: "@openclaw/pack",
+      packageName: "@foxclaw/pack",
       extensions: ["./escape.ts"],
     });
 
@@ -312,7 +312,7 @@ describe("discoverFoxClawPlugins", () => {
     fs.writeFileSync(
       outsideManifest,
       JSON.stringify({
-        name: "@openclaw/pack",
+        name: "@foxclaw/pack",
         foxclaw: { extensions: ["./entry.ts"] },
       }),
       "utf-8",

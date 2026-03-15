@@ -59,20 +59,20 @@ const fixtureRoot = mkdtempSafe(path.join(os.tmpdir(), "foxclaw-plugin-"));
 let tempDirIndex = 0;
 const prevBundledDir = process.env.FOXCLAW_BUNDLED_PLUGINS_DIR;
 const EMPTY_PLUGIN_SCHEMA = { type: "object", additionalProperties: false, properties: {} };
-let cachedBundledTelegramDir = "";
+let cachedBundledSlackDir = "";
 let cachedBundledMemoryDir = "";
-const BUNDLED_TELEGRAM_PLUGIN_BODY = `module.exports = {
-  id: "telegram",
+const BUNDLED_SLACK_PLUGIN_BODY = `module.exports = {
+  id: "slack",
   register(api) {
     api.registerChannel({
       plugin: {
-        id: "telegram",
+        id: "slack",
         meta: {
-          id: "telegram",
-          label: "Telegram",
-          selectionLabel: "Telegram",
-          docsPath: "/channels/telegram",
-          blurb: "telegram channel",
+          id: "slack",
+          label: "Slack",
+          selectionLabel: "Slack",
+          docsPath: "/channels/slack",
+          blurb: "slack channel",
         },
         capabilities: { chatTypes: ["direct"] },
         config: {
@@ -187,23 +187,23 @@ function loadBundledMemoryPluginRegistry(options?: {
   });
 }
 
-function setupBundledTelegramPlugin() {
-  if (!cachedBundledTelegramDir) {
-    cachedBundledTelegramDir = makeTempDir();
+function setupBundledSlackPlugin() {
+  if (!cachedBundledSlackDir) {
+    cachedBundledSlackDir = makeTempDir();
     writePlugin({
-      id: "telegram",
-      body: BUNDLED_TELEGRAM_PLUGIN_BODY,
-      dir: cachedBundledTelegramDir,
-      filename: "telegram.cjs",
+      id: "slack",
+      body: BUNDLED_SLACK_PLUGIN_BODY,
+      dir: cachedBundledSlackDir,
+      filename: "slack.cjs",
     });
   }
-  process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = cachedBundledTelegramDir;
+  process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = cachedBundledSlackDir;
 }
 
-function expectTelegramLoaded(registry: ReturnType<typeof loadFoxClawPlugins>) {
-  const telegram = registry.plugins.find((entry) => entry.id === "telegram");
-  expect(telegram?.status).toBe("loaded");
-  expect(registry.channels.some((entry) => entry.plugin.id === "telegram")).toBe(true);
+function expectSlackLoaded(registry: ReturnType<typeof loadFoxClawPlugins>) {
+  const slack = registry.plugins.find((entry) => entry.id === "slack");
+  expect(slack?.status).toBe("loaded");
+  expect(registry.channels.some((entry) => entry.plugin.id === "slack")).toBe(true);
 }
 
 function useNoBundledPlugins() {
@@ -299,7 +299,7 @@ afterAll(() => {
   } catch {
     // ignore cleanup failures
   } finally {
-    cachedBundledTelegramDir = "";
+    cachedBundledSlackDir = "";
     cachedBundledMemoryDir = "";
   }
 });
@@ -328,34 +328,34 @@ describe("loadFoxClawPlugins", () => {
     expect(bundled?.status).toBe("disabled");
   });
 
-  it("loads bundled telegram plugin when enabled", () => {
-    setupBundledTelegramPlugin();
+  it("loads bundled slack plugin when enabled", () => {
+    setupBundledSlackPlugin();
 
     const registry = loadFoxClawPlugins({
       cache: false,
-      workspaceDir: cachedBundledTelegramDir,
+      workspaceDir: cachedBundledSlackDir,
       config: {
         plugins: {
-          allow: ["telegram"],
+          allow: ["slack"],
           entries: {
-            telegram: { enabled: true },
+            slack: { enabled: true },
           },
         },
       },
     });
 
-    expectTelegramLoaded(registry);
+    expectSlackLoaded(registry);
   });
 
   it("loads bundled channel plugins when channels.<id>.enabled=true", () => {
-    setupBundledTelegramPlugin();
+    setupBundledSlackPlugin();
 
     const registry = loadFoxClawPlugins({
       cache: false,
-      workspaceDir: cachedBundledTelegramDir,
+      workspaceDir: cachedBundledSlackDir,
       config: {
         channels: {
-          telegram: {
+          slack: {
             enabled: true,
           },
         },
@@ -365,38 +365,38 @@ describe("loadFoxClawPlugins", () => {
       },
     });
 
-    expectTelegramLoaded(registry);
+    expectSlackLoaded(registry);
   });
 
   it("still respects explicit disable via plugins.entries for bundled channels", () => {
-    setupBundledTelegramPlugin();
+    setupBundledSlackPlugin();
 
     const registry = loadFoxClawPlugins({
       cache: false,
-      workspaceDir: cachedBundledTelegramDir,
+      workspaceDir: cachedBundledSlackDir,
       config: {
         channels: {
-          telegram: {
+          slack: {
             enabled: true,
           },
         },
         plugins: {
           entries: {
-            telegram: { enabled: false },
+            slack: { enabled: false },
           },
         },
       },
     });
 
-    const telegram = registry.plugins.find((entry) => entry.id === "telegram");
-    expect(telegram?.status).toBe("disabled");
-    expect(telegram?.error).toBe("disabled in config");
+    const slack = registry.plugins.find((entry) => entry.id === "slack");
+    expect(slack?.status).toBe("disabled");
+    expect(slack?.error).toBe("disabled in config");
   });
 
   it("preserves package.json metadata for bundled memory plugins", () => {
     const registry = loadBundledMemoryPluginRegistry({
       packageMeta: {
-        name: "@openclaw/memory-core",
+        name: "@foxclaw/memory-core",
         version: "1.2.3",
         description: "Memory plugin package",
       },
@@ -2054,7 +2054,7 @@ describe("loadFoxClawPlugins", () => {
   it("derives plugin-sdk subpaths from package exports", () => {
     const subpaths = __testing.listPluginSdkExportedSubpaths();
     expect(subpaths).toContain("compat");
-    expect(subpaths).toContain("telegram");
+    expect(subpaths).toContain("slack");
     expect(subpaths).not.toContain("root-alias");
   });
 

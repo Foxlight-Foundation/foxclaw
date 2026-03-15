@@ -48,9 +48,9 @@ const { configureProgramHelp } = await import("./help.js");
 
 const testProgramContext: ProgramContext = {
   programVersion: "9.9.9-test",
-  channelOptions: ["telegram"],
-  messageChannelOptions: "telegram",
-  agentChannelOptions: "last|telegram",
+  channelOptions: ["slack"],
+  messageChannelOptions: "slack",
+  agentChannelOptions: "last|slack",
 };
 
 describe("configureProgramHelp", () => {
