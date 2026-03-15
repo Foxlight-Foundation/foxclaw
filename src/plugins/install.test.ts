@@ -221,7 +221,7 @@ function setupManifestInstallFixture(params: { manifestId: string }) {
   fs.mkdirSync(stateDir, { recursive: true });
   fs.cpSync(manifestInstallTemplateDir, pluginDir, { recursive: true });
   fs.writeFileSync(
-    path.join(pluginDir, "openclaw.plugin.json"),
+    path.join(pluginDir, "foxclaw.plugin.json"),
     JSON.stringify({
       id: params.manifestId,
       configSchema: { type: "object", properties: {} },
@@ -372,7 +372,7 @@ beforeAll(async () => {
     "utf-8",
   );
   fs.writeFileSync(
-    path.join(manifestInstallTemplateDir, "openclaw.plugin.json"),
+    path.join(manifestInstallTemplateDir, "foxclaw.plugin.json"),
     JSON.stringify({
       id: "manifest-template",
       configSchema: { type: "object", properties: {} },
@@ -505,7 +505,7 @@ describe("installPluginFromArchive", () => {
       return;
     }
     expect(result.error).toContain("openclaw.extensions");
-    expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.MISSING_OPENCLAW_EXTENSIONS);
+    expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.MISSING_FOXCLAW_EXTENSIONS);
   });
 
   it("rejects legacy plugin package shape when openclaw.extensions is missing", async () => {
@@ -519,7 +519,7 @@ describe("installPluginFromArchive", () => {
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(pluginDir, "openclaw.plugin.json"),
+      path.join(pluginDir, "foxclaw.plugin.json"),
       JSON.stringify({
         id: "legacy-entry-fallback",
         configSchema: { type: "object", properties: {} },
@@ -537,7 +537,7 @@ describe("installPluginFromArchive", () => {
     if (!result.ok) {
       expect(result.error).toContain("package.json missing openclaw.extensions");
       expect(result.error).toContain("update the plugin package");
-      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.MISSING_OPENCLAW_EXTENSIONS);
+      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.MISSING_FOXCLAW_EXTENSIONS);
       return;
     }
     expect.unreachable("expected install to fail without openclaw.extensions");
@@ -677,7 +677,7 @@ describe("installPluginFromDir", () => {
     expect(manifest.devDependencies?.vitest).toBe("^3.0.0");
   });
 
-  it("uses openclaw.plugin.json id as install key when it differs from package name", async () => {
+  it("uses foxclaw.plugin.json id as install key when it differs from package name", async () => {
     const { pluginDir, extensionsDir } = setupManifestInstallFixture({
       manifestId: "memory-cognee",
     });

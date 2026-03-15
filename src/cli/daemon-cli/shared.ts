@@ -105,11 +105,11 @@ export function pickProbeHostForBind(
 }
 
 const SAFE_DAEMON_ENV_KEYS = [
-  "OPENCLAW_PROFILE",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_GATEWAY_PORT",
-  "OPENCLAW_NIX_MODE",
+  "FOXCLAW_PROFILE",
+  "FOXCLAW_STATE_DIR",
+  "FOXCLAW_CONFIG_PATH",
+  "FOXCLAW_GATEWAY_PORT",
+  "FOXCLAW_NIX_MODE",
 ];
 
 export function filterDaemonEnv(env: Record<string, string> | undefined): Record<string, string> {
@@ -171,8 +171,8 @@ export function renderRuntimeHints(
     hints.push(
       ...buildPlatformRuntimeLogHints({
         env,
-        systemdServiceName: resolveGatewaySystemdServiceName(env.OPENCLAW_PROFILE),
-        windowsTaskName: resolveGatewayWindowsTaskName(env.OPENCLAW_PROFILE),
+        systemdServiceName: resolveGatewaySystemdServiceName(env.FOXCLAW_PROFILE),
+        windowsTaskName: resolveGatewayWindowsTaskName(env.FOXCLAW_PROFILE),
       }),
     );
   }
@@ -180,7 +180,7 @@ export function renderRuntimeHints(
 }
 
 export function renderGatewayServiceStartHints(env: NodeJS.ProcessEnv = process.env): string[] {
-  const profile = env.OPENCLAW_PROFILE;
+  const profile = env.FOXCLAW_PROFILE;
   return buildPlatformServiceStartHints({
     installCommand: formatCliCommand("openclaw gateway install", env),
     startCommand: formatCliCommand("openclaw gateway", env),

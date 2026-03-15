@@ -1,5 +1,5 @@
 {
-  "name": "@openclaw/google-gemini-cli-auth",
+  "name": "@foxclaw/google-gemini-cli-auth",
   "version": "2026.3.14",
   "private": true,
   "description": "OpenClaw Gemini CLI OAuth provider plugin",

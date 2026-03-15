@@ -5,7 +5,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vites
 import { resolveApiKeyForProvider } from "../agents/model-auth.js";
 import type { MsgContext } from "../auto-reply/templating.js";
 import type { OpenClawConfig } from "../config/config.js";
-import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-openclaw-dir.js";
+import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-foxclaw-dir.js";
 import { fetchRemoteMedia } from "../media/fetch.js";
 import { runExec } from "../process/exec.js";
 import { withEnvAsync } from "../test-utils/env.js";
@@ -159,7 +159,7 @@ async function withMediaAutoDetectEnv<T>(
       GROQ_API_KEY: undefined,
       DEEPGRAM_API_KEY: undefined,
       GEMINI_API_KEY: undefined,
-      OPENCLAW_AGENT_DIR: undefined,
+      FOXCLAW_AGENT_DIR: undefined,
       PI_CODING_AGENT_DIR: undefined,
       ...env,
     },
@@ -664,7 +664,7 @@ describe("applyMediaUnderstanding", () => {
     await withMediaAutoDetectEnv(
       {
         PATH: emptyBinDir,
-        OPENCLAW_AGENT_DIR: isolatedAgentDir,
+        FOXCLAW_AGENT_DIR: isolatedAgentDir,
         PI_CODING_AGENT_DIR: isolatedAgentDir,
       },
       async () => {

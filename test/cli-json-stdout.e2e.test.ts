@@ -16,14 +16,14 @@ describe("cli json stdout contract", () => {
           ...process.env,
           HOME: tempHome,
           USERPROFILE: tempHome,
-          OPENCLAW_TEST_FAST: "1",
+          FOXCLAW_TEST_FAST: "1",
         };
-        delete env.OPENCLAW_HOME;
-        delete env.OPENCLAW_STATE_DIR;
-        delete env.OPENCLAW_CONFIG_PATH;
+        delete env.FOXCLAW_HOME;
+        delete env.FOXCLAW_STATE_DIR;
+        delete env.FOXCLAW_CONFIG_PATH;
         delete env.VITEST;
 
-        const entry = path.resolve(process.cwd(), "openclaw.mjs");
+        const entry = path.resolve(process.cwd(), "foxclaw.mjs");
         const result = spawnSync(
           process.execPath,
           [entry, "update", "status", "--json", "--timeout", "1"],

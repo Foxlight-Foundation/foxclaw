@@ -62,8 +62,8 @@ describe("run-node script", () => {
           args: ["--version"],
           env: {
             ...process.env,
-            OPENCLAW_FORCE_BUILD: "1",
-            OPENCLAW_RUNNER_LOG: "0",
+            FOXCLAW_FORCE_BUILD: "1",
+            FOXCLAW_RUNNER_LOG: "0",
           },
           spawn,
           execPath: process.execPath,
@@ -73,7 +73,7 @@ describe("run-node script", () => {
         expect(exitCode).toBe(0);
         await expect(fs.readFile(argsPath, "utf-8")).resolves.toContain("exec tsdown --no-clean");
         await expect(fs.readFile(indexPath, "utf-8")).resolves.toContain("sentinel");
-        expect(nodeCalls).toEqual([[process.execPath, "openclaw.mjs", "--version"]]);
+        expect(nodeCalls).toEqual([[process.execPath, "foxclaw.mjs", "--version"]]);
       });
     },
   );
@@ -122,7 +122,7 @@ describe("run-node script", () => {
         args: ["status"],
         env: {
           ...process.env,
-          OPENCLAW_RUNNER_LOG: "0",
+          FOXCLAW_RUNNER_LOG: "0",
         },
         spawn,
         spawnSync,
@@ -131,7 +131,7 @@ describe("run-node script", () => {
       });
 
       expect(exitCode).toBe(0);
-      expect(spawnCalls).toEqual([[process.execPath, "openclaw.mjs", "status"]]);
+      expect(spawnCalls).toEqual([[process.execPath, "foxclaw.mjs", "status"]]);
     });
   });
 
@@ -150,8 +150,8 @@ describe("run-node script", () => {
         args: ["status"],
         env: {
           ...process.env,
-          OPENCLAW_FORCE_BUILD: "1",
-          OPENCLAW_RUNNER_LOG: "0",
+          FOXCLAW_FORCE_BUILD: "1",
+          FOXCLAW_RUNNER_LOG: "0",
         },
         spawn,
         execPath: process.execPath,

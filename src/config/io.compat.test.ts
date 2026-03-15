@@ -17,7 +17,7 @@ async function writeConfig(
   home: string,
   dirname: ".openclaw",
   port: number,
-  filename: string = "openclaw.json",
+  filename: string = "foxclaw.json",
 ) {
   const dir = path.join(home, dirname);
   await fs.mkdir(dir, { recursive: true });
@@ -46,24 +46,24 @@ describe("config io paths", () => {
   it("defaults to ~/.openclaw/openclaw.json when config is missing", async () => {
     await withTempHome(async (home) => {
       const io = createIoForHome(home);
-      expect(io.configPath).toBe(path.join(home, ".openclaw", "openclaw.json"));
+      expect(io.configPath).toBe(path.join(home, ".openclaw", "foxclaw.json"));
     });
   });
 
-  it("uses OPENCLAW_HOME for default config path", async () => {
+  it("uses FOXCLAW_HOME for default config path", async () => {
     await withTempHome(async (home) => {
       const io = createConfigIO({
-        env: { OPENCLAW_HOME: path.join(home, "svc-home") } as NodeJS.ProcessEnv,
+        env: { FOXCLAW_HOME: path.join(home, "svc-home") } as NodeJS.ProcessEnv,
         homedir: () => path.join(home, "ignored-home"),
       });
-      expect(io.configPath).toBe(path.join(home, "svc-home", ".openclaw", "openclaw.json"));
+      expect(io.configPath).toBe(path.join(home, "svc-home", ".openclaw", "foxclaw.json"));
     });
   });
 
-  it("honors explicit OPENCLAW_CONFIG_PATH override", async () => {
+  it("honors explicit FOXCLAW_CONFIG_PATH override", async () => {
     await withTempHome(async (home) => {
       const customPath = await writeConfig(home, ".openclaw", 20002, "custom.json");
-      const io = createIoForHome(home, { OPENCLAW_CONFIG_PATH: customPath } as NodeJS.ProcessEnv);
+      const io = createIoForHome(home, { FOXCLAW_CONFIG_PATH: customPath } as NodeJS.ProcessEnv);
       expect(io.configPath).toBe(customPath);
       expect(io.loadConfig().gateway?.port).toBe(20002);
     });
@@ -82,7 +82,7 @@ describe("config io paths", () => {
     await withTempHome(async (home) => {
       const configDir = path.join(home, ".openclaw");
       await fs.mkdir(configDir, { recursive: true });
-      const configPath = path.join(configDir, "openclaw.json");
+      const configPath = path.join(configDir, "foxclaw.json");
       await fs.writeFile(
         configPath,
         JSON.stringify(
@@ -142,7 +142,7 @@ describe("config io paths", () => {
     await withTempHome(async (home) => {
       const configDir = path.join(home, ".openclaw");
       await fs.mkdir(configDir, { recursive: true });
-      const configPath = path.join(configDir, "openclaw.json");
+      const configPath = path.join(configDir, "foxclaw.json");
       await fs.writeFile(
         configPath,
         JSON.stringify({ gateway: { port: "not-a-number" } }, null, 2),

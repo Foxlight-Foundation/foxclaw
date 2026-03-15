@@ -54,7 +54,7 @@ export function clearPluginManifestRegistryCache(): void {
 }
 
 function resolveManifestCacheMs(env: NodeJS.ProcessEnv): number {
-  const raw = env.OPENCLAW_PLUGIN_MANIFEST_CACHE_MS?.trim();
+  const raw = env.FOXCLAW_PLUGIN_MANIFEST_CACHE_MS?.trim();
   if (raw === "" || raw === "0") {
     return 0;
   }
@@ -69,7 +69,7 @@ function resolveManifestCacheMs(env: NodeJS.ProcessEnv): number {
 }
 
 function shouldUseManifestCache(env: NodeJS.ProcessEnv): boolean {
-  const disabled = env.OPENCLAW_DISABLE_PLUGIN_MANIFEST_CACHE?.trim();
+  const disabled = env.FOXCLAW_DISABLE_PLUGIN_MANIFEST_CACHE?.trim();
   if (disabled) {
     return false;
   }

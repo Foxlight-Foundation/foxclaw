@@ -89,9 +89,9 @@ async function runGatewayHealthCheck(params: {
     path: "gateway.auth.password",
   });
   const token =
-    process.env.OPENCLAW_GATEWAY_TOKEN ?? process.env.CLAWDBOT_GATEWAY_TOKEN ?? configuredToken;
+    process.env.FOXCLAW_GATEWAY_TOKEN ?? process.env.CLAWDBOT_GATEWAY_TOKEN ?? configuredToken;
   const password =
-    process.env.OPENCLAW_GATEWAY_PASSWORD ??
+    process.env.FOXCLAW_GATEWAY_PASSWORD ??
     process.env.CLAWDBOT_GATEWAY_PASSWORD ??
     configuredPassword;
 
@@ -351,11 +351,11 @@ export async function runConfigureWizard(
     const localProbe = await probeGatewayReachable({
       url: localUrl,
       token:
-        process.env.OPENCLAW_GATEWAY_TOKEN ??
+        process.env.FOXCLAW_GATEWAY_TOKEN ??
         process.env.CLAWDBOT_GATEWAY_TOKEN ??
         baseLocalProbeToken,
       password:
-        process.env.OPENCLAW_GATEWAY_PASSWORD ??
+        process.env.FOXCLAW_GATEWAY_PASSWORD ??
         process.env.CLAWDBOT_GATEWAY_PASSWORD ??
         baseLocalProbePassword,
     });
@@ -643,7 +643,7 @@ export async function runConfigureWizard(
     });
     // Try both new and old passwords since gateway may still have old config.
     const newPassword =
-      process.env.OPENCLAW_GATEWAY_PASSWORD ??
+      process.env.FOXCLAW_GATEWAY_PASSWORD ??
       process.env.CLAWDBOT_GATEWAY_PASSWORD ??
       (await resolveGatewaySecretInputForWizard({
         cfg: nextConfig,
@@ -651,7 +651,7 @@ export async function runConfigureWizard(
         path: "gateway.auth.password",
       }));
     const oldPassword =
-      process.env.OPENCLAW_GATEWAY_PASSWORD ??
+      process.env.FOXCLAW_GATEWAY_PASSWORD ??
       process.env.CLAWDBOT_GATEWAY_PASSWORD ??
       (await resolveGatewaySecretInputForWizard({
         cfg: baseConfig,
@@ -659,7 +659,7 @@ export async function runConfigureWizard(
         path: "gateway.auth.password",
       }));
     const token =
-      process.env.OPENCLAW_GATEWAY_TOKEN ??
+      process.env.FOXCLAW_GATEWAY_TOKEN ??
       process.env.CLAWDBOT_GATEWAY_TOKEN ??
       (await resolveGatewaySecretInputForWizard({
         cfg: nextConfig,

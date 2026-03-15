@@ -68,7 +68,7 @@ vi.mock("node:fs", async (importOriginal) => {
   return { ...wrapped, default: wrapped };
 });
 
-vi.mock("./openclaw-root.js", () => ({
+vi.mock("./foxclaw-root.js", () => ({
   resolveOpenClawPackageRoot: vi.fn(async () => null),
   resolveOpenClawPackageRootSync: vi.fn(() => null),
 }));
@@ -79,7 +79,7 @@ let resolveControlUiDistIndexHealth: typeof import("./control-ui-assets.js").res
 let isPackageProvenControlUiRootSync: typeof import("./control-ui-assets.js").isPackageProvenControlUiRootSync;
 let resolveControlUiRootOverrideSync: typeof import("./control-ui-assets.js").resolveControlUiRootOverrideSync;
 let resolveControlUiRootSync: typeof import("./control-ui-assets.js").resolveControlUiRootSync;
-let openclawRoot: typeof import("./openclaw-root.js");
+let openclawRoot: typeof import("./foxclaw-root.js");
 
 describe("control UI assets helpers (fs-mocked)", () => {
   beforeAll(async () => {
@@ -91,7 +91,7 @@ describe("control UI assets helpers (fs-mocked)", () => {
       resolveControlUiRootOverrideSync,
       resolveControlUiRootSync,
     } = await import("./control-ui-assets.js"));
-    openclawRoot = await import("./openclaw-root.js");
+    openclawRoot = await import("./foxclaw-root.js");
   });
 
   beforeEach(() => {
@@ -153,7 +153,7 @@ describe("control UI assets helpers (fs-mocked)", () => {
     setFile(path.join(root, "package.json"), JSON.stringify({ name: "openclaw" }));
     setFile(path.join(root, "dist", "control-ui", "index.html"), "<html></html>\n");
 
-    await expect(resolveControlUiDistIndexPath(path.join(root, "openclaw.mjs"))).resolves.toBe(
+    await expect(resolveControlUiDistIndexPath(path.join(root, "foxclaw.mjs"))).resolves.toBe(
       path.join(root, "dist", "control-ui", "index.html"),
     );
   });

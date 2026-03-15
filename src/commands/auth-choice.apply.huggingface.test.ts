@@ -44,8 +44,8 @@ async function runHuggingfaceApply(
 
 describe("applyAuthChoiceHuggingface", () => {
   const lifecycle = createAuthTestLifecycle([
-    "OPENCLAW_STATE_DIR",
-    "OPENCLAW_AGENT_DIR",
+    "FOXCLAW_STATE_DIR",
+    "FOXCLAW_AGENT_DIR",
     "PI_CODING_AGENT_DIR",
     "HF_TOKEN",
     "HUGGINGFACE_HUB_TOKEN",

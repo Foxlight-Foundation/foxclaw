@@ -63,7 +63,7 @@ describe("bundled plugin sources", () => {
       return {
         ok: false,
         error: "invalid manifest",
-        manifestPath: `${rootDir}/openclaw.plugin.json`,
+        manifestPath: `${rootDir}/foxclaw.plugin.json`,
       };
     });
 

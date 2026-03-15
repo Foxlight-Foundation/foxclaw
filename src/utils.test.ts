@@ -131,10 +131,10 @@ describe("resolveConfigDir", () => {
     }
   });
 
-  it("expands OPENCLAW_STATE_DIR using the provided env", () => {
+  it("expands FOXCLAW_STATE_DIR using the provided env", () => {
     const env = {
       HOME: "/tmp/openclaw-home",
-      OPENCLAW_STATE_DIR: "~/state",
+      FOXCLAW_STATE_DIR: "~/state",
     } as NodeJS.ProcessEnv;
 
     expect(resolveConfigDir(env)).toBe(path.resolve("/tmp/openclaw-home", "state"));
@@ -142,8 +142,8 @@ describe("resolveConfigDir", () => {
 });
 
 describe("resolveHomeDir", () => {
-  it("prefers OPENCLAW_HOME over HOME", () => {
-    vi.stubEnv("OPENCLAW_HOME", "/srv/openclaw-home");
+  it("prefers FOXCLAW_HOME over HOME", () => {
+    vi.stubEnv("FOXCLAW_HOME", "/srv/openclaw-home");
     vi.stubEnv("HOME", "/home/other");
 
     expect(resolveHomeDir()).toBe(path.resolve("/srv/openclaw-home"));
@@ -153,12 +153,12 @@ describe("resolveHomeDir", () => {
 });
 
 describe("shortenHomePath", () => {
-  it("uses $OPENCLAW_HOME prefix when OPENCLAW_HOME is set", () => {
-    vi.stubEnv("OPENCLAW_HOME", "/srv/openclaw-home");
+  it("uses $FOXCLAW_HOME prefix when FOXCLAW_HOME is set", () => {
+    vi.stubEnv("FOXCLAW_HOME", "/srv/openclaw-home");
     vi.stubEnv("HOME", "/home/other");
 
     expect(shortenHomePath(`${path.resolve("/srv/openclaw-home")}/.openclaw/openclaw.json`)).toBe(
-      "$OPENCLAW_HOME/.openclaw/openclaw.json",
+      "$FOXCLAW_HOME/.openclaw/openclaw.json",
     );
 
     vi.unstubAllEnvs();
@@ -166,13 +166,13 @@ describe("shortenHomePath", () => {
 });
 
 describe("shortenHomeInString", () => {
-  it("uses $OPENCLAW_HOME replacement when OPENCLAW_HOME is set", () => {
-    vi.stubEnv("OPENCLAW_HOME", "/srv/openclaw-home");
+  it("uses $FOXCLAW_HOME replacement when FOXCLAW_HOME is set", () => {
+    vi.stubEnv("FOXCLAW_HOME", "/srv/openclaw-home");
     vi.stubEnv("HOME", "/home/other");
 
     expect(
       shortenHomeInString(`config: ${path.resolve("/srv/openclaw-home")}/.openclaw/openclaw.json`),
-    ).toBe("config: $OPENCLAW_HOME/.openclaw/openclaw.json");
+    ).toBe("config: $FOXCLAW_HOME/.openclaw/openclaw.json");
 
     vi.unstubAllEnvs();
   });
@@ -219,8 +219,8 @@ describe("resolveUserPath", () => {
     expect(resolveUserPath("tmp/dir")).toBe(path.resolve("tmp/dir"));
   });
 
-  it("prefers OPENCLAW_HOME for tilde expansion", () => {
-    vi.stubEnv("OPENCLAW_HOME", "/srv/openclaw-home");
+  it("prefers FOXCLAW_HOME for tilde expansion", () => {
+    vi.stubEnv("FOXCLAW_HOME", "/srv/openclaw-home");
     vi.stubEnv("HOME", "/home/other");
 
     expect(resolveUserPath("~/openclaw")).toBe(path.resolve("/srv/openclaw-home", "openclaw"));
@@ -231,7 +231,7 @@ describe("resolveUserPath", () => {
   it("uses the provided env for tilde expansion", () => {
     const env = {
       HOME: "/tmp/openclaw-home",
-      OPENCLAW_HOME: "/srv/openclaw-home",
+      FOXCLAW_HOME: "/srv/openclaw-home",
     } as NodeJS.ProcessEnv;
 
     expect(resolveUserPath("~/openclaw", env)).toBe(path.resolve("/srv/openclaw-home", "openclaw"));

@@ -6,7 +6,7 @@ import {
   prepareSecretsRuntimeSnapshot,
 } from "../secrets/runtime.js";
 import { withFetchPreconnect } from "../test-utils/fetch-mock.js";
-import { createOpenClawTools } from "./openclaw-tools.js";
+import { createOpenClawTools } from "./foxclaw-tools.js";
 
 vi.mock("../plugins/tools.js", () => ({
   resolvePluginTools: () => [],

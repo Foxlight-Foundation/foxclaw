@@ -10,7 +10,7 @@ const resolvePreferredOpenClawTmpDirMock = vi.hoisted(() => vi.fn(() => os.tmpdi
 vi.mock("node:child_process", () => ({
   spawn: (...args: unknown[]) => spawnMock(...args),
 }));
-vi.mock("./tmp-openclaw-dir.js", () => ({
+vi.mock("./tmp-foxclaw-dir.js", () => ({
   resolvePreferredOpenClawTmpDir: () => resolvePreferredOpenClawTmpDirMock(),
 }));
 
@@ -60,7 +60,7 @@ describe("relaunchGatewayScheduledTask", () => {
       return { unref };
     });
 
-    const result = relaunchGatewayScheduledTask({ OPENCLAW_PROFILE: "work" });
+    const result = relaunchGatewayScheduledTask({ FOXCLAW_PROFILE: "work" });
 
     expect(result).toMatchObject({
       ok: true,
@@ -87,15 +87,15 @@ describe("relaunchGatewayScheduledTask", () => {
     expect(script).toContain('del "%~f0" >nul 2>&1');
   });
 
-  it("prefers OPENCLAW_WINDOWS_TASK_NAME overrides", () => {
+  it("prefers FOXCLAW_WINDOWS_TASK_NAME overrides", () => {
     spawnMock.mockImplementation((_file: string, args: string[]) => {
       createdScriptPaths.add(decodeCmdPathArg(args[3]));
       return { unref: vi.fn() };
     });
 
     relaunchGatewayScheduledTask({
-      OPENCLAW_PROFILE: "work",
-      OPENCLAW_WINDOWS_TASK_NAME: "OpenClaw Gateway (custom)",
+      FOXCLAW_PROFILE: "work",
+      FOXCLAW_WINDOWS_TASK_NAME: "OpenClaw Gateway (custom)",
     });
 
     const scriptPath = [...createdScriptPaths][0];
@@ -108,7 +108,7 @@ describe("relaunchGatewayScheduledTask", () => {
       throw new Error("spawn failed");
     });
 
-    const result = relaunchGatewayScheduledTask({ OPENCLAW_PROFILE: "work" });
+    const result = relaunchGatewayScheduledTask({ FOXCLAW_PROFILE: "work" });
 
     expect(result.ok).toBe(false);
     expect(result.method).toBe("schtasks");
@@ -122,7 +122,7 @@ describe("relaunchGatewayScheduledTask", () => {
     resolvePreferredOpenClawTmpDirMock.mockReturnValue(metacharTmpDir);
     spawnMock.mockReturnValue({ unref });
 
-    relaunchGatewayScheduledTask({ OPENCLAW_PROFILE: "work" });
+    relaunchGatewayScheduledTask({ FOXCLAW_PROFILE: "work" });
 
     expect(spawnMock).toHaveBeenCalledWith(
       "cmd.exe",

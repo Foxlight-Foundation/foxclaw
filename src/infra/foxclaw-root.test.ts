@@ -5,7 +5,7 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 type FakeFsEntry = { kind: "file"; content: string } | { kind: "dir" };
 
 const VITEST_FS_BASE = path.join(path.parse(process.cwd()).root, "__openclaw_vitest__");
-const FIXTURE_BASE = path.join(VITEST_FS_BASE, "openclaw-root");
+const FIXTURE_BASE = path.join(VITEST_FS_BASE, "foxclaw-root");
 
 const state = vi.hoisted(() => ({
   entries: new Map<string, FakeFsEntry>(),
@@ -90,12 +90,12 @@ vi.mock("node:fs/promises", async (importOriginal) => {
 });
 
 describe("resolveOpenClawPackageRoot", () => {
-  let resolveOpenClawPackageRoot: typeof import("./openclaw-root.js").resolveOpenClawPackageRoot;
-  let resolveOpenClawPackageRootSync: typeof import("./openclaw-root.js").resolveOpenClawPackageRootSync;
+  let resolveOpenClawPackageRoot: typeof import("./foxclaw-root.js").resolveOpenClawPackageRoot;
+  let resolveOpenClawPackageRootSync: typeof import("./foxclaw-root.js").resolveOpenClawPackageRootSync;
 
   beforeAll(async () => {
     ({ resolveOpenClawPackageRoot, resolveOpenClawPackageRootSync } =
-      await import("./openclaw-root.js"));
+      await import("./foxclaw-root.js"));
   });
 
   beforeEach(() => {
@@ -117,7 +117,7 @@ describe("resolveOpenClawPackageRoot", () => {
     const project = fx("symlink-scenario");
     const bin = path.join(project, "bin", "openclaw");
     const realPkg = path.join(project, "real-pkg");
-    state.realpaths.set(abs(bin), abs(path.join(realPkg, "openclaw.mjs")));
+    state.realpaths.set(abs(bin), abs(path.join(realPkg, "foxclaw.mjs")));
     setFile(path.join(realPkg, "package.json"), JSON.stringify({ name: "openclaw" }));
 
     expect(resolveOpenClawPackageRootSync({ argv1: bin })).toBe(realPkg);
@@ -176,7 +176,7 @@ describe("resolveOpenClawPackageRoot", () => {
   it("falls back from a symlinked argv1 to the node_modules package root", () => {
     const project = fx("symlink-node-modules-fallback");
     const argv1 = path.join(project, "node_modules", ".bin", "openclaw");
-    state.realpaths.set(abs(argv1), abs(path.join(project, "versions", "current", "openclaw.mjs")));
+    state.realpaths.set(abs(argv1), abs(path.join(project, "versions", "current", "foxclaw.mjs")));
     const pkgRoot = path.join(project, "node_modules", "openclaw");
     setFile(path.join(pkgRoot, "package.json"), JSON.stringify({ name: "openclaw" }));
 

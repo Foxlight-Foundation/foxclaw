@@ -251,11 +251,11 @@ export async function ensureChromeExtensionRelayServer(opts: {
   }
 
   const extensionReconnectGraceMs = envMsOrDefault(
-    "OPENCLAW_EXTENSION_RELAY_RECONNECT_GRACE_MS",
+    "FOXCLAW_EXTENSION_RELAY_RECONNECT_GRACE_MS",
     DEFAULT_EXTENSION_RECONNECT_GRACE_MS,
   );
   const extensionCommandReconnectWaitMs = envMsOrDefault(
-    "OPENCLAW_EXTENSION_RELAY_COMMAND_RECONNECT_WAIT_MS",
+    "FOXCLAW_EXTENSION_RELAY_COMMAND_RECONNECT_WAIT_MS",
     DEFAULT_EXTENSION_COMMAND_RECONNECT_WAIT_MS,
   );
 

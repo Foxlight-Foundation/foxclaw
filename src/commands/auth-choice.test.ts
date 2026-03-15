@@ -57,8 +57,8 @@ type StoredAuthProfile = {
 
 describe("applyAuthChoice", () => {
   const lifecycle = createAuthTestLifecycle([
-    "OPENCLAW_STATE_DIR",
-    "OPENCLAW_AGENT_DIR",
+    "FOXCLAW_STATE_DIR",
+    "FOXCLAW_AGENT_DIR",
     "PI_CODING_AGENT_DIR",
     "ANTHROPIC_API_KEY",
     "OPENROUTER_API_KEY",

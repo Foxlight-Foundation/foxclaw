@@ -7,7 +7,7 @@ import { resolveStateDir } from "../config/paths.js";
 import { runCommandWithTimeout } from "../process/exec.js";
 import { VERSION } from "../version.js";
 import { writeJsonAtomic } from "./json-files.js";
-import { resolveOpenClawPackageRoot } from "./openclaw-root.js";
+import { resolveOpenClawPackageRoot } from "./foxclaw-root.js";
 import { normalizeUpdateChannel, DEFAULT_PACKAGE_CHANNEL } from "./update-channels.js";
 import { compareSemverStrings, resolveNpmChannelTag, checkUpdateStatus } from "./update-check.js";
 
@@ -272,7 +272,7 @@ async function runAutoUpdateCommand(params: {
     const res = await runCommandWithTimeout(argv, {
       timeoutMs: params.timeoutMs,
       env: {
-        OPENCLAW_AUTO_UPDATE: "1",
+        FOXCLAW_AUTO_UPDATE: "1",
       },
     });
     return {

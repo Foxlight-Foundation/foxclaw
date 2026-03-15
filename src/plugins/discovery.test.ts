@@ -18,10 +18,10 @@ const mkdirSafe = mkdirSafeDir;
 
 function buildDiscoveryEnv(stateDir: string): NodeJS.ProcessEnv {
   return {
-    OPENCLAW_STATE_DIR: stateDir,
+    FOXCLAW_STATE_DIR: stateDir,
     CLAWDBOT_STATE_DIR: undefined,
-    OPENCLAW_HOME: undefined,
-    OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+    FOXCLAW_HOME: undefined,
+    FOXCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
   };
 }
 
@@ -360,9 +360,9 @@ describe("discoverOpenClawPlugins", () => {
       const result = discoverOpenClawPlugins({
         env: {
           ...process.env,
-          OPENCLAW_STATE_DIR: stateDir,
+          FOXCLAW_STATE_DIR: stateDir,
           CLAWDBOT_STATE_DIR: undefined,
-          OPENCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+          FOXCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
         },
       });
 
@@ -408,7 +408,7 @@ describe("discoverOpenClawPlugins", () => {
     const first = discoverOpenClawPlugins({
       env: {
         ...buildDiscoveryEnv(stateDir),
-        OPENCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
+        FOXCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
       },
     });
     expect(first.candidates.some((candidate) => candidate.idHint === "cached")).toBe(true);
@@ -418,7 +418,7 @@ describe("discoverOpenClawPlugins", () => {
     const second = discoverOpenClawPlugins({
       env: {
         ...buildDiscoveryEnv(stateDir),
-        OPENCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
+        FOXCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
       },
     });
     expect(second.candidates.some((candidate) => candidate.idHint === "cached")).toBe(true);
@@ -428,7 +428,7 @@ describe("discoverOpenClawPlugins", () => {
     const third = discoverOpenClawPlugins({
       env: {
         ...buildDiscoveryEnv(stateDir),
-        OPENCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
+        FOXCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
       },
     });
     expect(third.candidates.some((candidate) => candidate.idHint === "cached")).toBe(false);
@@ -447,13 +447,13 @@ describe("discoverOpenClawPlugins", () => {
     const first = discoverOpenClawPlugins({
       env: {
         ...buildDiscoveryEnv(stateDirA),
-        OPENCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
+        FOXCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
       },
     });
     const second = discoverOpenClawPlugins({
       env: {
         ...buildDiscoveryEnv(stateDirB),
-        OPENCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
+        FOXCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
       },
     });
 
@@ -479,7 +479,7 @@ describe("discoverOpenClawPlugins", () => {
       env: {
         ...buildDiscoveryEnv(stateDir),
         HOME: homeA,
-        OPENCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
+        FOXCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
       },
     });
     const second = discoverOpenClawPlugins({
@@ -487,7 +487,7 @@ describe("discoverOpenClawPlugins", () => {
       env: {
         ...buildDiscoveryEnv(stateDir),
         HOME: homeB,
-        OPENCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
+        FOXCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
       },
     });
 
@@ -507,7 +507,7 @@ describe("discoverOpenClawPlugins", () => {
 
     const env = {
       ...buildDiscoveryEnv(stateDir),
-      OPENCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
+      FOXCLAW_PLUGIN_DISCOVERY_CACHE_MS: "5000",
     };
 
     const first = discoverOpenClawPlugins({

@@ -7,8 +7,8 @@ describe("buildPlatformRuntimeLogHints", () => {
       buildPlatformRuntimeLogHints({
         platform: "darwin",
         env: {
-          OPENCLAW_STATE_DIR: "/tmp/openclaw-state",
-          OPENCLAW_LOG_PREFIX: "gateway",
+          FOXCLAW_STATE_DIR: "/tmp/openclaw-state",
+          FOXCLAW_LOG_PREFIX: "gateway",
         },
         systemdServiceName: "openclaw-gateway",
         windowsTaskName: "OpenClaw Gateway",

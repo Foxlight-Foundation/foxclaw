@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { createOpenClawTools } from "../agents/openclaw-tools.js";
+import { createOpenClawTools } from "../agents/foxclaw-tools.js";
 import { runBeforeToolCallHook } from "../agents/pi-tools.before-tool-call.js";
 import { resolveToolLoopDetectionConfig } from "../agents/pi-tools.js";
 import {

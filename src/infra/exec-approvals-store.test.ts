@@ -23,7 +23,7 @@ import {
 } from "./exec-approvals.js";
 
 const tempDirs: string[] = [];
-const originalOpenClawHome = process.env.OPENCLAW_HOME;
+const originalOpenClawHome = process.env.FOXCLAW_HOME;
 
 beforeEach(() => {
   requestJsonlSocketMock.mockReset();
@@ -32,9 +32,9 @@ beforeEach(() => {
 afterEach(() => {
   vi.restoreAllMocks();
   if (originalOpenClawHome === undefined) {
-    delete process.env.OPENCLAW_HOME;
+    delete process.env.FOXCLAW_HOME;
   } else {
-    process.env.OPENCLAW_HOME = originalOpenClawHome;
+    process.env.FOXCLAW_HOME = originalOpenClawHome;
   }
   for (const dir of tempDirs.splice(0)) {
     fs.rmSync(dir, { recursive: true, force: true });
@@ -44,7 +44,7 @@ afterEach(() => {
 function createHomeDir(): string {
   const dir = makeTempDir();
   tempDirs.push(dir);
-  process.env.OPENCLAW_HOME = dir;
+  process.env.FOXCLAW_HOME = dir;
   return dir;
 }
 

@@ -5,8 +5,8 @@ import { captureEnv } from "../test-utils/env.js";
 let envSnapshot: ReturnType<typeof captureEnv>;
 
 beforeAll(() => {
-  envSnapshot = captureEnv(["OPENCLAW_PROFILE"]);
-  process.env.OPENCLAW_PROFILE = "isolated";
+  envSnapshot = captureEnv(["FOXCLAW_PROFILE"]);
+  process.env.FOXCLAW_PROFILE = "isolated";
 });
 
 afterAll(() => {
@@ -306,7 +306,7 @@ vi.mock("../gateway/session-utils.js", async (importOriginal) => {
     listAgentsForGateway: mocks.listAgentsForGateway,
   };
 });
-vi.mock("../infra/openclaw-root.js", () => ({
+vi.mock("../infra/foxclaw-root.js", () => ({
   resolveOpenClawPackageRoot: vi.fn().mockResolvedValue("/tmp/openclaw"),
 }));
 vi.mock("../infra/os-summary.js", () => ({
@@ -473,7 +473,7 @@ describe("statusCommand", () => {
   });
 
   it("shows gateway auth when reachable", async () => {
-    await withEnvVar("OPENCLAW_GATEWAY_TOKEN", "abcd1234", async () => {
+    await withEnvVar("FOXCLAW_GATEWAY_TOKEN", "abcd1234", async () => {
       mockProbeGatewayResult({
         ok: true,
         connectLatencyMs: 123,

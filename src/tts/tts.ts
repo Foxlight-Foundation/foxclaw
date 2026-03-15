@@ -23,7 +23,7 @@ import type {
   TtsModelOverrideConfig,
 } from "../config/types.tts.js";
 import { logVerbose } from "../globals.js";
-import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-openclaw-dir.js";
+import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-foxclaw-dir.js";
 import { isVoiceCompatibleAudio } from "../media/audio.js";
 import { CONFIG_DIR, resolveUserPath } from "../utils.js";
 import {
@@ -357,7 +357,7 @@ export function resolveTtsPrefsPath(config: ResolvedTtsConfig): string {
   if (config.prefsPath?.trim()) {
     return resolveUserPath(config.prefsPath.trim());
   }
-  const envPath = process.env.OPENCLAW_TTS_PREFS?.trim();
+  const envPath = process.env.FOXCLAW_TTS_PREFS?.trim();
   if (envPath) {
     return resolveUserPath(envPath);
   }

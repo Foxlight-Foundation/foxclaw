@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig, ConfigFileSnapshot } from "../config/types.openclaw.js";
+import type { OpenClawConfig, ConfigFileSnapshot } from "../config/types.foxclaw.js";
 import type { UpdateRunResult } from "../infra/update-runner.js";
 import { withEnvAsync } from "../test-utils/env.js";
 
@@ -37,7 +37,7 @@ vi.mock("../infra/update-runner.js", () => ({
   runGatewayUpdate: vi.fn(),
 }));
 
-vi.mock("../infra/openclaw-root.js", () => ({
+vi.mock("../infra/foxclaw-root.js", () => ({
   resolveOpenClawPackageRoot: vi.fn(),
 }));
 
@@ -137,7 +137,7 @@ vi.mock("../runtime.js", () => ({
 }));
 
 const { runGatewayUpdate } = await import("../infra/update-runner.js");
-const { resolveOpenClawPackageRoot } = await import("../infra/openclaw-root.js");
+const { resolveOpenClawPackageRoot } = await import("../infra/foxclaw-root.js");
 const { readConfigFileSnapshot, writeConfigFile } = await import("../config/config.js");
 const { checkUpdateStatus, fetchNpmTagVersion, resolveNpmChannelTag } =
   await import("../infra/update-check.js");
@@ -523,12 +523,12 @@ describe("update-cli", () => {
     expect(updateOptions?.env?.NODE_LLAMA_CPP_SKIP_DOWNLOAD).toBe("1");
   });
 
-  it("uses OPENCLAW_UPDATE_PACKAGE_SPEC for package updates", async () => {
+  it("uses FOXCLAW_UPDATE_PACKAGE_SPEC for package updates", async () => {
     const tempDir = createCaseDir("openclaw-update");
     mockPackageInstallStatus(tempDir);
 
     await withEnvAsync(
-      { OPENCLAW_UPDATE_PACKAGE_SPEC: "http://10.211.55.2:8138/openclaw-next.tgz" },
+      { FOXCLAW_UPDATE_PACKAGE_SPEC: "http://10.211.55.2:8138/openclaw-next.tgz" },
       async () => {
         await updateCommand({ yes: true, tag: "latest" });
       },
@@ -646,8 +646,8 @@ describe("update-cli", () => {
 
     await withEnvAsync(
       {
-        OPENCLAW_STATE_DIR: "./state",
-        OPENCLAW_CONFIG_PATH: "./config/openclaw.json",
+        FOXCLAW_STATE_DIR: "./state",
+        FOXCLAW_CONFIG_PATH: "./config/openclaw.json",
       },
       async () => {
         await updateCommand({});
@@ -659,8 +659,8 @@ describe("update-cli", () => {
       expect.objectContaining({
         cwd: root,
         env: expect.objectContaining({
-          OPENCLAW_STATE_DIR: path.resolve("./state"),
-          OPENCLAW_CONFIG_PATH: path.resolve("./config/openclaw.json"),
+          FOXCLAW_STATE_DIR: path.resolve("./state"),
+          FOXCLAW_CONFIG_PATH: path.resolve("./config/openclaw.json"),
         }),
         timeoutMs: 60_000,
       }),
@@ -693,7 +693,7 @@ describe("update-cli", () => {
     try {
       await withEnvAsync(
         {
-          OPENCLAW_STATE_DIR: "./state",
+          FOXCLAW_STATE_DIR: "./state",
         },
         async () => {
           await updateCommand({});
@@ -708,7 +708,7 @@ describe("update-cli", () => {
       expect.objectContaining({
         cwd: root,
         env: expect.objectContaining({
-          OPENCLAW_STATE_DIR: path.resolve(originalCwd, "./state"),
+          FOXCLAW_STATE_DIR: path.resolve(originalCwd, "./state"),
         }),
         timeoutMs: 60_000,
       }),
@@ -738,7 +738,7 @@ describe("update-cli", () => {
   it("updateCommand continues after doctor sub-step and clears update flag", async () => {
     const randomSpy = vi.spyOn(Math, "random").mockReturnValue(0);
     try {
-      await withEnvAsync({ OPENCLAW_UPDATE_IN_PROGRESS: undefined }, async () => {
+      await withEnvAsync({ FOXCLAW_UPDATE_IN_PROGRESS: undefined }, async () => {
         vi.mocked(runGatewayUpdate).mockResolvedValue(makeOkUpdateResult());
         vi.mocked(runDaemonRestart).mockResolvedValue(true);
         vi.mocked(doctorCommand).mockResolvedValue(undefined);
@@ -750,7 +750,7 @@ describe("update-cli", () => {
           defaultRuntime,
           expect.objectContaining({ nonInteractive: true }),
         );
-        expect(process.env.OPENCLAW_UPDATE_IN_PROGRESS).toBeUndefined();
+        expect(process.env.FOXCLAW_UPDATE_IN_PROGRESS).toBeUndefined();
 
         const logLines = vi.mocked(defaultRuntime.log).mock.calls.map((call) => String(call[0]));
         expect(
@@ -871,7 +871,7 @@ describe("update-cli", () => {
 
   it("updateWizardCommand offers dev checkout and forwards selections", async () => {
     const tempDir = createCaseDir("openclaw-update-wizard");
-    await withEnvAsync({ OPENCLAW_GIT_DIR: tempDir }, async () => {
+    await withEnvAsync({ FOXCLAW_GIT_DIR: tempDir }, async () => {
       setTty(true);
 
       vi.mocked(checkUpdateStatus).mockResolvedValue({

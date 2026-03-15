@@ -339,7 +339,7 @@ export type {
   WindowsSpawnProgram,
   WindowsSpawnResolution,
 } from "./windows-spawn.js";
-export { resolvePreferredOpenClawTmpDir } from "../infra/tmp-openclaw-dir.js";
+export { resolvePreferredOpenClawTmpDir } from "../infra/tmp-foxclaw-dir.js";
 export {
   runPluginCommandWithTimeout,
   type PluginCommandRunOptions,

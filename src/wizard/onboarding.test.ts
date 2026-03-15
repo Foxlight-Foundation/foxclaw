@@ -399,8 +399,8 @@ describe("runOnboardingWizard", () => {
   });
 
   it("resolves gateway.auth.password SecretRef for local onboarding probe", async () => {
-    const previous = process.env.OPENCLAW_GATEWAY_PASSWORD;
-    process.env.OPENCLAW_GATEWAY_PASSWORD = "gateway-ref-password"; // pragma: allowlist secret
+    const previous = process.env.FOXCLAW_GATEWAY_PASSWORD;
+    process.env.FOXCLAW_GATEWAY_PASSWORD = "gateway-ref-password"; // pragma: allowlist secret
     probeGatewayReachable.mockClear();
     readConfigFileSnapshot.mockResolvedValueOnce({
       path: "/tmp/.openclaw/openclaw.json",
@@ -416,7 +416,7 @@ describe("runOnboardingWizard", () => {
             password: {
               source: "env",
               provider: "default",
-              id: "OPENCLAW_GATEWAY_PASSWORD",
+              id: "FOXCLAW_GATEWAY_PASSWORD",
             },
           },
         },
@@ -453,9 +453,9 @@ describe("runOnboardingWizard", () => {
       );
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_GATEWAY_PASSWORD;
+        delete process.env.FOXCLAW_GATEWAY_PASSWORD;
       } else {
-        process.env.OPENCLAW_GATEWAY_PASSWORD = previous;
+        process.env.FOXCLAW_GATEWAY_PASSWORD = previous;
       }
     }
 

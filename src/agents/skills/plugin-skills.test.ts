@@ -30,7 +30,7 @@ function buildRegistry(params: { acpxRoot: string; helperRoot: string }): Plugin
         origin: "workspace",
         rootDir: params.acpxRoot,
         source: params.acpxRoot,
-        manifestPath: path.join(params.acpxRoot, "openclaw.plugin.json"),
+        manifestPath: path.join(params.acpxRoot, "foxclaw.plugin.json"),
       },
       {
         id: "helper",
@@ -41,7 +41,7 @@ function buildRegistry(params: { acpxRoot: string; helperRoot: string }): Plugin
         origin: "workspace",
         rootDir: params.helperRoot,
         source: params.helperRoot,
-        manifestPath: path.join(params.helperRoot, "openclaw.plugin.json"),
+        manifestPath: path.join(params.helperRoot, "foxclaw.plugin.json"),
       },
     ],
   };
@@ -63,7 +63,7 @@ function createSinglePluginRegistry(params: {
         origin: "workspace",
         rootDir: params.pluginRoot,
         source: params.pluginRoot,
-        manifestPath: path.join(params.pluginRoot, "openclaw.plugin.json"),
+        manifestPath: path.join(params.pluginRoot, "foxclaw.plugin.json"),
       },
     ],
   };

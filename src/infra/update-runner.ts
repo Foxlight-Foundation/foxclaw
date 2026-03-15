@@ -371,7 +371,7 @@ export async function runGatewayUpdate(opts: UpdateRunnerOptions = {}): Promise<
       status: "error",
       mode: "unknown",
       root: gitRoot,
-      reason: "not-openclaw-root",
+      reason: "not-foxclaw-root",
       steps: [],
       durationMs: Date.now() - startedAt,
     };
@@ -745,7 +745,7 @@ export async function runGatewayUpdate(opts: UpdateRunnerOptions = {}): Promise<
       };
     }
 
-    const doctorEntry = path.join(gitRoot, "openclaw.mjs");
+    const doctorEntry = path.join(gitRoot, "foxclaw.mjs");
     const doctorEntryExists = await fs
       .stat(doctorEntry)
       .then(() => true)
@@ -775,7 +775,7 @@ export async function runGatewayUpdate(opts: UpdateRunnerOptions = {}): Promise<
     const doctorNodePath = await resolveStableNodePath(process.execPath);
     const doctorArgv = [doctorNodePath, doctorEntry, "doctor", "--non-interactive", "--fix"];
     const doctorStep = await runStep(
-      step("openclaw doctor", doctorArgv, gitRoot, { OPENCLAW_UPDATE_IN_PROGRESS: "1" }),
+      step("openclaw doctor", doctorArgv, gitRoot, { FOXCLAW_UPDATE_IN_PROGRESS: "1" }),
     );
     steps.push(doctorStep);
 

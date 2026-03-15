@@ -40,8 +40,8 @@ function deriveDefaultGatewayUrl(): { pageUrl: string; effectiveUrl: string } {
   const proto = location.protocol === "https:" ? "wss" : "ws";
   const configured =
     typeof window !== "undefined" &&
-    typeof window.__OPENCLAW_CONTROL_UI_BASE_PATH__ === "string" &&
-    window.__OPENCLAW_CONTROL_UI_BASE_PATH__.trim();
+    typeof window.__FOXCLAW_CONTROL_UI_BASE_PATH__ === "string" &&
+    window.__FOXCLAW_CONTROL_UI_BASE_PATH__.trim();
   const basePath = configured
     ? normalizeBasePath(configured)
     : inferBasePathFromPathname(location.pathname);

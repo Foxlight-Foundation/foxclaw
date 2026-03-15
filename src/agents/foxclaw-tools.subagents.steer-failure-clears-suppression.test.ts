@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import {
   callGatewayMock,
   setSubagentsConfigOverride,
-} from "./openclaw-tools.subagents.test-harness.js";
+} from "./foxclaw-tools.subagents.test-harness.js";
 import {
   addSubagentRunForTests,
   listSubagentRunsForRequester,
@@ -14,7 +14,7 @@ import {
 import "./test-helpers/fast-core-tools.js";
 import { createSubagentsTool } from "./tools/subagents-tool.js";
 
-describe("openclaw-tools: subagents steer failure", () => {
+describe("foxclaw-tools: subagents steer failure", () => {
   beforeEach(() => {
     resetSubagentRegistryForTests();
     callGatewayMock.mockClear();

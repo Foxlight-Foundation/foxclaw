@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import "./test-helpers/fast-core-tools.js";
-import { createOpenClawTools } from "./openclaw-tools.js";
+import { createOpenClawTools } from "./foxclaw-tools.js";
 
 function readToolByName() {
   return new Map(createOpenClawTools().map((tool) => [tool.name, tool]));

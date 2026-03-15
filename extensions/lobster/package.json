@@ -1,5 +1,5 @@
 {
-  "name": "@openclaw/lobster",
+  "name": "@foxclaw/lobster",
   "version": "2026.3.14",
   "description": "Lobster workflow tool plugin (typed pipelines + resumable approvals)",
   "type": "module",

@@ -57,7 +57,7 @@ function mkdirSafe(dir: string) {
 
 const fixtureRoot = mkdtempSafe(path.join(os.tmpdir(), "openclaw-plugin-"));
 let tempDirIndex = 0;
-const prevBundledDir = process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
+const prevBundledDir = process.env.FOXCLAW_BUNDLED_PLUGINS_DIR;
 const EMPTY_PLUGIN_SCHEMA = { type: "object", additionalProperties: false, properties: {} };
 let cachedBundledTelegramDir = "";
 let cachedBundledMemoryDir = "";
@@ -103,7 +103,7 @@ function writePlugin(params: {
   const file = path.join(dir, filename);
   fs.writeFileSync(file, params.body, "utf-8");
   fs.writeFileSync(
-    path.join(dir, "openclaw.plugin.json"),
+    path.join(dir, "foxclaw.plugin.json"),
     JSON.stringify(
       {
         id: params.id,
@@ -123,7 +123,7 @@ function loadBundledMemoryPluginRegistry(options?: {
   pluginFilename?: string;
 }) {
   if (!options && cachedBundledMemoryDir) {
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = cachedBundledMemoryDir;
+    process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = cachedBundledMemoryDir;
     return loadOpenClawPlugins({
       cache: false,
       workspaceDir: cachedBundledMemoryDir,
@@ -172,7 +172,7 @@ function loadBundledMemoryPluginRegistry(options?: {
   if (!options) {
     cachedBundledMemoryDir = bundledDir;
   }
-  process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+  process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
   return loadOpenClawPlugins({
     cache: false,
@@ -197,7 +197,7 @@ function setupBundledTelegramPlugin() {
       filename: "telegram.cjs",
     });
   }
-  process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = cachedBundledTelegramDir;
+  process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = cachedBundledTelegramDir;
 }
 
 function expectTelegramLoaded(registry: ReturnType<typeof loadOpenClawPlugins>) {
@@ -207,7 +207,7 @@ function expectTelegramLoaded(registry: ReturnType<typeof loadOpenClawPlugins>) 
 }
 
 function useNoBundledPlugins() {
-  process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+  process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
 }
 
 function loadRegistryFromSinglePlugin(params: {
@@ -254,7 +254,7 @@ function createEscapingEntryFixture(params: { id: string; sourceBody: string }) 
   const linkedEntry = path.join(pluginDir, "entry.cjs");
   fs.writeFileSync(outsideEntry, params.sourceBody, "utf-8");
   fs.writeFileSync(
-    path.join(pluginDir, "openclaw.plugin.json"),
+    path.join(pluginDir, "foxclaw.plugin.json"),
     JSON.stringify(
       {
         id: params.id,
@@ -287,9 +287,9 @@ function createPluginSdkAliasFixture(params?: {
 afterEach(() => {
   clearPluginLoaderCache();
   if (prevBundledDir === undefined) {
-    delete process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
+    delete process.env.FOXCLAW_BUNDLED_PLUGINS_DIR;
   } else {
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = prevBundledDir;
+    process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = prevBundledDir;
   }
 });
 
@@ -313,7 +313,7 @@ describe("loadOpenClawPlugins", () => {
       dir: bundledDir,
       filename: "bundled.cjs",
     });
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+    process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
     const registry = loadOpenClawPlugins({
       cache: false,
@@ -411,7 +411,7 @@ describe("loadOpenClawPlugins", () => {
     expect(memory?.version).toBe("1.2.3");
   });
   it("loads plugins from config paths", () => {
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+    process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
     const plugin = writePlugin({
       id: "allowed",
       filename: "allowed.cjs",
@@ -440,7 +440,7 @@ describe("loadOpenClawPlugins", () => {
   });
 
   it("re-initializes global hook runner when serving registry from cache", () => {
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+    process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
     const plugin = writePlugin({
       id: "cache-hook-runner",
       filename: "cache-hook-runner.cjs",
@@ -501,14 +501,14 @@ describe("loadOpenClawPlugins", () => {
       ...options,
       env: {
         ...process.env,
-        OPENCLAW_BUNDLED_PLUGINS_DIR: bundledA,
+        FOXCLAW_BUNDLED_PLUGINS_DIR: bundledA,
       },
     });
     const second = loadOpenClawPlugins({
       ...options,
       env: {
         ...process.env,
-        OPENCLAW_BUNDLED_PLUGINS_DIR: bundledB,
+        FOXCLAW_BUNDLED_PLUGINS_DIR: bundledB,
       },
     });
 
@@ -558,9 +558,9 @@ describe("loadOpenClawPlugins", () => {
       env: {
         ...process.env,
         HOME: homeA,
-        OPENCLAW_HOME: undefined,
-        OPENCLAW_STATE_DIR: stateDir,
-        OPENCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+        FOXCLAW_HOME: undefined,
+        FOXCLAW_STATE_DIR: stateDir,
+        FOXCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
       },
     });
     const second = loadOpenClawPlugins({
@@ -568,9 +568,9 @@ describe("loadOpenClawPlugins", () => {
       env: {
         ...process.env,
         HOME: homeB,
-        OPENCLAW_HOME: undefined,
-        OPENCLAW_STATE_DIR: stateDir,
-        OPENCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+        FOXCLAW_HOME: undefined,
+        FOXCLAW_STATE_DIR: stateDir,
+        FOXCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
       },
     });
 
@@ -617,11 +617,11 @@ describe("loadOpenClawPlugins", () => {
       ...options,
       env: {
         ...process.env,
-        OPENCLAW_HOME: openclawHome,
+        FOXCLAW_HOME: openclawHome,
         HOME: ignoredHome,
-        OPENCLAW_STATE_DIR: stateDir,
+        FOXCLAW_STATE_DIR: stateDir,
         CLAWDBOT_STATE_DIR: undefined,
-        OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+        FOXCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
       },
     });
     const secondHome = makeTempDir();
@@ -629,11 +629,11 @@ describe("loadOpenClawPlugins", () => {
       ...options,
       env: {
         ...process.env,
-        OPENCLAW_HOME: secondHome,
+        FOXCLAW_HOME: secondHome,
         HOME: ignoredHome,
-        OPENCLAW_STATE_DIR: stateDir,
+        FOXCLAW_STATE_DIR: stateDir,
         CLAWDBOT_STATE_DIR: undefined,
-        OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+        FOXCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
       },
     };
     const second = loadOpenClawPlugins(secondOptions);
@@ -658,8 +658,8 @@ describe("loadOpenClawPlugins", () => {
       loadOpenClawPlugins({
         env: {
           ...process.env,
-          OPENCLAW_STATE_DIR: stateDir,
-          OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+          FOXCLAW_STATE_DIR: stateDir,
+          FOXCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
         },
         config: {
           plugins: {
@@ -699,8 +699,8 @@ describe("loadOpenClawPlugins", () => {
       env: {
         ...process.env,
         HOME: homeDir,
-        OPENCLAW_HOME: undefined,
-        OPENCLAW_BUNDLED_PLUGINS_DIR: override,
+        FOXCLAW_HOME: undefined,
+        FOXCLAW_BUNDLED_PLUGINS_DIR: override,
       },
       config: {
         plugins: {
@@ -717,7 +717,7 @@ describe("loadOpenClawPlugins", () => {
     ).toBe(fs.realpathSync(plugin.file));
   });
 
-  it("prefers OPENCLAW_HOME over HOME for env-expanded load paths", () => {
+  it("prefers FOXCLAW_HOME over HOME for env-expanded load paths", () => {
     const ignoredHome = makeTempDir();
     const openclawHome = makeTempDir();
     const stateDir = makeTempDir();
@@ -733,9 +733,9 @@ describe("loadOpenClawPlugins", () => {
       env: {
         ...process.env,
         HOME: ignoredHome,
-        OPENCLAW_HOME: openclawHome,
-        OPENCLAW_STATE_DIR: stateDir,
-        OPENCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+        FOXCLAW_HOME: openclawHome,
+        FOXCLAW_STATE_DIR: stateDir,
+        FOXCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
       },
       config: {
         plugins: {
@@ -1214,7 +1214,7 @@ describe("loadOpenClawPlugins", () => {
   });
 
   it("respects explicit disable in config", () => {
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+    process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
     const plugin = writePlugin({
       id: "config-disable",
       body: `module.exports = { id: "config-disable", register() {} };`,
@@ -1353,7 +1353,7 @@ describe("loadOpenClawPlugins", () => {
   });
 
   it("enforces memory slot selection", () => {
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+    process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
     const memoryA = writePlugin({
       id: "memory-a",
       body: `module.exports = { id: "memory-a", kind: "memory", register() {} };`,
@@ -1398,7 +1398,7 @@ describe("loadOpenClawPlugins", () => {
       body: `module.exports = { id: "memory-b", kind: "memory", register() {} };`,
     });
     fs.writeFileSync(
-      path.join(memoryADir, "openclaw.plugin.json"),
+      path.join(memoryADir, "foxclaw.plugin.json"),
       JSON.stringify(
         {
           id: "memory-a",
@@ -1411,7 +1411,7 @@ describe("loadOpenClawPlugins", () => {
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(memoryBDir, "openclaw.plugin.json"),
+      path.join(memoryBDir, "foxclaw.plugin.json"),
       JSON.stringify(
         {
           id: "memory-b",
@@ -1423,7 +1423,7 @@ describe("loadOpenClawPlugins", () => {
       ),
       "utf-8",
     );
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+    process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
     const registry = loadOpenClawPlugins({
       cache: false,
@@ -1447,7 +1447,7 @@ describe("loadOpenClawPlugins", () => {
   });
 
   it("disables memory plugins when slot is none", () => {
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+    process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
     const memory = writePlugin({
       id: "memory-off",
       body: `module.exports = { id: "memory-off", kind: "memory", register() {} };`,
@@ -1475,7 +1475,7 @@ describe("loadOpenClawPlugins", () => {
       dir: bundledDir,
       filename: "shadow.cjs",
     });
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+    process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
     const override = writePlugin({
       id: "shadow",
@@ -1509,10 +1509,10 @@ describe("loadOpenClawPlugins", () => {
       dir: bundledDir,
       filename: "index.cjs",
     });
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+    process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
     const stateDir = makeTempDir();
-    withEnv({ OPENCLAW_STATE_DIR: stateDir, CLAWDBOT_STATE_DIR: undefined }, () => {
+    withEnv({ FOXCLAW_STATE_DIR: stateDir, CLAWDBOT_STATE_DIR: undefined }, () => {
       const globalDir = path.join(stateDir, "extensions", "feishu");
       mkdirSafe(globalDir);
       writePlugin({
@@ -1652,7 +1652,7 @@ describe("loadOpenClawPlugins", () => {
       dir: bundledDir,
       filename: "index.cjs",
     });
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+    process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
     const workspaceDir = makeTempDir();
     const workspaceExtDir = path.join(workspaceDir, ".openclaw", "extensions", "shadowed");
@@ -1685,7 +1685,7 @@ describe("loadOpenClawPlugins", () => {
   it("warns when loaded non-bundled plugin has no install/load-path provenance", () => {
     useNoBundledPlugins();
     const stateDir = makeTempDir();
-    withEnv({ OPENCLAW_STATE_DIR: stateDir, CLAWDBOT_STATE_DIR: undefined }, () => {
+    withEnv({ FOXCLAW_STATE_DIR: stateDir, CLAWDBOT_STATE_DIR: undefined }, () => {
       const globalDir = path.join(stateDir, "extensions", "rogue");
       mkdirSafe(globalDir);
       writePlugin({
@@ -1737,11 +1737,11 @@ describe("loadOpenClawPlugins", () => {
       logger: createWarningLogger(warnings),
       env: {
         ...process.env,
-        OPENCLAW_HOME: openclawHome,
+        FOXCLAW_HOME: openclawHome,
         HOME: ignoredHome,
-        OPENCLAW_STATE_DIR: stateDir,
+        FOXCLAW_STATE_DIR: stateDir,
         CLAWDBOT_STATE_DIR: undefined,
-        OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+        FOXCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
       },
       config: {
         plugins: {
@@ -1779,11 +1779,11 @@ describe("loadOpenClawPlugins", () => {
       logger: createWarningLogger(warnings),
       env: {
         ...process.env,
-        OPENCLAW_HOME: openclawHome,
+        FOXCLAW_HOME: openclawHome,
         HOME: ignoredHome,
-        OPENCLAW_STATE_DIR: stateDir,
+        FOXCLAW_STATE_DIR: stateDir,
         CLAWDBOT_STATE_DIR: undefined,
-        OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+        FOXCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
       },
       config: {
         plugins: {
@@ -1901,7 +1901,7 @@ describe("loadOpenClawPlugins", () => {
       throw err;
     }
 
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
+    process.env.FOXCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
     const registry = loadOpenClawPlugins({
       cache: false,
       workspaceDir: bundledDir,
@@ -1991,8 +1991,8 @@ describe("loadOpenClawPlugins", () => {
       cwd: process.cwd(),
       env: {
         ...process.env,
-        OPENCLAW_HOME: undefined,
-        OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+        FOXCLAW_HOME: undefined,
+        FOXCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
       },
       encoding: "utf-8",
       stdio: "pipe",

@@ -82,23 +82,23 @@ async function withOnboardEnv(
   run: (ctx: OnboardEnv) => Promise<void>,
 ): Promise<void> {
   const tempHome = await makeTempWorkspace(prefix);
-  const configPath = path.join(tempHome, "openclaw.json");
+  const configPath = path.join(tempHome, "foxclaw.json");
   const runtime = createThrowingRuntime();
 
   try {
     await withEnvAsync(
       {
         HOME: tempHome,
-        OPENCLAW_STATE_DIR: tempHome,
-        OPENCLAW_CONFIG_PATH: configPath,
-        OPENCLAW_SKIP_CHANNELS: "1",
-        OPENCLAW_SKIP_GMAIL_WATCHER: "1",
-        OPENCLAW_SKIP_CRON: "1",
-        OPENCLAW_SKIP_CANVAS_HOST: "1",
-        OPENCLAW_GATEWAY_TOKEN: undefined,
-        OPENCLAW_GATEWAY_PASSWORD: undefined,
+        FOXCLAW_STATE_DIR: tempHome,
+        FOXCLAW_CONFIG_PATH: configPath,
+        FOXCLAW_SKIP_CHANNELS: "1",
+        FOXCLAW_SKIP_GMAIL_WATCHER: "1",
+        FOXCLAW_SKIP_CRON: "1",
+        FOXCLAW_SKIP_CANVAS_HOST: "1",
+        FOXCLAW_GATEWAY_TOKEN: undefined,
+        FOXCLAW_GATEWAY_PASSWORD: undefined,
         CUSTOM_API_KEY: undefined,
-        OPENCLAW_DISABLE_CONFIG_CACHE: "1",
+        FOXCLAW_DISABLE_CONFIG_CACHE: "1",
       },
       async () => {
         await run({ configPath, runtime });

@@ -1,5 +1,5 @@
 {
-  "name": "openclaw",
+  "name": "foxclaw",
   "version": "2026.3.14",
   "description": "Multi-channel AI gateway with extensible messaging integrations",
   "keywords": [],
@@ -14,7 +14,7 @@
     "url": "git+https://github.com/openclaw/openclaw.git"
   },
   "bin": {
-    "openclaw": "openclaw.mjs"
+    "foxclaw": "foxclaw.mjs"
   },
   "directories": {
     "doc": "docs",
@@ -23,7 +23,7 @@
   "files": [
     "CHANGELOG.md",
     "LICENSE",
-    "openclaw.mjs",
+    "foxclaw.mjs",
     "README-header.png",
     "README.md",
     "assets/",
@@ -124,7 +124,7 @@
       "types": "./dist/plugin-sdk/keyed-async-queue.d.ts",
       "default": "./dist/plugin-sdk/keyed-async-queue.js"
     },
-    "./cli-entry": "./openclaw.mjs"
+    "./cli-entry": "./foxclaw.mjs"
   },
   "scripts": {
     "build": "pnpm canvas:a2ui:bundle && node scripts/tsdown-build.mjs && node scripts/copy-plugin-sdk-root-alias.mjs && pnpm build:plugin-sdk:dts && node --import tsx scripts/write-plugin-sdk-entry-dts.ts && node --import tsx scripts/canvas-a2ui-copy.ts && node --import tsx scripts/copy-hook-metadata.ts && node --import tsx scripts/copy-export-html-templates.ts && node --import tsx scripts/write-build-info.ts && node --import tsx scripts/write-cli-startup-metadata.ts && node --import tsx scripts/write-cli-compat.ts",

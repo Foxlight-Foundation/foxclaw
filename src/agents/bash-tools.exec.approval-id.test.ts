@@ -44,7 +44,7 @@ function buildPreparedSystemRunPayload(rawInvokeParams: unknown) {
 }
 
 function getTestConfigPath() {
-  return path.join(process.env.HOME ?? "", ".openclaw", "openclaw.json");
+  return path.join(process.env.HOME ?? "", ".openclaw", "foxclaw.json");
 }
 
 async function writeOpenClawConfig(config: Record<string, unknown>, pretty = false) {

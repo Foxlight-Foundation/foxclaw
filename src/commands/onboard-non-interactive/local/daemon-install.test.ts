@@ -65,7 +65,7 @@ describe("installGatewayDaemonNonInteractive", () => {
             token: {
               source: "env",
               provider: "default",
-              id: "OPENCLAW_GATEWAY_TOKEN",
+              id: "FOXCLAW_GATEWAY_TOKEN",
             },
           },
         },

@@ -151,7 +151,7 @@ function expectSecurityConnectError(
 }
 
 describe("GatewayClient security checks", () => {
-  const envSnapshot = captureEnv(["OPENCLAW_ALLOW_INSECURE_PRIVATE_WS"]);
+  const envSnapshot = captureEnv(["FOXCLAW_ALLOW_INSECURE_PRIVATE_WS"]);
 
   beforeEach(() => {
     envSnapshot.restore();
@@ -215,8 +215,8 @@ describe("GatewayClient security checks", () => {
     client.stop();
   });
 
-  it("allows ws:// to private addresses only with OPENCLAW_ALLOW_INSECURE_PRIVATE_WS=1", () => {
-    process.env.OPENCLAW_ALLOW_INSECURE_PRIVATE_WS = "1";
+  it("allows ws:// to private addresses only with FOXCLAW_ALLOW_INSECURE_PRIVATE_WS=1", () => {
+    process.env.FOXCLAW_ALLOW_INSECURE_PRIVATE_WS = "1";
     const onConnectError = vi.fn();
     const client = new GatewayClient({
       url: "ws://192.168.1.100:18789",
@@ -230,8 +230,8 @@ describe("GatewayClient security checks", () => {
     client.stop();
   });
 
-  it("allows ws:// hostnames with OPENCLAW_ALLOW_INSECURE_PRIVATE_WS=1", () => {
-    process.env.OPENCLAW_ALLOW_INSECURE_PRIVATE_WS = "1";
+  it("allows ws:// hostnames with FOXCLAW_ALLOW_INSECURE_PRIVATE_WS=1", () => {
+    process.env.FOXCLAW_ALLOW_INSECURE_PRIVATE_WS = "1";
     const onConnectError = vi.fn();
     const client = new GatewayClient({
       url: "ws://openclaw-gateway.ai:18789",

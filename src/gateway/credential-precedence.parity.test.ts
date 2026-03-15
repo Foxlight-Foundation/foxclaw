@@ -20,8 +20,8 @@ type TestCase = {
 };
 
 const gatewayEnv = {
-  OPENCLAW_GATEWAY_TOKEN: "env-token", // pragma: allowlist secret
-  OPENCLAW_GATEWAY_PASSWORD: "env-password", // pragma: allowlist secret
+  FOXCLAW_GATEWAY_TOKEN: "env-token", // pragma: allowlist secret
+  FOXCLAW_GATEWAY_PASSWORD: "env-password", // pragma: allowlist secret
 } as NodeJS.ProcessEnv;
 
 function makeRemoteGatewayConfig(remote: { token?: string; password?: string }): OpenClawConfig {
@@ -39,9 +39,9 @@ function makeRemoteGatewayConfig(remote: { token?: string; password?: string }):
 
 function withGatewayAuthEnv<T>(env: NodeJS.ProcessEnv, fn: () => T): T {
   const keys = [
-    "OPENCLAW_GATEWAY_TOKEN",
-    "OPENCLAW_GATEWAY_PASSWORD",
-    "OPENCLAW_SERVICE_KIND",
+    "FOXCLAW_GATEWAY_TOKEN",
+    "FOXCLAW_GATEWAY_PASSWORD",
+    "FOXCLAW_SERVICE_KIND",
     "CLAWDBOT_GATEWAY_TOKEN",
     "CLAWDBOT_GATEWAY_PASSWORD",
   ] as const;
@@ -83,8 +83,8 @@ describe("gateway credential precedence parity", () => {
         },
       } as OpenClawConfig,
       env: {
-        OPENCLAW_GATEWAY_TOKEN: "env-token", // pragma: allowlist secret
-        OPENCLAW_GATEWAY_PASSWORD: "env-password", // pragma: allowlist secret
+        FOXCLAW_GATEWAY_TOKEN: "env-token", // pragma: allowlist secret
+        FOXCLAW_GATEWAY_PASSWORD: "env-password", // pragma: allowlist secret
       } as NodeJS.ProcessEnv,
       expected: {
         call: { token: "env-token", password: "env-password" }, // pragma: allowlist secret
@@ -151,9 +151,9 @@ describe("gateway credential precedence parity", () => {
         },
       } as OpenClawConfig,
       env: {
-        OPENCLAW_GATEWAY_TOKEN: "env-token",
-        OPENCLAW_GATEWAY_PASSWORD: "env-password", // pragma: allowlist secret
-        OPENCLAW_SERVICE_KIND: "gateway",
+        FOXCLAW_GATEWAY_TOKEN: "env-token",
+        FOXCLAW_GATEWAY_PASSWORD: "env-password", // pragma: allowlist secret
+        FOXCLAW_SERVICE_KIND: "gateway",
       } as NodeJS.ProcessEnv,
       expected: {
         call: { token: "config-token", password: "env-password" }, // pragma: allowlist secret

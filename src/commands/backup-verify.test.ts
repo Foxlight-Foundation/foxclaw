@@ -109,7 +109,7 @@ describe("backupVerifyCommand", () => {
     const stateDir = path.join(tempHome.home, ".openclaw");
     const archiveDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-backup-verify-out-"));
     try {
-      await fs.writeFile(path.join(stateDir, "openclaw.json"), JSON.stringify({}), "utf8");
+      await fs.writeFile(path.join(stateDir, "foxclaw.json"), JSON.stringify({}), "utf8");
       await fs.writeFile(path.join(stateDir, "state.txt"), "hello\n", "utf8");
 
       const runtime = createBackupVerifyRuntime();
@@ -220,7 +220,7 @@ describe("backupVerifyCommand", () => {
     const configPath = path.join(tempHome.home, "custom-config.json");
     const archiveDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-backup-verify-out-"));
     try {
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
+      process.env.FOXCLAW_CONFIG_PATH = configPath;
       await fs.writeFile(
         configPath,
         JSON.stringify({
@@ -232,7 +232,7 @@ describe("backupVerifyCommand", () => {
         }),
         "utf8",
       );
-      await fs.writeFile(path.join(stateDir, "openclaw.json"), JSON.stringify({}), "utf8");
+      await fs.writeFile(path.join(stateDir, "foxclaw.json"), JSON.stringify({}), "utf8");
       await fs.writeFile(path.join(stateDir, "state.txt"), "hello\n", "utf8");
       await fs.writeFile(
         path.join(externalWorkspace, "manifest.json"),
@@ -251,7 +251,7 @@ describe("backupVerifyCommand", () => {
       expect(verified.ok).toBe(true);
       expect(verified.assetCount).toBeGreaterThanOrEqual(2);
     } finally {
-      delete process.env.OPENCLAW_CONFIG_PATH;
+      delete process.env.FOXCLAW_CONFIG_PATH;
       await fs.rm(externalWorkspace, { recursive: true, force: true });
       await fs.rm(archiveDir, { recursive: true, force: true });
     }

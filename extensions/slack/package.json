@@ -1,5 +1,5 @@
 {
-  "name": "@openclaw/slack",
+  "name": "@foxclaw/slack",
   "version": "2026.3.14",
   "private": true,
   "description": "OpenClaw Slack channel plugin",

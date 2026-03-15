@@ -191,7 +191,7 @@ describe("security audit", () => {
     const tmp = await makeTmpDir(label);
     const stateDir = path.join(tmp, "state");
     await fs.mkdir(stateDir, { recursive: true, mode: 0o700 });
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "foxclaw.json");
     await fs.writeFile(configPath, "{}\n", "utf-8");
     if (!isWindows) {
       await fs.chmod(configPath, 0o600);
@@ -203,7 +203,7 @@ describe("security audit", () => {
     const credentialsDir = path.join(sharedChannelSecurityStateDir, "credentials");
     await fs.rm(credentialsDir, { recursive: true, force: true }).catch(() => undefined);
     await fs.mkdir(credentialsDir, { recursive: true, mode: 0o700 });
-    await withEnvAsync({ OPENCLAW_STATE_DIR: sharedChannelSecurityStateDir }, () =>
+    await withEnvAsync({ FOXCLAW_STATE_DIR: sharedChannelSecurityStateDir }, () =>
       fn(sharedChannelSecurityStateDir),
     );
   };
@@ -297,10 +297,10 @@ description: test skill
 
   it("flags non-loopback bind without auth as critical", async () => {
     // Clear env tokens so resolveGatewayAuth defaults to mode=none
-    const prevToken = process.env.OPENCLAW_GATEWAY_TOKEN;
-    const prevPassword = process.env.OPENCLAW_GATEWAY_PASSWORD;
-    delete process.env.OPENCLAW_GATEWAY_TOKEN;
-    delete process.env.OPENCLAW_GATEWAY_PASSWORD;
+    const prevToken = process.env.FOXCLAW_GATEWAY_TOKEN;
+    const prevPassword = process.env.FOXCLAW_GATEWAY_PASSWORD;
+    delete process.env.FOXCLAW_GATEWAY_TOKEN;
+    delete process.env.FOXCLAW_GATEWAY_PASSWORD;
 
     try {
       const cfg: OpenClawConfig = {
@@ -316,14 +316,14 @@ description: test skill
     } finally {
       // Restore env
       if (prevToken === undefined) {
-        delete process.env.OPENCLAW_GATEWAY_TOKEN;
+        delete process.env.FOXCLAW_GATEWAY_TOKEN;
       } else {
-        process.env.OPENCLAW_GATEWAY_TOKEN = prevToken;
+        process.env.FOXCLAW_GATEWAY_TOKEN = prevToken;
       }
       if (prevPassword === undefined) {
-        delete process.env.OPENCLAW_GATEWAY_PASSWORD;
+        delete process.env.FOXCLAW_GATEWAY_PASSWORD;
       } else {
-        process.env.OPENCLAW_GATEWAY_PASSWORD = prevPassword;
+        process.env.FOXCLAW_GATEWAY_PASSWORD = prevPassword;
       }
     }
   });
@@ -336,7 +336,7 @@ description: test skill
           password: {
             source: "env",
             provider: "default",
-            id: "OPENCLAW_GATEWAY_PASSWORD",
+            id: "FOXCLAW_GATEWAY_PASSWORD",
           },
         },
       },
@@ -667,7 +667,7 @@ description: test skill
     const tmp = await makeTmpDir("win");
     const stateDir = path.join(tmp, "state");
     await fs.mkdir(stateDir, { recursive: true });
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "foxclaw.json");
     await fs.writeFile(configPath, "{}\n", "utf-8");
 
     const user = "DESKTOP-TEST\\Tester";
@@ -705,7 +705,7 @@ description: test skill
     const tmp = await makeTmpDir("win-open");
     const stateDir = path.join(tmp, "state");
     await fs.mkdir(stateDir, { recursive: true });
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "foxclaw.json");
     await fs.writeFile(configPath, "{}\n", "utf-8");
 
     const user = "DESKTOP-TEST\\Tester";
@@ -872,7 +872,7 @@ description: test skill
     await fs.writeFile(targetConfigPath, "{}\n", "utf-8");
     await fs.chmod(targetConfigPath, 0o444);
 
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "foxclaw.json");
     await fs.symlink(targetConfigPath, configPath);
 
     const res = await runSecurityAudit({
@@ -909,7 +909,7 @@ description: test skill
     await fs.writeFile(outsideSkillPath, "# outside\n", "utf-8");
     await fs.symlink(outsideSkillPath, path.join(workspaceDir, "skills", "leak", "SKILL.md"));
 
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "foxclaw.json");
     await fs.writeFile(configPath, "{}\n", "utf-8");
     await fs.chmod(configPath, 0o600);
 
@@ -939,7 +939,7 @@ description: test skill
       "utf-8",
     );
 
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "foxclaw.json");
     await fs.writeFile(configPath, "{}\n", "utf-8");
     if (!isWindows) {
       await fs.chmod(configPath, 0o600);
@@ -1351,7 +1351,7 @@ description: test skill
           password: {
             source: "env",
             provider: "default",
-            id: "OPENCLAW_GATEWAY_PASSWORD",
+            id: "FOXCLAW_GATEWAY_PASSWORD",
           },
         },
       },
@@ -2718,8 +2718,8 @@ description: test skill
   });
 
   it("flags hooks token reuse of the gateway env token as critical", async () => {
-    const prevToken = process.env.OPENCLAW_GATEWAY_TOKEN;
-    process.env.OPENCLAW_GATEWAY_TOKEN = "shared-gateway-token-1234567890";
+    const prevToken = process.env.FOXCLAW_GATEWAY_TOKEN;
+    process.env.FOXCLAW_GATEWAY_TOKEN = "shared-gateway-token-1234567890";
     const cfg: OpenClawConfig = {
       hooks: { enabled: true, token: "shared-gateway-token-1234567890" },
     };
@@ -2729,9 +2729,9 @@ description: test skill
       expectFinding(res, "hooks.token_reuse_gateway_token", "critical");
     } finally {
       if (prevToken === undefined) {
-        delete process.env.OPENCLAW_GATEWAY_TOKEN;
+        delete process.env.FOXCLAW_GATEWAY_TOKEN;
       } else {
-        process.env.OPENCLAW_GATEWAY_TOKEN = prevToken;
+        process.env.FOXCLAW_GATEWAY_TOKEN = prevToken;
       }
     }
   });
@@ -2938,7 +2938,7 @@ description: test skill
       await fs.chmod(includePath, 0o644);
     }
 
-    const configPath = path.join(stateDir, "openclaw.json");
+    const configPath = path.join(stateDir, "foxclaw.json");
     await fs.writeFile(configPath, `{ "$include": "./extra.json5" }\n`, "utf-8");
     await fs.chmod(configPath, 0o600);
 
@@ -3002,7 +3002,7 @@ description: test skill
         includeFilesystem: true,
         includeChannelSecurity: false,
         stateDir,
-        configPath: path.join(stateDir, "openclaw.json"),
+        configPath: path.join(stateDir, "foxclaw.json"),
         execDockerRawFn: execDockerRawUnavailable,
       });
 
@@ -3062,7 +3062,7 @@ description: test skill
       includeFilesystem: true,
       includeChannelSecurity: false,
       stateDir: sharedInstallMetadataStateDir,
-      configPath: path.join(sharedInstallMetadataStateDir, "openclaw.json"),
+      configPath: path.join(sharedInstallMetadataStateDir, "foxclaw.json"),
       execDockerRawFn: execDockerRawUnavailable,
     });
 
@@ -3101,7 +3101,7 @@ description: test skill
       includeFilesystem: true,
       includeChannelSecurity: false,
       stateDir: sharedInstallMetadataStateDir,
-      configPath: path.join(sharedInstallMetadataStateDir, "openclaw.json"),
+      configPath: path.join(sharedInstallMetadataStateDir, "foxclaw.json"),
       execDockerRawFn: execDockerRawUnavailable,
     });
 
@@ -3159,7 +3159,7 @@ description: test skill
       includeFilesystem: true,
       includeChannelSecurity: false,
       stateDir,
-      configPath: path.join(stateDir, "openclaw.json"),
+      configPath: path.join(stateDir, "foxclaw.json"),
       execDockerRawFn: execDockerRawUnavailable,
     });
 
@@ -3178,7 +3178,7 @@ description: test skill
       includeFilesystem: true,
       includeChannelSecurity: false,
       stateDir,
-      configPath: path.join(stateDir, "openclaw.json"),
+      configPath: path.join(stateDir, "foxclaw.json"),
       execDockerRawFn: execDockerRawUnavailable,
     });
 
@@ -3204,7 +3204,7 @@ description: test skill
       includeFilesystem: true,
       includeChannelSecurity: false,
       stateDir,
-      configPath: path.join(stateDir, "openclaw.json"),
+      configPath: path.join(stateDir, "foxclaw.json"),
       execDockerRawFn: execDockerRawUnavailable,
     });
 
@@ -3229,7 +3229,7 @@ description: test skill
         includeFilesystem: true,
         includeChannelSecurity: false,
         stateDir,
-        configPath: path.join(stateDir, "openclaw.json"),
+        configPath: path.join(stateDir, "foxclaw.json"),
         execDockerRawFn: execDockerRawUnavailable,
       });
 
@@ -3273,7 +3273,7 @@ description: test skill
         includeFilesystem: true,
         includeChannelSecurity: false,
         stateDir,
-        configPath: path.join(stateDir, "openclaw.json"),
+        configPath: path.join(stateDir, "foxclaw.json"),
         execDockerRawFn: execDockerRawUnavailable,
       });
 
@@ -3513,10 +3513,10 @@ description: test skill
     const makeProbeEnv = (env?: { token?: string; password?: string }) => {
       const probeEnv: NodeJS.ProcessEnv = {};
       if (env?.token !== undefined) {
-        probeEnv.OPENCLAW_GATEWAY_TOKEN = env.token;
+        probeEnv.FOXCLAW_GATEWAY_TOKEN = env.token;
       }
       if (env?.password !== undefined) {
-        probeEnv.OPENCLAW_GATEWAY_PASSWORD = env.password;
+        probeEnv.FOXCLAW_GATEWAY_PASSWORD = env.password;
       }
       return probeEnv;
     };

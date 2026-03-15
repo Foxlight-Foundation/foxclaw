@@ -11,7 +11,7 @@ vi.mock("../plugins/tools.js", () => ({
   resolvePluginTools: resolvePluginToolsMock,
 }));
 
-import { createOpenClawTools } from "./openclaw-tools.js";
+import { createOpenClawTools } from "./foxclaw-tools.js";
 
 describe("createOpenClawTools plugin context", () => {
   it("forwards trusted requester sender identity to plugin tool context", () => {

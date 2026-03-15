@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import type { ChannelPlugin } from "../channels/plugins/index.js";
-import { resolveOpenClawPackageRootSync } from "../infra/openclaw-root.js";
+import { resolveOpenClawPackageRootSync } from "../infra/foxclaw-root.js";
 import { loadPluginManifestRegistry } from "../plugins/manifest-registry.js";
 import { FIELD_HELP } from "./schema.help.js";
 import { buildConfigSchema, type ConfigSchemaResponse } from "./schema.js";
@@ -351,8 +351,8 @@ async function loadBundledConfigSchemaResponse(): Promise<ConfigSchemaResponse> 
   const env = {
     ...process.env,
     HOME: os.tmpdir(),
-    OPENCLAW_STATE_DIR: path.join(os.tmpdir(), "openclaw-config-doc-baseline-state"),
-    OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(repoRoot, "extensions"),
+    FOXCLAW_STATE_DIR: path.join(os.tmpdir(), "openclaw-config-doc-baseline-state"),
+    FOXCLAW_BUNDLED_PLUGINS_DIR: path.join(repoRoot, "extensions"),
   };
 
   const manifestRegistry = loadPluginManifestRegistry({

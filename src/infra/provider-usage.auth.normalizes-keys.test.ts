@@ -39,8 +39,8 @@ describe("resolveProviderAuths key normalization", () => {
       "USERPROFILE",
       "HOMEDRIVE",
       "HOMEPATH",
-      "OPENCLAW_HOME",
-      "OPENCLAW_STATE_DIR",
+      "FOXCLAW_HOME",
+      "FOXCLAW_STATE_DIR",
       ...Object.keys(env),
     ]);
     const snapshot: Record<string, string | undefined> = {};
@@ -50,8 +50,8 @@ describe("resolveProviderAuths key normalization", () => {
 
     process.env.HOME = base;
     process.env.USERPROFILE = base;
-    delete process.env.OPENCLAW_HOME;
-    process.env.OPENCLAW_STATE_DIR = path.join(base, ".openclaw");
+    delete process.env.FOXCLAW_HOME;
+    process.env.FOXCLAW_STATE_DIR = path.join(base, ".openclaw");
     for (const [key, value] of Object.entries(env)) {
       if (value === undefined) {
         delete process.env[key];
@@ -86,7 +86,7 @@ describe("resolveProviderAuths key normalization", () => {
     const stateDir = path.join(home, ".openclaw");
     await fs.mkdir(stateDir, { recursive: true });
     await fs.writeFile(
-      path.join(stateDir, "openclaw.json"),
+      path.join(stateDir, "foxclaw.json"),
       `${JSON.stringify(config, null, 2)}\n`,
       "utf8",
     );

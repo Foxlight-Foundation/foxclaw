@@ -1,5 +1,5 @@
 {
-  "name": "@openclaw/memory-core",
+  "name": "@foxclaw/memory-core",
   "version": "2026.3.14",
   "private": true,
   "description": "OpenClaw core memory search plugin",

@@ -9,7 +9,7 @@ import {
   resolveShellFromEnv,
   usesSlowDynamicCompletion,
 } from "../cli/completion-cli.js";
-import { resolveOpenClawPackageRoot } from "../infra/openclaw-root.js";
+import { resolveOpenClawPackageRoot } from "../infra/foxclaw-root.js";
 import type { RuntimeEnv } from "../runtime.js";
 import { note } from "../terminal/note.js";
 import type { DoctorPrompter } from "./doctor-prompter.js";
@@ -27,7 +27,7 @@ async function generateCompletionCache(): Promise<boolean> {
     return false;
   }
 
-  const binPath = path.join(root, "openclaw.mjs");
+  const binPath = path.join(root, "foxclaw.mjs");
   const result = spawnSync(process.execPath, [binPath, "completion", "--write-state"], {
     cwd: root,
     env: process.env,

@@ -67,8 +67,8 @@ describe("formatPluginSourceForTable", () => {
     const homeDir = path.resolve(path.sep, "tmp", "openclaw-home");
     const roots = withEnv(
       {
-        OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(ignoredHome, "ignored-bundled"),
-        OPENCLAW_STATE_DIR: path.join(ignoredHome, "ignored-state"),
+        FOXCLAW_BUNDLED_PLUGINS_DIR: path.join(ignoredHome, "ignored-bundled"),
+        FOXCLAW_STATE_DIR: path.join(ignoredHome, "ignored-state"),
         HOME: ignoredHome,
       },
       () =>
@@ -76,8 +76,8 @@ describe("formatPluginSourceForTable", () => {
           env: {
             ...process.env,
             HOME: homeDir,
-            OPENCLAW_BUNDLED_PLUGINS_DIR: "~/bundled",
-            OPENCLAW_STATE_DIR: "~/state",
+            FOXCLAW_BUNDLED_PLUGINS_DIR: "~/bundled",
+            FOXCLAW_STATE_DIR: "~/state",
           },
           workspaceDir: "~/ws",
         }),

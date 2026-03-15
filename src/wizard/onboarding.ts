@@ -281,7 +281,7 @@ export async function runOnboardingWizard(
 
   const localPort = resolveGatewayPort(baseConfig);
   const localUrl = `ws://127.0.0.1:${localPort}`;
-  let localGatewayToken = process.env.OPENCLAW_GATEWAY_TOKEN ?? process.env.CLAWDBOT_GATEWAY_TOKEN;
+  let localGatewayToken = process.env.FOXCLAW_GATEWAY_TOKEN ?? process.env.CLAWDBOT_GATEWAY_TOKEN;
   try {
     const resolvedGatewayToken = await resolveOnboardingSecretInputString({
       config: baseConfig,
@@ -302,7 +302,7 @@ export async function runOnboardingWizard(
     );
   }
   let localGatewayPassword =
-    process.env.OPENCLAW_GATEWAY_PASSWORD ?? process.env.CLAWDBOT_GATEWAY_PASSWORD;
+    process.env.FOXCLAW_GATEWAY_PASSWORD ?? process.env.CLAWDBOT_GATEWAY_PASSWORD;
   try {
     const resolvedGatewayPassword = await resolveOnboardingSecretInputString({
       config: baseConfig,

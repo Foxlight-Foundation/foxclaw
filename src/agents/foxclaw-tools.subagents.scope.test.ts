@@ -6,7 +6,7 @@ import {
   callGatewayMock,
   resetSubagentsConfigOverride,
   setSubagentsConfigOverride,
-} from "./openclaw-tools.subagents.test-harness.js";
+} from "./foxclaw-tools.subagents.test-harness.js";
 import { addSubagentRunForTests, resetSubagentRegistryForTests } from "./subagent-registry.js";
 import "./test-helpers/fast-core-tools.js";
 import { createPerSenderSessionConfig } from "./test-helpers/session-config.js";
@@ -74,7 +74,7 @@ async function expectLeafSubagentControlForbidden(params: {
   expect(callGatewayMock).not.toHaveBeenCalled();
 }
 
-describe("openclaw-tools: subagents scope isolation", () => {
+describe("foxclaw-tools: subagents scope isolation", () => {
   let storePath = "";
 
   beforeEach(() => {
