@@ -1,9 +1,9 @@
 import type { ReactiveController, ReactiveControllerHost } from "lit";
-import { i18n } from "./translate.ts";
+import { tolgee } from "../tolgee.ts";
 
 export class I18nController implements ReactiveController {
   private host: ReactiveControllerHost;
-  private unsubscribe?: () => void;
+  private unsubscribe?: { unsubscribe: () => void };
 
   constructor(host: ReactiveControllerHost) {
     this.host = host;
@@ -11,12 +11,12 @@ export class I18nController implements ReactiveController {
   }
 
   hostConnected() {
-    this.unsubscribe = i18n.subscribe(() => {
+    this.unsubscribe = tolgee.on("update", () => {
       this.host.requestUpdate();
     });
   }
 
   hostDisconnected() {
-    this.unsubscribe?.();
+    this.unsubscribe?.unsubscribe();
   }
 }

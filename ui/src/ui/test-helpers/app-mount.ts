@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, vi } from "vitest";
-import { i18n } from "../../i18n/index.ts";
+import { tolgee } from "../../i18n/index.ts";
 import "../app.ts";
 import type { FoxClawApp } from "../app.ts";
 
@@ -35,7 +35,7 @@ export function registerAppMountHooks() {
     localStorage.clear();
     sessionStorage.clear();
     document.body.innerHTML = "";
-    await i18n.setLocale("en");
+    await tolgee.changeLanguage("en");
     vi.stubGlobal("WebSocket", MockWebSocket as unknown as typeof WebSocket);
     vi.stubGlobal(
       "fetch",
@@ -48,7 +48,7 @@ export function registerAppMountHooks() {
     localStorage.clear();
     sessionStorage.clear();
     document.body.innerHTML = "";
-    await i18n.setLocale("en");
+    await tolgee.changeLanguage("en");
     vi.unstubAllGlobals();
   });
 }
