@@ -15,12 +15,13 @@ type: project
 - README and docs/index.md rewritten for FoxClaw identity
 
 ### Still TODO
-1. **packages/clawdbot and packages/moltbot** — legacy compat shims referencing `openclaw@workspace:*`. Delete or update.
-2. **pnpm install + pnpm build** — cannot test on kite1 (live openclaw install). Must test on another cluster machine.
-3. **Upstream import paths** — `from "openclaw/plugin-sdk/..."` still reference upstream npm package. Intentionally preserved until full decoupling.
-4. **Slack extension** — still present, will be removed eventually per roadmap.
-5. **Extension audit** — 20 extensions remain, need evaluation for relevance.
-6. **10 test files with stale vi.mock() paths** — referencing deleted extensions, harmless but technically dead code.
+1. **UI language audit** — ui/ directory is full of hierarchical/assistant language that violates project values. Needs ripping apart. This is the next priority.
+2. **packages/clawdbot and packages/moltbot** — legacy compat shims referencing `openclaw@workspace:*`. Delete or update.
+3. **pnpm install + pnpm build** — cannot test on kite1 (live openclaw install). Must test on another cluster machine.
+4. **Upstream import paths** — `from "openclaw/plugin-sdk/..."` still reference upstream npm package. Intentionally preserved until full decoupling.
+5. **Slack extension** — still present, will be removed eventually per roadmap.
+6. **Extension audit** — 20 extensions remain, need evaluation for relevance.
+7. **10 test files with stale vi.mock() paths** — referencing deleted extensions, harmless but technically dead code.
 
 ### Remaining Extensions (20)
 acpx, copilot-proxy, device-pair, diagnostics-otel, diffs, google-gemini-cli-auth, llm-task, lobster, memory-core, memory-lancedb, minimax-portal-auth, ollama, open-prose, qwen-portal-auth, sglang, shared, slack, test-utils, thread-ownership, vllm
