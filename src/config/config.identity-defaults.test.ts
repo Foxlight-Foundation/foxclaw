@@ -71,7 +71,7 @@ describe("config identity defaults", () => {
               identity: {
                 name: "Samantha Sloth",
                 theme: "space lobster",
-                emoji: "🦞",
+                emoji: "🦊",
               },
               groupChat: { mentionPatterns: ["@foxclaw"] },
             },
@@ -92,7 +92,7 @@ describe("config identity defaults", () => {
       const cfg = await writeAndLoadConfig(home, {
         messages: {
           messagePrefix: "[foxclaw]",
-          responsePrefix: "🦞",
+          responsePrefix: "🦊",
         },
         channels: {
           slack: {

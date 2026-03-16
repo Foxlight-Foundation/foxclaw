@@ -99,7 +99,7 @@ foxclaw agents set-identity --workspace ~/.foxclaw/workspace --from-identity
 Override fields explicitly:
 
 ```bash
-foxclaw agents set-identity --agent main --name "FoxClaw" --emoji "🦞" --avatar avatars/foxclaw.png
+foxclaw agents set-identity --agent main --name "FoxClaw" --emoji "🦊" --avatar avatars/foxclaw.png
 ```
 
 Config sample:
@@ -113,7 +113,7 @@ Config sample:
         identity: {
           name: "FoxClaw",
           theme: "space lobster",
-          emoji: "🦞",
+          emoji: "🦊",
           avatar: "avatars/foxclaw.png",
         },
       },

@@ -344,7 +344,7 @@ export async function launchFoxClawChrome(
         name: profile.name,
         color: profile.color,
       });
-      log.info(`🦞 foxclaw browser profile decorated (${profile.color})`);
+      log.info(`🦊 foxclaw browser profile decorated (${profile.color})`);
     } catch (err) {
       log.warn(`foxclaw browser profile decoration failed: ${String(err)}`);
     }
@@ -401,7 +401,7 @@ export async function launchFoxClawChrome(
 
   const pid = proc.pid ?? -1;
   log.info(
-    `🦞 foxclaw browser started (${exe.kind}) profile "${profile.name}" on 127.0.0.1:${profile.cdpPort} (pid ${pid})`,
+    `🦊 foxclaw browser started (${exe.kind}) profile "${profile.name}" on 127.0.0.1:${profile.cdpPort} (pid ${pid})`,
   );
 
   return {

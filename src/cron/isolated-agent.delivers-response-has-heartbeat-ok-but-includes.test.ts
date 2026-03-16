@@ -160,7 +160,7 @@ describe("runCronIsolatedAgentTurn", () => {
 
       vi.mocked(runSubagentAnnounceFlow).mockClear();
       vi.mocked(deps.sendMessageSlack as (...args: unknown[]) => unknown).mockClear();
-      mockEmbeddedAgentPayloads([{ text: "HEARTBEAT_OK 🦞" }]);
+      mockEmbeddedAgentPayloads([{ text: "HEARTBEAT_OK 🦊" }]);
 
       const cfg = makeCfg(home, storePath, {
         channels: { slack: { botToken: "xoxb-1" } },
@@ -194,7 +194,7 @@ describe("runCronIsolatedAgentTurn", () => {
       expect(deps.sendMessageSlack).toHaveBeenCalledTimes(1);
       expect(deps.sendMessageSlack).toHaveBeenCalledWith(
         "C123",
-        "HEARTBEAT_OK 🦞",
+        "HEARTBEAT_OK 🦊",
         expect.objectContaining({ accountId: undefined }),
       );
     });
@@ -204,7 +204,7 @@ describe("runCronIsolatedAgentTurn", () => {
     await withTempHome(async (home) => {
       const { storePath, deps } = await createSlackDeliveryFixture(home);
 
-      mockEmbeddedAgentPayloads([{ text: "HEARTBEAT_OK 🦞" }]);
+      mockEmbeddedAgentPayloads([{ text: "HEARTBEAT_OK 🦊" }]);
 
       const cfg = makeCfg(home, storePath, {
         channels: { slack: { botToken: "xoxb-1" } },
@@ -243,7 +243,7 @@ describe("runCronIsolatedAgentTurn", () => {
       expect(deps.sendMessageSlack).toHaveBeenCalledTimes(1);
       expect(deps.sendMessageSlack).toHaveBeenCalledWith(
         "C123",
-        "HEARTBEAT_OK 🦞",
+        "HEARTBEAT_OK 🦊",
         expect.objectContaining({ accountId: undefined }),
       );
       expect(callGateway).toHaveBeenCalledTimes(1);

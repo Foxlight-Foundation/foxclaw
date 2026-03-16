@@ -219,7 +219,7 @@ ${theme.muted("Docs:")} ${formatDocsLink("/cli/agent", "docs.foxclaw.ai/cli/agen
         `
 ${theme.heading("Examples:")}
 ${formatHelpExamples([
-  ['foxclaw agents set-identity --agent main --name "FoxClaw" --emoji "🦞"', "Set name + emoji."],
+  ['foxclaw agents set-identity --agent main --name "FoxClaw" --emoji "🦊"', "Set name + emoji."],
   ["foxclaw agents set-identity --agent main --avatar avatars/foxclaw.png", "Set avatar path."],
   [
     "foxclaw agents set-identity --workspace ~/.foxclaw/workspace --from-identity",
