@@ -3,9 +3,7 @@ import { slackOnboardingAdapter } from "../../channels/plugins/onboarding/slack.
 import type { ChannelChoice } from "../onboard-types.js";
 import type { ChannelOnboardingAdapter } from "./types.js";
 
-const BUILTIN_ONBOARDING_ADAPTERS: ChannelOnboardingAdapter[] = [
-  slackOnboardingAdapter,
-];
+const BUILTIN_ONBOARDING_ADAPTERS: ChannelOnboardingAdapter[] = [slackOnboardingAdapter];
 
 const CHANNEL_ONBOARDING_ADAPTERS = () => {
   const fromRegistry = listChannelPlugins()

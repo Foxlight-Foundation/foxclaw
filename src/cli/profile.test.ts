@@ -94,9 +94,7 @@ describe("applyCliProfileEnv", () => {
 
     const resolvedHome = path.resolve("/srv/foxclaw-home");
     expect(env.FOXCLAW_STATE_DIR).toBe(path.join(resolvedHome, ".foxclaw-work"));
-    expect(env.FOXCLAW_CONFIG_PATH).toBe(
-      path.join(resolvedHome, ".foxclaw-work", "foxclaw.json"),
-    );
+    expect(env.FOXCLAW_CONFIG_PATH).toBe(path.join(resolvedHome, ".foxclaw-work", "foxclaw.json"));
   });
 });
 
@@ -155,9 +153,7 @@ describe("formatCliCommand", () => {
   });
 
   it("handles command with no args after foxclaw", () => {
-    expect(formatCliCommand("foxclaw", { FOXCLAW_PROFILE: "test" })).toBe(
-      "foxclaw --profile test",
-    );
+    expect(formatCliCommand("foxclaw", { FOXCLAW_PROFILE: "test" })).toBe("foxclaw --profile test");
   });
 
   it("handles pnpm wrapper", () => {

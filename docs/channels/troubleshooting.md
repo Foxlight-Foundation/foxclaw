@@ -34,8 +34,8 @@ Healthy baseline:
 
 | Symptom                                | Fastest check                             | Fix                                               |
 | -------------------------------------- | ----------------------------------------- | ------------------------------------------------- |
-| Socket mode connected but no responses | `foxclaw channels status --probe`        | Verify app token + bot token and required scopes. |
-| DMs blocked                            | `foxclaw pairing list slack`             | Approve pairing or relax DM policy.               |
+| Socket mode connected but no responses | `foxclaw channels status --probe`         | Verify app token + bot token and required scopes. |
+| DMs blocked                            | `foxclaw pairing list slack`              | Approve pairing or relax DM policy.               |
 | Channel message ignored                | Check `groupPolicy` and channel allowlist | Allow the channel or switch policy to `open`.     |
 
 Full troubleshooting: [/channels/slack#troubleshooting](/channels/slack#troubleshooting)

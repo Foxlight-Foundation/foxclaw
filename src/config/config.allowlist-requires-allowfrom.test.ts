@@ -8,9 +8,9 @@ describe('dmPolicy="allowlist" requires non-empty effective allowFrom', () => {
     });
     expect(res.ok).toBe(false);
     if (!res.ok) {
-      expect(
-        res.issues.some((i) => i.path.includes("slack") && i.path.includes("allowFrom")),
-      ).toBe(true);
+      expect(res.issues.some((i) => i.path.includes("slack") && i.path.includes("allowFrom"))).toBe(
+        true,
+      );
     }
   });
 });

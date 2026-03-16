@@ -166,9 +166,7 @@ export function extractHookToken(req: IncomingMessage): string | undefined {
     }
   }
   const headerToken =
-    typeof req.headers["x-foxclaw-token"] === "string"
-      ? req.headers["x-foxclaw-token"].trim()
-      : "";
+    typeof req.headers["x-foxclaw-token"] === "string" ? req.headers["x-foxclaw-token"].trim() : "";
   if (headerToken) {
     return headerToken;
   }

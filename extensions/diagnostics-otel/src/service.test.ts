@@ -244,14 +244,10 @@ describe("diagnostics-otel service", () => {
     });
 
     expect(telemetryState.counters.get("foxclaw.webhook.received")?.add).toHaveBeenCalled();
-    expect(
-      telemetryState.histograms.get("foxclaw.webhook.duration_ms")?.record,
-    ).toHaveBeenCalled();
+    expect(telemetryState.histograms.get("foxclaw.webhook.duration_ms")?.record).toHaveBeenCalled();
     expect(telemetryState.counters.get("foxclaw.message.queued")?.add).toHaveBeenCalled();
     expect(telemetryState.counters.get("foxclaw.message.processed")?.add).toHaveBeenCalled();
-    expect(
-      telemetryState.histograms.get("foxclaw.message.duration_ms")?.record,
-    ).toHaveBeenCalled();
+    expect(telemetryState.histograms.get("foxclaw.message.duration_ms")?.record).toHaveBeenCalled();
     expect(telemetryState.histograms.get("foxclaw.queue.wait_ms")?.record).toHaveBeenCalled();
     expect(telemetryState.counters.get("foxclaw.session.stuck")?.add).toHaveBeenCalled();
     expect(

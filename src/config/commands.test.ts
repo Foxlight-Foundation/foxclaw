@@ -12,9 +12,21 @@ import {
 beforeEach(() => {
   setActivePluginRegistry(
     createTestRegistry([
-      { pluginId: "slack", source: "test", plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }) },
-      { pluginId: "discord", source: "test", plugin: createChannelTestPluginBase({ id: "discord", label: "Discord" }) },
-      { pluginId: "telegram", source: "test", plugin: createChannelTestPluginBase({ id: "telegram", label: "Telegram" }) },
+      {
+        pluginId: "slack",
+        source: "test",
+        plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }),
+      },
+      {
+        pluginId: "discord",
+        source: "test",
+        plugin: createChannelTestPluginBase({ id: "discord", label: "Discord" }),
+      },
+      {
+        pluginId: "telegram",
+        source: "test",
+        plugin: createChannelTestPluginBase({ id: "telegram", label: "Telegram" }),
+      },
     ]),
   );
 });

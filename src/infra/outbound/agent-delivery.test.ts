@@ -1,10 +1,21 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { setActivePluginRegistry } from "../../plugins/runtime.js";
-import { createChannelTestPluginBase, createTestRegistry } from "../../test-utils/channel-plugins.js";
+import {
+  createChannelTestPluginBase,
+  createTestRegistry,
+} from "../../test-utils/channel-plugins.js";
 
 const agentDeliveryTestRegistry = createTestRegistry([
-  { pluginId: "slack", source: "test", plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }) },
-  { pluginId: "whatsapp", source: "test", plugin: createChannelTestPluginBase({ id: "whatsapp", label: "WhatsApp" }) },
+  {
+    pluginId: "slack",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }),
+  },
+  {
+    pluginId: "whatsapp",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "whatsapp", label: "WhatsApp" }),
+  },
 ]);
 
 beforeEach(() => {

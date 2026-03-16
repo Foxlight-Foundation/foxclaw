@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { applyLegacyMigrations } from "./legacy.js";
 import { migrateLegacyConfig } from "./legacy-migrate.js";
 import { WHISPER_BASE_AUDIO_MODEL } from "./legacy-migrate.test-helpers.js";
+import { applyLegacyMigrations } from "./legacy.js";
 
 // Helper that applies legacy migrations without validation (for testing
 // migrations that produce configs with removed channels like telegram/imessage).

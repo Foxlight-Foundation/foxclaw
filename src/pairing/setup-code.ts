@@ -158,9 +158,7 @@ function resolveGatewayTokenFromEnv(env: NodeJS.ProcessEnv): string | undefined 
 }
 
 function resolveGatewayPasswordFromEnv(env: NodeJS.ProcessEnv): string | undefined {
-  return (
-    env.FOXCLAW_GATEWAY_PASSWORD?.trim() || env.CLAWDBOT_GATEWAY_PASSWORD?.trim() || undefined
-  );
+  return env.FOXCLAW_GATEWAY_PASSWORD?.trim() || env.CLAWDBOT_GATEWAY_PASSWORD?.trim() || undefined;
 }
 
 function resolvePairingSetupAuthLabel(

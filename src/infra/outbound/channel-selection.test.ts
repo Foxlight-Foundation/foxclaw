@@ -1,12 +1,31 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { setActivePluginRegistry } from "../../plugins/runtime.js";
-import { createChannelTestPluginBase, createTestRegistry } from "../../test-utils/channel-plugins.js";
+import {
+  createChannelTestPluginBase,
+  createTestRegistry,
+} from "../../test-utils/channel-plugins.js";
 
 const channelSelectionTestRegistry = createTestRegistry([
-  { pluginId: "slack", source: "test", plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }) },
-  { pluginId: "discord", source: "test", plugin: createChannelTestPluginBase({ id: "discord", label: "Discord" }) },
-  { pluginId: "telegram", source: "test", plugin: createChannelTestPluginBase({ id: "telegram", label: "Telegram" }) },
-  { pluginId: "signal", source: "test", plugin: createChannelTestPluginBase({ id: "signal", label: "Signal" }) },
+  {
+    pluginId: "slack",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }),
+  },
+  {
+    pluginId: "discord",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "discord", label: "Discord" }),
+  },
+  {
+    pluginId: "telegram",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "telegram", label: "Telegram" }),
+  },
+  {
+    pluginId: "signal",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "signal", label: "Signal" }),
+  },
 ]);
 
 const mocks = vi.hoisted(() => ({

@@ -139,4 +139,3 @@ export function createScopedDmSecurityResolver<
       normalizeEntry: params.normalizeEntry,
     });
 }
-

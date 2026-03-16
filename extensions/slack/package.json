@@ -1,6 +1,6 @@
 {
   "name": "@foxclaw/slack",
-  "version": "2026.3.14",
+  "version": "0.1.0",
   "private": true,
   "description": "OpenClaw Slack channel plugin",
   "type": "module",

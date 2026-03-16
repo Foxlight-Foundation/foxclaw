@@ -44,4 +44,3 @@ export function createDefaultDeps(): CliDeps {
 export function createOutboundSendDeps(deps: CliDeps): OutboundSendDeps {
   return createOutboundSendDepsFromCliSource(deps);
 }
-

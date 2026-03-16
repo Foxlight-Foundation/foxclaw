@@ -618,7 +618,6 @@ export async function collectChannelSecurityFindings(params: {
           });
         }
       }
-
     }
   }
 

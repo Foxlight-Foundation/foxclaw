@@ -39,9 +39,7 @@ describe("resolveExecApprovalInitiatingSurfaceState", () => {
   });
 
   it("marks non-built-in channels as unsupported", () => {
-    expect(
-      resolveExecApprovalInitiatingSurfaceState({ channel: "slack" }),
-    ).toEqual({
+    expect(resolveExecApprovalInitiatingSurfaceState({ channel: "slack" })).toEqual({
       kind: "unsupported",
       channel: "slack",
       channelLabel: "Slack",

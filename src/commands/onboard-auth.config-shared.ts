@@ -40,10 +40,7 @@ export function applyOnboardAuthAgentModelsAndProviders(
   };
 }
 
-export function applyAgentDefaultModelPrimary(
-  cfg: FoxClawConfig,
-  primary: string,
-): FoxClawConfig {
+export function applyAgentDefaultModelPrimary(cfg: FoxClawConfig, primary: string): FoxClawConfig {
   const existingFallbacks = extractAgentDefaultModelFallbacks(cfg.agents?.defaults?.model);
   return {
     ...cfg,

@@ -78,8 +78,8 @@ Config:
 {
   broadcast: {
     strategy: "parallel",
-    "C0123456": ["alfred", "baerbel"],
-    "C0789012": ["support", "logger"],
+    C0123456: ["alfred", "baerbel"],
+    C0789012: ["support", "logger"],
   },
 }
 ```
@@ -98,9 +98,7 @@ Example:
   agents: {
     list: [{ id: "support", name: "Support", workspace: "~/.foxclaw/workspace-support" }],
   },
-  bindings: [
-    { match: { channel: "slack", teamId: "T123" }, agentId: "support" },
-  ],
+  bindings: [{ match: { channel: "slack", teamId: "T123" }, agentId: "support" }],
 }
 ```
 

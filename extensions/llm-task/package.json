@@ -1,6 +1,6 @@
 {
   "name": "@foxclaw/llm-task",
-  "version": "2026.3.14",
+  "version": "0.1.0",
   "private": true,
   "description": "OpenClaw JSON-only LLM task plugin",
   "type": "module",

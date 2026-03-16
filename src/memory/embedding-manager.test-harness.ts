@@ -14,11 +14,7 @@ export function installEmbeddingManagerFixture(opts: {
   fixturePrefix: string;
   largeTokens: number;
   smallTokens: number;
-  createCfg: (params: {
-    workspaceDir: string;
-    indexPath: string;
-    tokens: number;
-  }) => FoxClawConfig;
+  createCfg: (params: { workspaceDir: string; indexPath: string; tokens: number }) => FoxClawConfig;
   resetIndexEachTest?: boolean;
 }) {
   const embedBatch = getEmbedBatchMock();

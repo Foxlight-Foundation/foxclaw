@@ -217,9 +217,7 @@ export {
   type ResolveProviderRuntimeGroupPolicyParams,
   warnMissingProviderGroupPolicyFallbackOnce,
 } from "../config/runtime-group-policy.js";
-export {
-  SlackConfigSchema,
-} from "../config/zod-schema.providers-core.js";
+export { SlackConfigSchema } from "../config/zod-schema.providers-core.js";
 export {
   BlockStreamingCoalesceSchema,
   DmConfigSchema,

@@ -300,4 +300,3 @@ Group inbound payloads set:
 - `WasMentioned` (mention gating result)
 
 The agent system prompt includes a group intro on the first turn of a new group session. It reminds the model to respond like a human, avoid Markdown tables, and avoid typing literal `\n` sequences.
-

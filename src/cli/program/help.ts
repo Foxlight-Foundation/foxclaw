@@ -22,10 +22,7 @@ const ROOT_COMMANDS_HINT =
 
 const EXAMPLES = [
   ["foxclaw models --help", "Show detailed help for the models command."],
-  [
-    "foxclaw channels login --verbose",
-    "Link personal WhatsApp Web and show QR + connection logs.",
-  ],
+  ["foxclaw channels login --verbose", "Link personal WhatsApp Web and show QR + connection logs."],
   [
     'foxclaw message send --target +15555550123 --message "Hi" --json',
     "Send via your web session and print JSON result.",

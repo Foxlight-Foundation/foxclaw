@@ -4,9 +4,7 @@ import type { ChannelId } from "./plugins/types.js";
 
 // Channel docking: add new core channels here (order + meta + aliases), then
 // register the plugin in its extension entrypoint and keep protocol IDs in sync.
-export const CHAT_CHANNEL_ORDER = [
-  "slack",
-] as const;
+export const CHAT_CHANNEL_ORDER = ["slack"] as const;
 
 export type ChatChannelId = (typeof CHAT_CHANNEL_ORDER)[number];
 

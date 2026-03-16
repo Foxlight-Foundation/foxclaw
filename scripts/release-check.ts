@@ -51,7 +51,7 @@ const requiredPathGroups = [
   "dist/plugin-sdk/minimax-portal-auth.d.ts",
   "dist/plugin-sdk/open-prose.js",
   "dist/plugin-sdk/open-prose.d.ts",
-"dist/plugin-sdk/qwen-portal-auth.js",
+  "dist/plugin-sdk/qwen-portal-auth.js",
   "dist/plugin-sdk/qwen-portal-auth.d.ts",
   "dist/plugin-sdk/test-utils.js",
   "dist/plugin-sdk/test-utils.d.ts",

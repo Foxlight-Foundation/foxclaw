@@ -30,10 +30,26 @@ describe("sessions", () => {
   };
 
   const sessionsTestRegistry = createTestRegistry([
-    { pluginId: "slack", source: "test", plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }) },
-    { pluginId: "discord", source: "test", plugin: createChannelTestPluginBase({ id: "discord", label: "Discord" }) },
-    { pluginId: "whatsapp", source: "test", plugin: createChannelTestPluginBase({ id: "whatsapp", label: "WhatsApp" }) },
-    { pluginId: "telegram", source: "test", plugin: createChannelTestPluginBase({ id: "telegram", label: "Telegram" }) },
+    {
+      pluginId: "slack",
+      source: "test",
+      plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }),
+    },
+    {
+      pluginId: "discord",
+      source: "test",
+      plugin: createChannelTestPluginBase({ id: "discord", label: "Discord" }),
+    },
+    {
+      pluginId: "whatsapp",
+      source: "test",
+      plugin: createChannelTestPluginBase({ id: "whatsapp", label: "WhatsApp" }),
+    },
+    {
+      pluginId: "telegram",
+      source: "test",
+      plugin: createChannelTestPluginBase({ id: "telegram", label: "Telegram" }),
+    },
   ]);
 
   beforeAll(async () => {

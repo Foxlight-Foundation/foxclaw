@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { applyLegacyMigrations } from "./legacy.js";
 import { migrateLegacyConfig } from "./legacy-migrate.js";
+import { applyLegacyMigrations } from "./legacy.js";
 import { validateConfigObjectRaw } from "./validation.js";
 
 describe("thread binding config keys", () => {

@@ -25,10 +25,7 @@ export function mockAgentPayloads(
   });
 }
 
-export function expectDirectSlackDelivery(
-  deps: CliDeps,
-  params: { to: string; text: string },
-) {
+export function expectDirectSlackDelivery(deps: CliDeps, params: { to: string; text: string }) {
   expect(deps.sendMessageSlack).toHaveBeenCalledTimes(1);
   expect(deps.sendMessageSlack).toHaveBeenCalledWith(
     params.to,
@@ -64,4 +61,3 @@ export async function runSlackAnnounceTurn(params: {
     deliveryContract: params.deliveryContract,
   });
 }
-

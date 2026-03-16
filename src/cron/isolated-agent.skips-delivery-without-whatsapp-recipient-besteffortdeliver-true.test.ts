@@ -53,9 +53,7 @@ function expectDeliveredOk(result: Awaited<ReturnType<typeof runCronIsolatedAgen
   expect(result.delivered).toBe(true);
 }
 
-async function expectBestEffortSlackNotDelivered(
-  payload: Record<string, unknown>,
-): Promise<void> {
+async function expectBestEffortSlackNotDelivered(payload: Record<string, unknown>): Promise<void> {
   await expectStructuredSlackFailure({
     payload,
     bestEffort: true,

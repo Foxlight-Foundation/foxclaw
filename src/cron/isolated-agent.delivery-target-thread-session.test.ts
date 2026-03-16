@@ -32,8 +32,16 @@ vi.mock("../channels/plugins/index.js", () => ({
 const { resolveDeliveryTarget } = await import("./isolated-agent/delivery-target.js");
 
 const cronTestRegistry = createTestRegistry([
-  { pluginId: "slack", source: "test", plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }) },
-  { pluginId: "telegram", source: "test", plugin: createChannelTestPluginBase({ id: "telegram", label: "Telegram" }) },
+  {
+    pluginId: "slack",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }),
+  },
+  {
+    pluginId: "telegram",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "telegram", label: "Telegram" }),
+  },
 ]);
 
 beforeEach(() => {
@@ -128,5 +136,4 @@ describe("resolveDeliveryTarget thread session lookup", () => {
     expect(result.accountId).toBe("explicit-account");
     expect(result.to).toBe("-100444");
   });
-
 });

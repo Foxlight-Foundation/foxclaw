@@ -1,9 +1,7 @@
 import { inspectSlackAccount } from "../../extensions/slack/src/account-inspect.js";
 import { resolveSlackReplyToMode } from "../../extensions/slack/src/accounts.js";
 import { buildSlackThreadingToolContext } from "../../extensions/slack/src/threading-tool-context.js";
-import {
-  formatAllowFromLowercase,
-} from "../plugin-sdk/allow-from.js";
+import { formatAllowFromLowercase } from "../plugin-sdk/allow-from.js";
 import {
   mapAllowFromEntries,
   resolveOptionalConfigString,

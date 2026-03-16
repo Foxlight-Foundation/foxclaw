@@ -1,6 +1,6 @@
 {
   "name": "@foxclaw/vllm-provider",
-  "version": "2026.3.14",
+  "version": "0.1.0",
   "private": true,
   "description": "OpenClaw vLLM provider plugin",
   "type": "module",

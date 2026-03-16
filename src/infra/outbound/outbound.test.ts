@@ -5,16 +5,43 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import type { ReplyPayload } from "../../auto-reply/types.js";
 import type { FoxClawConfig } from "../../config/config.js";
 import { setActivePluginRegistry } from "../../plugins/runtime.js";
-import { createChannelTestPluginBase, createTestRegistry } from "../../test-utils/channel-plugins.js";
+import {
+  createChannelTestPluginBase,
+  createTestRegistry,
+} from "../../test-utils/channel-plugins.js";
 import { typedCases } from "../../test-utils/typed-cases.js";
 
 const outboundTestRegistry = createTestRegistry([
-  { pluginId: "slack", source: "test", plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }) },
-  { pluginId: "telegram", source: "test", plugin: createChannelTestPluginBase({ id: "telegram", label: "Telegram" }) },
-  { pluginId: "discord", source: "test", plugin: createChannelTestPluginBase({ id: "discord", label: "Discord" }) },
-  { pluginId: "imessage", source: "test", plugin: createChannelTestPluginBase({ id: "imessage", label: "iMessage" }) },
-  { pluginId: "whatsapp", source: "test", plugin: createChannelTestPluginBase({ id: "whatsapp", label: "WhatsApp" }) },
-  { pluginId: "signal", source: "test", plugin: createChannelTestPluginBase({ id: "signal", label: "Signal" }) },
+  {
+    pluginId: "slack",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }),
+  },
+  {
+    pluginId: "telegram",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "telegram", label: "Telegram" }),
+  },
+  {
+    pluginId: "discord",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "discord", label: "Discord" }),
+  },
+  {
+    pluginId: "imessage",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "imessage", label: "iMessage" }),
+  },
+  {
+    pluginId: "whatsapp",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "whatsapp", label: "WhatsApp" }),
+  },
+  {
+    pluginId: "signal",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "signal", label: "Signal" }),
+  },
 ]);
 
 beforeEach(() => {
@@ -985,7 +1012,6 @@ describe("resolveOutboundSessionRoute", () => {
       }
     }
   });
-
 });
 
 describe("normalizeOutboundPayloadsForJson", () => {

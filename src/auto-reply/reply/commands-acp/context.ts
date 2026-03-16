@@ -5,9 +5,9 @@ import {
 } from "../../../acp/conversation-id.js";
 import { DISCORD_THREAD_BINDING_CHANNEL } from "../../../channels/thread-bindings-policy.js";
 import { resolveConversationIdFromTargets } from "../../../infra/outbound/conversation-id.js";
+import { resolveTelegramConversationId } from "../commands-subagents/shared.js";
 import type { HandleCommandsParams } from "../commands-types.js";
 import { parseDiscordParentChannelFromSessionKey } from "../discord-parent-channel.js";
-import { resolveTelegramConversationId } from "../commands-subagents/shared.js";
 
 export function resolveAcpCommandChannel(params: HandleCommandsParams): string {
   const raw =

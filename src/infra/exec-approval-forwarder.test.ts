@@ -60,7 +60,6 @@ function createForwarder(params: {
   return { deliver, forwarder };
 }
 
-
 async function expectSessionFilterRequestResult(params: {
   sessionFilter: string[];
   sessionKey: string;

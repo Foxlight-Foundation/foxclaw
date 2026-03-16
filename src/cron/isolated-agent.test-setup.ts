@@ -4,10 +4,7 @@ import { runEmbeddedPiAgent } from "../agents/pi-embedded.js";
 import { runSubagentAnnounceFlow } from "../agents/subagent-announce.js";
 import { callGateway } from "../gateway/call.js";
 import { setActivePluginRegistry } from "../plugins/runtime.js";
-import {
-  createOutboundTestPlugin,
-  createTestRegistry,
-} from "../test-utils/channel-plugins.js";
+import { createOutboundTestPlugin, createTestRegistry } from "../test-utils/channel-plugins.js";
 
 export function setupIsolatedAgentTurnMocks(params?: { fast?: boolean }): void {
   if (params?.fast) {

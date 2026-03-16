@@ -49,9 +49,11 @@ async function runSlackAnnounceTurn(params: {
   signal?: AbortSignal;
 }) {
   return runCronIsolatedAgentTurn({
-    cfg: params.cfg ?? makeCfg(params.home, params.storePath, {
-      channels: { slack: { botToken: "xoxb-1" } },
-    }),
+    cfg:
+      params.cfg ??
+      makeCfg(params.home, params.storePath, {
+        channels: { slack: { botToken: "xoxb-1" } },
+      }),
     deps: params.deps,
     job: {
       ...makeJob({

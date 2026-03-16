@@ -24,14 +24,14 @@ This fork has been stripped of:
 
 ## Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Runtime | Node 22+ / TypeScript (ESM) |
+| Layer           | Technology                                                       |
+| --------------- | ---------------------------------------------------------------- |
+| Runtime         | Node 22+ / TypeScript (ESM)                                      |
 | Local inference | Any OpenAI-compatible endpoint (Ollama, vLLM, SGLang, EXO, etc.) |
-| Memory (vector) | Forked mem0 + Qdrant |
-| Memory (graph) | Neo4j |
-| Voice | ElevenLabs |
-| Gateway | FoxClaw (this repo) |
+| Memory (vector) | Forked mem0 + Qdrant                                             |
+| Memory (graph)  | Neo4j                                                            |
+| Voice           | ElevenLabs                                                       |
+| Gateway         | FoxClaw (this repo)                                              |
 
 ## Install
 
@@ -72,26 +72,26 @@ Config lives at `~/.foxclaw/foxclaw.json`:
 
 ## Remaining extensions
 
-| Extension | Purpose |
-|-----------|---------|
-| acpx | ACP router for coding agents |
-| copilot-proxy | GitHub Copilot proxy |
-| device-pair | Device pairing |
-| diagnostics-otel | OpenTelemetry diagnostics |
-| diffs | Shareable diff viewer |
-| google-gemini-cli-auth | Gemini CLI OAuth |
-| llm-task | LLM task runner |
-| lobster | Lobster UI theming |
-| memory-core | Memory plugin (backed by foxmemory-store) |
-| memory-lancedb | LanceDB memory backend |
-| minimax-portal-auth | MiniMax portal auth |
-| ollama | Ollama local model provider |
-| open-prose | OpenProse writing workflows |
-| qwen-portal-auth | Qwen portal auth |
-| sglang | SGLang model provider |
-| slack | Slack channel integration |
-| thread-ownership | Thread ownership tracking |
-| vllm | vLLM model provider |
+| Extension              | Purpose                                   |
+| ---------------------- | ----------------------------------------- |
+| acpx                   | ACP router for coding agents              |
+| copilot-proxy          | GitHub Copilot proxy                      |
+| device-pair            | Device pairing                            |
+| diagnostics-otel       | OpenTelemetry diagnostics                 |
+| diffs                  | Shareable diff viewer                     |
+| google-gemini-cli-auth | Gemini CLI OAuth                          |
+| llm-task               | LLM task runner                           |
+| lobster                | Lobster UI theming                        |
+| memory-core            | Memory plugin (backed by foxmemory-store) |
+| memory-lancedb         | LanceDB memory backend                    |
+| minimax-portal-auth    | MiniMax portal auth                       |
+| ollama                 | Ollama local model provider               |
+| open-prose             | OpenProse writing workflows               |
+| qwen-portal-auth       | Qwen portal auth                          |
+| sglang                 | SGLang model provider                     |
+| slack                  | Slack channel integration                 |
+| thread-ownership       | Thread ownership tracking                 |
+| vllm                   | vLLM model provider                       |
 
 ## Key subsystems
 

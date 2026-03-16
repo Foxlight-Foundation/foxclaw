@@ -27,9 +27,9 @@ describe("detectRespawnSupervisor", () => {
   });
 
   it("detects scheduled-task supervision on Windows from either hint family", () => {
-    expect(
-      detectRespawnSupervisor({ FOXCLAW_WINDOWS_TASK_NAME: "FoxClaw Gateway" }, "win32"),
-    ).toBe("schtasks");
+    expect(detectRespawnSupervisor({ FOXCLAW_WINDOWS_TASK_NAME: "FoxClaw Gateway" }, "win32")).toBe(
+      "schtasks",
+    );
     expect(
       detectRespawnSupervisor(
         {

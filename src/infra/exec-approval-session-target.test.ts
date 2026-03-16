@@ -10,10 +10,26 @@ import { resolveExecApprovalSessionTarget } from "./exec-approval-session-target
 import type { ExecApprovalRequest } from "./exec-approvals.js";
 
 const execApprovalTestRegistry = createTestRegistry([
-  { pluginId: "slack", source: "test", plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }) },
-  { pluginId: "discord", source: "test", plugin: createChannelTestPluginBase({ id: "discord", label: "Discord" }) },
-  { pluginId: "telegram", source: "test", plugin: createChannelTestPluginBase({ id: "telegram", label: "Telegram" }) },
-  { pluginId: "whatsapp", source: "test", plugin: createChannelTestPluginBase({ id: "whatsapp", label: "WhatsApp" }) },
+  {
+    pluginId: "slack",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }),
+  },
+  {
+    pluginId: "discord",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "discord", label: "Discord" }),
+  },
+  {
+    pluginId: "telegram",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "telegram", label: "Telegram" }),
+  },
+  {
+    pluginId: "whatsapp",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "whatsapp", label: "WhatsApp" }),
+  },
 ]);
 
 beforeEach(() => {

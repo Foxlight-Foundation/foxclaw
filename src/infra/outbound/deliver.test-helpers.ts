@@ -172,4 +172,3 @@ export function resetDeliverTestMocks(params?: { includeSessionMocks?: boolean }
     mocks.appendAssistantMessageToSessionTranscript.mockClear();
   }
 }
-

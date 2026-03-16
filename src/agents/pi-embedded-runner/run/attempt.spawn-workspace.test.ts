@@ -371,9 +371,7 @@ describe("runEmbeddedAttempt sessions_spawn workspace inheritance", () => {
 
   it("passes the real workspace to sessions_spawn when workspaceAccess is ro", async () => {
     const realWorkspace = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-real-workspace-"));
-    const sandboxWorkspace = await fs.mkdtemp(
-      path.join(os.tmpdir(), "foxclaw-sandbox-workspace-"),
-    );
+    const sandboxWorkspace = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-sandbox-workspace-"));
     const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "foxclaw-agent-dir-"));
     tempPaths.push(realWorkspace, sandboxWorkspace, agentDir);
 

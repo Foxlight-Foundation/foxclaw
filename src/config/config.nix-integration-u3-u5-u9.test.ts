@@ -93,9 +93,7 @@ describe("Nix integration (U3, U5, U9)", () => {
 
     it("CONFIG_PATH respects FOXCLAW_CONFIG_PATH override", () => {
       expect(
-        resolveConfigPathCandidate(
-          envWith({ FOXCLAW_CONFIG_PATH: "/nix/store/abc/foxclaw.json" }),
-        ),
+        resolveConfigPathCandidate(envWith({ FOXCLAW_CONFIG_PATH: "/nix/store/abc/foxclaw.json" })),
       ).toBe(path.resolve("/nix/store/abc/foxclaw.json"));
     });
 
@@ -176,9 +174,7 @@ describe("Nix integration (U3, U5, U9)", () => {
         expect(cfg.plugins?.load?.paths?.[0]).toBe(path.join(home, "plugins", "demo-plugin"));
         expect(cfg.agents?.defaults?.workspace).toBe(path.join(home, "ws-default"));
         expect(cfg.agents?.list?.[0]?.workspace).toBe(path.join(home, "ws-agent"));
-        expect(cfg.agents?.list?.[0]?.agentDir).toBe(
-          path.join(home, ".foxclaw", "agents", "main"),
-        );
+        expect(cfg.agents?.list?.[0]?.agentDir).toBe(path.join(home, ".foxclaw", "agents", "main"));
         expect(cfg.agents?.list?.[0]?.sandbox?.workspaceRoot).toBe(path.join(home, "sandbox-root"));
       });
     });
@@ -202,10 +198,7 @@ describe("Nix integration (U3, U5, U9)", () => {
 
     it("falls back to config when env is invalid", () => {
       expect(
-        resolveGatewayPort(
-          { gateway: { port: 19003 } },
-          envWith({ FOXCLAW_GATEWAY_PORT: "nope" }),
-        ),
+        resolveGatewayPort({ gateway: { port: 19003 } }, envWith({ FOXCLAW_GATEWAY_PORT: "nope" })),
       ).toBe(19003);
     });
   });

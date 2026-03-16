@@ -71,7 +71,6 @@ describe("message action threading helpers", () => {
       }),
     ).toBeUndefined();
   });
-
 });
 
 describe("message action media helpers", () => {

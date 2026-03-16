@@ -239,9 +239,7 @@ export function resolvePlanTargetAgainstRegistry(candidate: {
   return null;
 }
 
-export function discoverConfigSecretTargets(
-  config: FoxClawConfig,
-): DiscoveredConfigSecretTarget[] {
+export function discoverConfigSecretTargets(config: FoxClawConfig): DiscoveredConfigSecretTarget[] {
   return discoverConfigSecretTargetsByIds(config);
 }
 

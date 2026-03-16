@@ -9,8 +9,16 @@ import { createChannelTestPluginBase, createTestRegistry } from "../test-utils/c
 import { createSafeAudioFixtureBuffer } from "./runner.test-utils.js";
 
 const echoTranscriptTestRegistry = createTestRegistry([
-  { pluginId: "slack", source: "test", plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }) },
-  { pluginId: "whatsapp", source: "test", plugin: createChannelTestPluginBase({ id: "whatsapp", label: "WhatsApp" }) },
+  {
+    pluginId: "slack",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "slack", label: "Slack" }),
+  },
+  {
+    pluginId: "whatsapp",
+    source: "test",
+    plugin: createChannelTestPluginBase({ id: "whatsapp", label: "WhatsApp" }),
+  },
 ]);
 
 // ---------------------------------------------------------------------------
